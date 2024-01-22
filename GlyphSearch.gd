@@ -9,10 +9,6 @@ signal glyph_name_selected(glyph_name, glyphs)
 var glyphList = preload("./GlyphList.gd").new()
 var glyphs = glyphList.glyphs
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
 
 func erase_all_text():
 	$GlyphSearchEntry.text = ""
@@ -59,16 +55,3 @@ func _input(event):
 	#			$"GlyphSearch/SearchEntry".grab_focus()
 	#			print(event.as_text())
 				append_text(key)
-
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
-#func _on_glyph_search_entry_glyph_name_input_cancelled():
-#	hide()
-#
-#func _on_glyph_search_entry_glyph_name_input_started():
-#	show()

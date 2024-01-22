@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://css6xu7374m8y"]
+[gd_scene load_steps=9 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://UNLWS UI.gd" id="1_3xaam"]
 [ext_resource type="Script" path="res://GlyphSearch.gd" id="2_4qx87"]
 [ext_resource type="Script" path="res://HeldGlyph.gd" id="2_dixo0"]
 [ext_resource type="Script" path="res://Mouse.gd" id="2_nrgt7"]
 [ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="4_udrq6"]
+[ext_resource type="Script" path="res://Cursor.gd" id="5_xdx2f"]
 [ext_resource type="Texture2D" uid="uid://ophny38xmdit" path="res://Images/Glyphs/cat.svg" id="6_8ihid"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ck7dl"]
@@ -41,6 +42,7 @@ script = ExtResource("2_nrgt7")
 
 [node name="Cursor" type="Sprite2D" parent="Mouse"]
 texture = ExtResource("4_udrq6")
+script = ExtResource("5_xdx2f")
 
 [node name="HeldGlyph" type="Node2D" parent="Mouse"]
 script = ExtResource("2_dixo0")

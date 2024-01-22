@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwndp5371xlw0"]
+[gd_scene load_steps=3 format=3 uid="uid://dwndp5371xlw0"]
 
 [ext_resource type="Script" path="res://GlyphInstance.gd" id="1_7xa21"]
-[ext_resource type="Script" path="res://GlyphLine.gd" id="2_3ywnr"]
 
 [sub_resource type="Curve2D" id="Curve2D_w5ye6"]
 _data = {
@@ -13,7 +12,6 @@ point_count = 5
 script = ExtResource("1_7xa21")
 
 [node name="Line" type="Line2D" parent="."]
-script = ExtResource("2_3ywnr")
 
 [node name="Path" type="Path2D" parent="Line"]
 position = Vector2(39, -4)

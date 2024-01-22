@@ -1,9 +1,10 @@
 extends Object
 
-var Glyph = preload("GlyphType.gd")
+var Glyph_Type = preload("GlyphType.gd")
 var glyphs = {}
 
 # Modified from https://gist.github.com/Sirosky/a60ae50a78a420bd9eaaff430a78fbcf
+# Recursively find all files with the given extension in the given folder
 func get_all_files(path: String, file_ext := "", files := []) -> Array: #Loops through an entire directory recursively, and pulls the full file paths
 	var dir = DirAccess.open(path)
 
@@ -28,14 +29,10 @@ func get_all_files(path: String, file_ext := "", files := []) -> Array: #Loops t
 func get_filename_from_path(path):
 	return path.rsplit("/", true, 1)[1].rsplit(".", true, 1)[0]
 
-func _init():
-	var svg_paths = get_all_files("res://Images/Glyphs/", "svg")
+func _init(folder_path = "res://Images/Glyphs/"):
+	var svg_paths = get_all_files(folder_path, "svg")
 	
 	for path in svg_paths:
 		var glyph_name = get_filename_from_path(path)
-		glyphs[glyph_name] = Glyph.new(path)
+		glyphs[glyph_name] = Glyph_Type.new(path)
 
-#var glyphs = {
-#	"eat": Glyph.new("res://Images/Glyphs/eat.svg"),
-#	"cat": Glyph.new("res://Images/Glyphs/cat.svg"),
-#	}

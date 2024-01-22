@@ -1,5 +1,5 @@
-class_name Glyph extends Object
-var XML_node_class = preload("./XMLNode.gd")
+class_name Glyph_Type extends Object
+var XML_Node_From_Parser = preload("./XMLNodeFromParser.gd")
 
 #var preloaded_texture
 #var import_settings_text = """[params]
@@ -9,7 +9,7 @@ var XML_node_class = preload("./XMLNode.gd")
 var sprite_path
 var texture_is_loaded = false
 var texture
-var node_tree
+var xml_node
 var all_paths = []
 
 ## Modified from https://github.com/godotengine/godot-docs/issues/2148 by Justo Delgado (mrcdk)
@@ -40,12 +40,18 @@ func get_paths_from_svg(svg_path):
 	parser.open(svg_path)
 	print("READING ", svg_path)
 	
-	node_tree = XML_node_class.new(parser)
+	xml_node = XML_Node_From_Parser.new(parser)
 	
-	#print(node_tree)
-	print(node_tree.get_string())
+	#print(xml_node.get_string())
+	#print(xml_node.deep_copy().get_string() == xml_node.get_string())
+	#print(xml_node.get_main_node_with_name("g"))
 	
-	#var temp_stack = [[node_tree, 0]]
+	var test_file = FileAccess.open(
+		"res://Images/Output/"+svg_path.rsplit("/", true, 1)[1],
+		FileAccess.WRITE)
+	test_file.store_string(xml_node.get_string())
+	
+	#var temp_stack = [[xml_node, 0]]
 	#var temp_depth = 0
 	#var temp_string = ""
 	#var tab_string = ""
@@ -77,7 +83,7 @@ func get_paths_from_svg(svg_path):
 			#for idx in range(parser.get_attribute_count()):
 				#attributes_dict[parser.get_attribute_name(idx)] = parser.get_attribute_value(idx)
 			#print("The ", node_name, " element has the following attributes: ", attributes_dict)
-	return node_tree
+	return xml_node
 
 func _init(init_sprite_path):
 	sprite_path = init_sprite_path

@@ -1,4 +1,4 @@
-extends Node
+class_name Glyph_Instance extends Node
 
 var glyph_type
 
@@ -22,13 +22,3 @@ func _init(init_glyph_type):
 	l.width = 20
 	for point in selected_path.curve.get_baked_points():
 		l.add_point(point + selected_path.position)
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass

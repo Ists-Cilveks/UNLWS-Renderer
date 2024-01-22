@@ -1,87 +1,20 @@
-extends Object
-var XMLNode = preload("./XMLNode.gd")
+class_name XML_Node extends Object
 
 var children = []
 var node_type
 var node_name
 var is_empty
 var attributes_dict = {}
-var node_can_be_parsed = false # Becomes true if this is a node with data (like attributes) that I want to extract and save
-var node_full_text # If the node can't be parsed, then its data will be stored directly so it can be inserted into a different XML file
+var node_full_text = "" # If the node can't be parsed, then its data will be stored directly so it can be inserted into a different XML file
 
-func is_attribute_worth_storing(name):
-	if name.begins_with("inkscape:"):
-		return false
-	else:
-		return true
 
-func _init(parser):
-	node_type = parser.get_node_type()
-	is_empty = parser.is_empty()
-	if node_type == XMLParser.NODE_ELEMENT:
-		node_name = parser.get_node_name()
-		#if not parser.is_empty():
-			#print("<"+node_name+">")
-		#else:
-			#print("<"+node_name+" />")
-		node_can_be_parsed = true
-		for idx in range(parser.get_attribute_count()):
-			var attribute_name = parser.get_attribute_name(idx)
-			if is_attribute_worth_storing(attribute_name):
-				attributes_dict[attribute_name] = parser.get_attribute_value(idx)
-	elif node_type == XMLParser.NODE_ELEMENT_END:
-		#print(node_name, "==", parser.get_node_name())
-		#assert(node_name == parser.get_node_name()) # TODO: there should be a check of this kind so that closing tags fit their opening tags
-		#node_name = parser.get_node_name()
-		#node_full_text = "</" + node_name + ">"
-		#print(node_full_text)
-		pass
-	else:
-		node_full_text = "" # TODO: how to actually extract source text from the parser?
-	
-	if not parser.is_empty() and node_type in [XMLParser.NODE_ELEMENT, XMLParser.NODE_NONE]: # The only nodes that need to be checked for children are the start node and elements that aren't empty (<element />)
-		while parser.read() != ERR_FILE_EOF:
-			if parser.get_node_type() == XMLParser.NODE_TEXT:# TODO: I'm not sure this is reliable. Does this get rid of all the nodes that are unneeded (there could be other types)? Are there text nodes (and info in them) that are necessary?
-				continue
-			var potential_child = XMLNode.new(parser)
-			#print(potential_child.node_type)
-			if potential_child.node_type == XMLParser.NODE_ELEMENT_END:
-				break
-			else:
-				children.append(potential_child)
-	#print("Name: ", parser.get_node_name(), " ", parser.get_node_type())
-	#print("Num children: ", len(children))
-	#if true:
-		#pass
-	#print(get_string())
-	
-	#var res = ""
-	##print("num children:", len(children))
-	##if len(children) == 1 :
-		##print("num grandchildren:", len(children[0].children))
-	#for child in children:
-		##print(child.node_name," node_can_be_parsed: ",child.node_can_be_parsed)
-		#if child.node_can_be_parsed:
-			#if child.node_type == XMLParser.NODE_ELEMENT:
-				#res += "<" + child.node_name + " "
-				#var is_first_attribute = true
-				#for attribute_name in child.attributes_dict:
-					#if is_first_attribute:
-						#is_first_attribute = false
-					#else:
-						#res += "\n\t"
-					#res += attribute_name + ": \"" + child.attributes_dict[attribute_name] + "\""
-				#res += ">"
-				#res += child.get_string().indent("\t")
-				#
-			#elif child.node_type == XMLParser.NODE_ELEMENT_END:
-				#res += "</"+child.node_name+">"
-			##print(child.node_name)
-			##print(res)
-			#print(res)
-		#else:
-			#print(child.node_full_text)
-		
+func _init(init_name, init_attributes_dict={}, init_children=[], init_type=XMLParser.NODE_ELEMENT):
+	node_type = init_type
+	node_name = init_name
+	attributes_dict = init_attributes_dict
+	children = init_children	
+	is_empty = (init_type == XMLParser.NODE_ELEMENT and len(init_children) == 0)
+
 
 func get_string():
 	var res = ""
@@ -89,26 +22,44 @@ func get_string():
 	#if len(children) == 1 :
 		#print("num grandchildren:", len(children[0].children))
 	for child in children:
-		#print(child.node_name," node_can_be_parsed: ",child.node_can_be_parsed)
-		if child.node_can_be_parsed:
-			if child.node_type == XMLParser.NODE_ELEMENT:
-				res += "<" + child.node_name + " "
-				var is_first_attribute = true
+		if child.node_type == XMLParser.NODE_ELEMENT:
+			res += "<" + child.node_name
+			if len(child.attributes_dict) != 0:
 				for attribute_name in child.attributes_dict:
-					if is_first_attribute:
-						is_first_attribute = false
-					else:
-						res += "\n\t"
-					res += attribute_name + "=\"" + child.attributes_dict[attribute_name] + "\""
+					res += "\n\t" + attribute_name + "=\"" + child.attributes_dict[attribute_name].xml_escape() + "\""
 				if child.is_empty:
 					res += " /"
-				res += ">\n"
-				res += child.get_string().indent("\t")
-				
+			res += ">\n"
+			res += child.get_string().indent("\t")
 			if !child.is_empty:
 				res += "</"+child.node_name+">\n"
-		
 		else:
 			if len(child.node_full_text) > 0:
 				res += child.node_full_text + "\n"
 	return res
+
+
+func get_main_node_with_name(name): # This node or the first descendant that has the given name
+	if node_name == name:
+		return self
+	var num_children_with_main_nodes = 0
+	var previous_main_node
+	for child in children:
+		var potential_main_node = child.get_main_node_with_name(name)
+		if potential_main_node:
+			previous_main_node = potential_main_node
+			num_children_with_main_nodes += 1
+	if num_children_with_main_nodes == 1:
+		return previous_main_node
+	elif num_children_with_main_nodes > 1:
+		print("UNSUPPORTED SVG: There's a ", node_name, " node that has ", num_children_with_main_nodes, " children that each have a descendant that is a ", name," node.")
+
+
+func deep_copy(): # TODO: I haven't really checked this and don't know how to 😬
+	var new_attributes_dict = {}
+	for name in attributes_dict:
+		new_attributes_dict[name] = attributes_dict[name]
+	var new_children = []
+	for child in children:
+		new_children.append(child.deep_copy())
+	return XML_Node.new(node_name, new_attributes_dict, new_children, node_type)
