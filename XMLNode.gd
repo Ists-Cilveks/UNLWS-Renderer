@@ -9,13 +9,14 @@ var node_full_text = "" # If the node can't be parsed, then its data will be sto
 
 
 # NOTE: This may modify the arguments
-func _init(init_name, init_attributes_dict={}, init_children=[], init_type=XMLParser.NODE_ELEMENT):
-	node_type = init_type
-	node_name = init_name
-	attributes_dict = init_attributes_dict
+@warning_ignore("shadowed_variable")
+func _init(name, attributes_dict={}, children=[], type=XMLParser.NODE_ELEMENT):
+	self.node_type = type
+	self.node_name = name
+	self.attributes_dict = attributes_dict
 	add_my_attributes(attributes_dict)
-	children = init_children
-	is_empty = (init_type == XMLParser.NODE_ELEMENT and len(init_children) == 0)
+	self.children = children
+	self.is_empty = (type == XMLParser.NODE_ELEMENT and len(children) == 0)
 
 
 func get_string():
