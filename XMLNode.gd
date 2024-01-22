@@ -71,3 +71,6 @@ func deep_copy(): # TODO: I haven't really checked this and don't know how to ðŸ
 func add_my_attributes(dict):
 	if node_name == "svg":
 		dict["xmlns:unlws-renderer"] = "https://github.com/Ists-Cilveks/UNLWS-renderer"
+
+func add_child(child):
+	children.append(child)
