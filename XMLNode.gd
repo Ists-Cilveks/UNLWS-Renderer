@@ -8,11 +8,13 @@ var attributes_dict = {}
 var node_full_text = "" # If the node can't be parsed, then its data will be stored directly so it can be inserted into a different XML file
 
 
+# NOTE: This may modify the arguments
 func _init(init_name, init_attributes_dict={}, init_children=[], init_type=XMLParser.NODE_ELEMENT):
 	node_type = init_type
 	node_name = init_name
 	attributes_dict = init_attributes_dict
-	children = init_children	
+	add_my_attributes(attributes_dict)
+	children = init_children
 	is_empty = (init_type == XMLParser.NODE_ELEMENT and len(init_children) == 0)
 
 
@@ -63,3 +65,8 @@ func deep_copy(): # TODO: I haven't really checked this and don't know how to ðŸ
 	for child in children:
 		new_children.append(child.deep_copy())
 	return XML_Node.new(node_name, new_attributes_dict, new_children, node_type)
+
+
+func add_my_attributes(dict):
+	if node_name == "svg":
+		dict["xmlns:unlws-renderer"] = "https://github.com/Ists-Cilveks/UNLWS-renderer"

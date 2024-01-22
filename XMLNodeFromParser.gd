@@ -1,9 +1,5 @@
 class_name XML_Node_From_Parser extends XML_Node
 
-func add_my_attributes(dict):
-	if node_name == "svg":
-		dict["xmlns:jTalisoso-unlws"] = "https://github.com/Ists-Cilveks/UNLWS-renderer"
-
 func is_attribute_worth_storing(name):
 	if name.begins_with("inkscape:"):
 		return false
