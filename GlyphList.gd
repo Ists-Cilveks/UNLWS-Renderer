@@ -1,6 +1,5 @@
-extends Object
+class_name Glyph_List extends Object
 
-var Glyph_Type = preload("GlyphType.gd")
 var glyphs = {}
 
 # Modified from https://gist.github.com/Sirosky/a60ae50a78a420bd9eaaff430a78fbcf

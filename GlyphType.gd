@@ -1,11 +1,5 @@
 class_name Glyph_Type extends Object
-var XML_Node_From_Parser = preload("./XMLNodeFromParser.gd")
 
-#var preloaded_texture
-#var import_settings_text = """[params]
-#
-#svg/scale=5.0
-#"""
 var sprite_path
 var texture_is_loaded = false
 var texture

@@ -6,18 +6,17 @@ signal glyph_name_selected(glyph_name, glyphs)
 #signal glyph_name_input_changed(input, glyphs)
 
 
-var glyphList = preload("./GlyphList.gd").new()
-var glyphs = glyphList.glyphs
+var glyphs = Glyph_List.new().glyphs
 
 
 func erase_all_text():
 	$GlyphSearchEntry.text = ""
 
-func append_text(str):
+func append_text(text):
 	if len($GlyphSearchEntry.text) == 0:
 #		glyph_name_input_started.emit()
 		show()
-	$GlyphSearchEntry.text += str
+	$GlyphSearchEntry.text += text
 
 func backspace_input():
 	$GlyphSearchEntry.text = $GlyphSearchEntry.text.left(len($GlyphSearchEntry.text)-1)
