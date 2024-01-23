@@ -3,10 +3,10 @@ class_name XML_Node extends Object
 var children = []
 var node_type
 var node_name
-var is_empty
 var attributes_dict = {}
 var node_full_text = "" # If the node can't be parsed, then its data will be stored directly so it can be inserted into a different XML file
 
+const my_namespace = "unlws-renderer"
 
 # NOTE: This may modify the arguments
 @warning_ignore("shadowed_variable")
@@ -16,7 +16,6 @@ func _init(name, attributes_dict={}, children=[], type=XMLParser.NODE_ELEMENT):
 	self.attributes_dict = attributes_dict
 	add_my_attributes(attributes_dict)
 	self.children = children
-	self.is_empty = (type == XMLParser.NODE_ELEMENT and len(children) == 0)
 
 
 func get_string():
@@ -27,14 +26,15 @@ func get_string():
 	for child in children:
 		if child.node_type == XMLParser.NODE_ELEMENT:
 			res += "<" + child.node_name
+			var has_children = (len(child.children) != 0)
 			if len(child.attributes_dict) != 0:
 				for attribute_name in child.attributes_dict:
 					res += "\n\t" + attribute_name + "=\"" + child.attributes_dict[attribute_name].xml_escape() + "\""
-				if child.is_empty:
-					res += " /"
+			if !has_children: # child is self-closing
+				res += " /"
 			res += ">\n"
 			res += child.get_string().indent("\t")
-			if !child.is_empty:
+			if has_children: # child needs a closing tag
 				res += "</"+child.node_name+">\n"
 		else:
 			if len(child.node_full_text) > 0:
@@ -70,7 +70,7 @@ func deep_copy(): # TODO: I haven't really checked this and don't know how to ðŸ
 
 func add_my_attributes(dict):
 	if node_name == "svg":
-		dict["xmlns:unlws-renderer"] = "https://github.com/Ists-Cilveks/UNLWS-renderer"
+		dict["xmlns:"+my_namespace] = "https://github.com/Ists-Cilveks/UNLWS-renderer"
 
 func add_child(child):
 	children.append(child)

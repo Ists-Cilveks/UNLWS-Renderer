@@ -1,8 +1,11 @@
 class_name XML_Node_From_Parser extends XML_Node
 
 func is_attribute_worth_storing(name):
-	if name.begins_with("inkscape:"):
-		return false
+	if ":" in name:
+		if name.begins_with(my_namespace+":"):
+			return true
+		else:
+			return false
 	else:
 		return true
 
@@ -20,7 +23,6 @@ func create_attributes_dict(parser):
 @warning_ignore("shadowed_variable")
 func _init(parser):
 	var node_type = parser.get_node_type()
-	var is_empty = parser.is_empty()
 	var attributes_dict = {}
 	var children = []
 	if node_type == XMLParser.NODE_ELEMENT:
