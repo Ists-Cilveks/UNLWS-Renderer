@@ -35,5 +35,5 @@ func _init(folder_path = "res://Images/Glyphs/"):
 	
 	for path in svg_paths:
 		var glyph_name = get_filename_from_path(path)
-		glyphs[glyph_name] = Glyph_Type.new(path)
+		glyphs[glyph_name] = Glyph_Type.new(glyph_name, path)
 
