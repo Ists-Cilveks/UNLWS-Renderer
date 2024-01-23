@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://sjoa8yoclxtp"]
+
+[ext_resource type="Script" path="res://GlyphSearch.gd" id="1_ns67w"]
+[ext_resource type="Script" path="res://Mouse.gd" id="2_8ys82"]
+[ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="3_5ftf5"]
+[ext_resource type="Script" path="res://HeldGlyph.gd" id="4_v27g6"]
+[ext_resource type="Texture2D" uid="uid://ophny38xmdit" path="res://Images/Glyphs/cat.svg" id="5_8kq4d"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ck7dl"]
+blend_mode = 1
+
+[node name="UILayer" type="CanvasLayer"]
+
+[node name="Camera" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+
+[node name="GlyphSearch" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ns67w")
+
+[node name="GlyphSearchEntry" type="LineEdit" parent="GlyphSearch"]
+layout_mode = 0
+offset_left = 412.0
+offset_top = 158.0
+offset_right = 560.0
+offset_bottom = 189.0
+placeholder_text = "Glyph name:"
+editable = false
+
+[node name="Mouse" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 273.0
+offset_top = 162.0
+offset_right = 273.0
+offset_bottom = 162.0
+script = ExtResource("2_8ys82")
+
+[node name="Cursor" type="Sprite2D" parent="Mouse"]
+texture = ExtResource("3_5ftf5")
+
+[node name="HeldGlyph" type="Node2D" parent="Mouse"]
+script = ExtResource("4_v27g6")
+
+[node name="Sprite" type="Sprite2D" parent="Mouse/HeldGlyph"]
+material = SubResource("CanvasItemMaterial_ck7dl")
+texture = ExtResource("5_8kq4d")
+
+[connection signal="glyph_name_selected" from="GlyphSearch" to="Mouse" method="_on_glyph_search_glyph_name_selected"]

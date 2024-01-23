@@ -1,4 +1,4 @@
-class_name Glyph_List extends Object
+extends Node
 
 var glyphs = {}
 

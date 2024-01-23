@@ -11,9 +11,14 @@ config_version=5
 [application]
 
 config/name="UNLWS renderer"
-run/main_scene="res://unlws_ui.tscn"
+run/main_scene="res://unlws_editor.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Event_Bus="*res://Globals/EventBus.gd"
+Glyph_List="*res://Globals/GlyphList.gd"
 
 [filesystem]
 

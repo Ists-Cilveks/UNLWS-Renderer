@@ -2,8 +2,6 @@ extends Control
 
 signal glyph_name_selected(glyph_name)
 
-var glyphs
-
 func erase_all_text():
 	$GlyphSearchEntry.text = ""
 
@@ -22,7 +20,7 @@ func cancel_input():
 	hide()
 
 func input_complete():
-	glyph_name_selected.emit($GlyphSearchEntry.text, glyphs)
+	glyph_name_selected.emit($GlyphSearchEntry.text)
 	cancel_input()
 
 func _input(event):
@@ -49,7 +47,3 @@ func _input(event):
 	#			$"GlyphSearch/SearchEntry".grab_focus()
 	#			print(event.as_text())
 				append_text(key)
-
-
-func _on_unlws_ui_glyph_list_set(glyph_list):
-	glyphs = glyph_list

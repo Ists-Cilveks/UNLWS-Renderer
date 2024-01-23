@@ -4,10 +4,6 @@ var glyph_type
 
 var line_color = "#ff00ff"
 
-func set_style(color="#000000"):
-	line_color = color
-
-
 
 func _init(init_glyph_type):
 	#var file = FileAccess.open(svg_path, FileAccess.READ)
@@ -22,3 +18,7 @@ func _init(init_glyph_type):
 	l.width = 20
 	for point in selected_path.curve.get_baked_points():
 		l.add_point(point + selected_path.position)
+
+
+func set_style(color="#000000"):
+	line_color = color
