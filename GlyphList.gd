@@ -5,6 +5,8 @@ var glyphs = {}
 # Modified from https://gist.github.com/Sirosky/a60ae50a78a420bd9eaaff430a78fbcf
 # Recursively find all files with the given extension in the given folder
 func get_all_files(path: String, file_ext := "", files := []) -> Array: #Loops through an entire directory recursively, and pulls the full file paths
+	if path[-1] != "/":
+		path += "/"
 	var dir = DirAccess.open(path)
 
 	if dir != null:
@@ -14,10 +16,10 @@ func get_all_files(path: String, file_ext := "", files := []) -> Array: #Loops t
 
 		while file_name != "":
 			if dir.current_is_dir():
-				files = get_all_files(dir.get_current_dir() + "/" + file_name, file_ext, files)
+				files = get_all_files(dir.get_current_dir() + file_name, file_ext, files)
 			else:
 				if not file_ext is String or len(file_ext) == 0 or file_name.get_extension() == file_ext:
-					files.append(dir.get_current_dir() + "/" + file_name)
+					files.append(dir.get_current_dir() + file_name)
 
 			file_name = dir.get_next()
 	else:
