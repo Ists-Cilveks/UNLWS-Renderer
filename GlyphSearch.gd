@@ -1,13 +1,8 @@
 extends Control
 
-signal glyph_name_selected(glyph_name, glyphs)
-#signal glyph_name_input_cancelled
-#signal glyph_name_input_started
-#signal glyph_name_input_changed(input, glyphs)
+signal glyph_name_selected(glyph_name)
 
-
-var glyphs = Glyph_List.new().glyphs
-
+var glyphs
 
 func erase_all_text():
 	$GlyphSearchEntry.text = ""
@@ -54,3 +49,7 @@ func _input(event):
 	#			$"GlyphSearch/SearchEntry".grab_focus()
 	#			print(event.as_text())
 				append_text(key)
+
+
+func _on_unlws_ui_glyph_list_set(glyph_list):
+	glyphs = glyph_list

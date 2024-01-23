@@ -49,4 +49,6 @@ script = ExtResource("2_dixo0")
 material = SubResource("CanvasItemMaterial_ck7dl")
 texture = ExtResource("6_8ihid")
 
+[connection signal="glyph_list_set" from="." to="GlyphSearch" method="_on_unlws_ui_glyph_list_set"]
+[connection signal="glyph_list_set" from="." to="Mouse/HeldGlyph" method="_on_unlws_ui_glyph_list_set"]
 [connection signal="glyph_name_selected" from="GlyphSearch" to="Mouse/HeldGlyph" method="_on_glyph_search_glyph_name_selected"]

@@ -17,6 +17,7 @@ func create_attributes_dict(parser):
 	return dict
 
 
+@warning_ignore("shadowed_variable")
 func _init(parser):
 	var node_type = parser.get_node_type()
 	var is_empty = parser.is_empty()
