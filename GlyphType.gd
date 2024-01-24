@@ -10,7 +10,7 @@ var all_paths = []
 func _init(init_name, init_sprite_path):
 	name = init_name
 	sprite_path = init_sprite_path
-	get_paths_from_svg(sprite_path)
+	get_xml_node_from_svg_path(sprite_path)
 
 ## Modified from https://github.com/godotengine/godot-docs/issues/2148 by Justo Delgado (mrcdk)
 #func get_external_texture(path):
@@ -33,13 +33,14 @@ func get_texture():
 		texture_is_loaded = true
 	return texture
 
-#func get_paths_from_svg(svg_string):
-func get_paths_from_svg(svg_path):
+#func get_xml_node_from_svg_path(svg_string):
+func get_xml_node_from_svg_path(svg_path):
 	# Modified from https://docs.godotengine.org/en/stable/classes/class_xmlparser.html [accessed 2024-01-21]
 	var parser = XMLParser.new()
 	parser.open(svg_path)
 	
 	xml_node = XML_Node_From_Parser.new(parser)
+	xml_node.get_main_node_with_name("g").add_attribute("id", name)
 	
 	#print(xml_node.get_string())
 	#print(xml_node.deep_copy().get_string() == xml_node.get_string())

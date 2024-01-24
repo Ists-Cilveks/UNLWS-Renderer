@@ -14,7 +14,7 @@ func _init(name, attributes_dict={}, children=[], type=XMLParser.NODE_ELEMENT):
 	self.node_type = type
 	self.node_name = name
 	self.attributes_dict = attributes_dict
-	add_my_attributes(attributes_dict)
+	add_my_default_attributes()
 	self.children = children
 
 
@@ -68,9 +68,19 @@ func deep_copy(): # TODO: I haven't really checked this and don't know how to ðŸ
 	return XML_Node.new(node_name, new_attributes_dict, new_children, node_type)
 
 
-func add_my_attributes(dict):
+func add_attribute(name, value):
+	attributes_dict[name] = value
+
+func add_my_default_attributes():
 	if node_name == "svg":
-		dict["xmlns:"+my_namespace] = "https://github.com/Ists-Cilveks/UNLWS-renderer"
+		add_attribute("xmlns:"+my_namespace, "https://github.com/Ists-Cilveks/UNLWS-renderer")
 
 func add_child(child):
 	children.append(child)
+
+# This was meant to add commands to a transform tag but hopefully won't be necessary
+#func append_attribute_line(attribute_name, line):
+	#if attribute_name in attributes_dict:
+		#attributes_dict[attribute_name] += "\n" + line
+	#else:
+		#attributes_dict[attribute_name] = line

@@ -2,16 +2,19 @@ class_name Glyph_Instance extends Node2D
 
 var glyph_type
 
-var line_color = "#ff00ff"
+var style_dict = {}
 
+var instance_g_node
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
-func _init(glyph_type, position = Vector2()):
+func _init(glyph_type, position = Vector2(), rotation = 0):
 	#var file = FileAccess.open(svg_path, FileAccess.READ)
 	#var content = file.get_as_text()
 	#var all_paths = get_paths_from_svg(content)
 	self.glyph_type = glyph_type
-	self.position = position
+	self.instance_g_node = glyph_type.xml_node.get_main_node_with_name("g")
+	set_glyph_position(position)
+	set_glyph_rotation(rotation)
 	#print(glyph_type.name)
 	
 	#var all_paths = glyph_type.all_paths
@@ -24,5 +27,21 @@ func _init(glyph_type, position = Vector2()):
 		#l.add_point(point + selected_path.position)
 
 
-func set_style(color="#000000"):
-	line_color = color
+func add_style(new_dict):
+	for glyph_name in new_dict:
+		style_dict[glyph_name] = new_dict[glyph_name]
+
+func get_style_dict():
+	return style_dict
+
+func set_glyph_position(new_position):
+	position = new_position
+	#instance_g_node.append_attribute_line("transform", "translate("+str(position.x)+" "+str(position.y)+")")
+func set_glyph_rotation(new_rotation):
+	rotation = new_rotation
+
+func get_transform_string():
+	var res = ""
+	res += "rotate("+str(rotation)+")"
+	res += "translate("+str(position.x)+" "+str(position.y)+")\n"
+	return res
