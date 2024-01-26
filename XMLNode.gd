@@ -28,8 +28,10 @@ func get_string():
 			res += "<" + child.node_name
 			var has_children = (len(child.children) != 0)
 			if len(child.attributes_dict) != 0:
-				for attribute_name in child.attributes_dict:
-					res += "\n\t" + attribute_name + "=\"" + child.attributes_dict[attribute_name].xml_escape() + "\""
+				var attributes_string = child.get_attributes_string()
+				if attributes_string[-1] == "\n": # Get rid of trailing newline
+					attributes_string = attributes_string.left(len(attributes_string)-1)
+				res += "\n" + attributes_string.indent("\t")
 			if !has_children: # child is self-closing
 				res += " /"
 			res += ">\n"
@@ -39,6 +41,12 @@ func get_string():
 		else:
 			if len(child.node_full_text) > 0:
 				res += child.node_full_text + "\n"
+	return res
+
+func get_attributes_string():
+	var res = ""
+	for attribute_name in attributes_dict:
+		res += attribute_name + "=\"" + attributes_dict[attribute_name].xml_escape() + "\"\n"
 	return res
 
 
@@ -68,19 +76,19 @@ func deep_copy(): # TODO: I haven't really checked this and don't know how to ðŸ
 	return XML_Node.new(node_name, new_attributes_dict, new_children, node_type)
 
 
-func add_attribute(name, value):
+func set_attribute(name, value):
 	attributes_dict[name] = value
 
 func add_my_default_attributes():
 	if node_name == "svg":
-		add_attribute("xmlns:"+my_namespace, "https://github.com/Ists-Cilveks/UNLWS-renderer")
+		set_attribute("xmlns:"+my_namespace, "https://github.com/Ists-Cilveks/UNLWS-renderer")
 
 func add_child(child):
 	children.append(child)
 
-# This was meant to add commands to a transform tag but hopefully won't be necessary
-#func append_attribute_line(attribute_name, line):
-	#if attribute_name in attributes_dict:
-		#attributes_dict[attribute_name] += "\n" + line
-	#else:
-		#attributes_dict[attribute_name] = line
+func get_children_with_name(name):
+	var res = []
+	for child in children:
+		if child.node_name == name:
+			res.append(child)
+	return res

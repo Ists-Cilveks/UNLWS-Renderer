@@ -1,6 +1,14 @@
 extends Node
+## A global dictionary that has info about all glyphs.
+## The dict is loaded from SVGs in multiple directories (see _init).
 
 var glyphs = {}
+
+
+func _init(folder_paths = ["res://Images/Glyphs/", "res://Input/"]):
+	for path in folder_paths:
+		add_new_glyphs_from_folder(path)
+
 
 # Modified from https://gist.github.com/Sirosky/a60ae50a78a420bd9eaaff430a78fbcf
 # Recursively find all files with the given extension in the given folder
@@ -30,10 +38,18 @@ func get_all_files(path: String, file_ext := "", files := []) -> Array: #Loops t
 func get_filename_from_path(path):
 	return path.rsplit("/", true, 1)[1].rsplit(".", true, 1)[0]
 
-func _init(folder_path = "res://Images/Glyphs/"):
+# Go through all files in the given folder (recursively) and add each SVG as a Glyph_Type. If
+func add_new_glyphs_from_folder(folder_path):
 	var svg_paths = get_all_files(folder_path, "svg")
 	
 	for path in svg_paths:
 		var glyph_name = get_filename_from_path(path)
-		glyphs[glyph_name] = Glyph_Type.new(glyph_name, path)
+		if not glyph_name in glyphs:
+			glyphs[glyph_name] = Glyph_Type.new(glyph_name, path)
+
+func save_all_to_folder(folder_path):
+	if folder_path[-1] != "/":
+		folder_path += "/"
+	for glyph_name in glyphs:
+		glyphs[glyph_name].save(folder_path+glyph_name+".svg")
 

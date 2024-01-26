@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Mouse.gd" id="2_8ys82"]
 [ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="3_5ftf5"]
 [ext_resource type="Script" path="res://HeldGlyph.gd" id="4_v27g6"]
-[ext_resource type="Texture2D" uid="uid://ophny38xmdit" path="res://Images/Glyphs/cat.svg" id="5_8kq4d"]
+[ext_resource type="Texture2D" uid="uid://ophny38xmdit" path="res://Input/cat.svg" id="5_8kq4d"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ck7dl"]
 blend_mode = 1

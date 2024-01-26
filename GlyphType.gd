@@ -6,11 +6,14 @@ var texture_is_loaded = false
 var texture
 var xml_node
 var all_paths = []
+var binding_points = {}
 
 func _init(init_name, init_sprite_path):
 	name = init_name
 	sprite_path = init_sprite_path
-	get_xml_node_from_svg_path(sprite_path)
+	xml_node = get_xml_node_from_svg_path(sprite_path)
+	var g_node = xml_node.get_main_node_with_name("g")
+	binding_points = get_bp_dict_from_xml_node(g_node)
 
 ## Modified from https://github.com/godotengine/godot-docs/issues/2148 by Justo Delgado (mrcdk)
 #func get_external_texture(path):
@@ -39,16 +42,74 @@ func get_xml_node_from_svg_path(svg_path):
 	var parser = XMLParser.new()
 	parser.open(svg_path)
 	
-	xml_node = XML_Node_From_Parser.new(parser)
-	xml_node.get_main_node_with_name("g").add_attribute("id", name)
+	var new_xml_node = XML_Node_From_Parser.new(parser)
+	var g_node = new_xml_node.get_main_node_with_name("g")
+	g_node.set_attribute("id", name)
 	
-	#print(xml_node.get_string())
-	#print(xml_node.deep_copy().get_string() == xml_node.get_string())
-	#print(xml_node.get_main_node_with_name("g"))
+	#print(new_xml_node.get_string())
+	#print(new_xml_node.deep_copy().get_string() == new_xml_node.get_string())
+	#print(new_xml_node.get_main_node_with_name("g"))
 	
 	#var test_file = FileAccess.open(
 		#"res://Images/Output/"+svg_path.rsplit("/", true, 1)[1],
 		#FileAccess.WRITE)
-	#test_file.store_string(xml_node.get_string())
+	#test_file.store_string(new_xml_node.get_string())
 	
-	return xml_node
+	return new_xml_node
+
+func save(path):
+	var test_file = FileAccess.open(
+		path,
+		FileAccess.WRITE)
+	test_file.store_string(xml_node.get_string())
+
+
+func set_bp_info(bp_name, position, angle):
+	var bp_attributes_dict = {
+		"name": bp_name,
+		"x": position.x,
+		"y": position.y,
+		"angle": angle,
+	}
+	var new_bp = Binding_Point.new(bp_attributes_dict)
+	binding_points[bp_name] = new_bp
+	set_bp_node(new_bp)
+
+func set_bp_node(new_bp):
+	var g_node = xml_node.get_main_node_with_name("g")
+	var bp_node_name = g_node.my_namespace+":bp"
+	var existing_bp_nodes = g_node.get_children_with_name(bp_node_name)
+	# Find the bp node called bp_name or create one if it doesn't exist
+	var needed_bp_node
+	for bp in existing_bp_nodes:
+		if "name" in bp.attributes_dict and bp.attributes_dict["name"] == new_bp["name"]:
+			needed_bp_node = bp
+			break
+	if !needed_bp_node:
+		needed_bp_node = XML_Node.new(bp_node_name)
+		g_node.add_child(needed_bp_node)
+	
+	for attribute_name in new_bp.dict:
+		needed_bp_node.set_attribute(
+			attribute_name,
+			str(new_bp.dict[attribute_name]))
+	
+	new_bp.dict["xml_node"] = needed_bp_node
+
+func get_bp_dict_from_xml_node(g_node):
+	var res = {}
+	for bp_node in g_node.get_children_with_name(g_node.my_namespace+":bp"):
+		var new_name = bp_node.attributes_dict["name"]
+		assert(new_name, "UNSUPPORTED SVG: There is a <"+g_node.my_namespace+":bp> node with no \"name\" attribute")
+		var new_bp = Binding_Point.new(bp_node.attributes_dict.duplicate())
+		res[new_name] = new_bp
+		new_bp.set_attribute("xml_node", bp_node)
+		# TODO: The get_string function of the bp nodes could be overridden so that it gets the values from the Binding_Point instead of constantly needing to be synced.
+		## TODO: will this accomplish that? (ETA: no.)
+		#var get_attributes_string = func():
+			#var res2 = ""
+			#for attribute_name in new_bp.dict:
+				#res2 += attribute_name + "=\"" + new_bp.dict[attribute_name].xml_escape() + "\"\n"
+			#return res2
+		#bp_node.get_attributes_string = get_attributes_string
+	return res
