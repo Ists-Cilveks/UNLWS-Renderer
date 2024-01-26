@@ -5,7 +5,7 @@ extends Node
 var glyphs = {}
 
 
-func _init(folder_paths = ["res://Images/Glyphs/", "res://Input/"]):
+func _init(folder_paths = ["res://Images/Glyphs/", "res://Input/"]): # TODO: after the files are re-saved in the Glyphs folder, i need to get rid of the Input folder links
 	for path in folder_paths:
 		add_new_glyphs_from_folder(path)
 
