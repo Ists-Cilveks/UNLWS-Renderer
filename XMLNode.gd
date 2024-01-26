@@ -46,7 +46,8 @@ func get_string():
 func get_attributes_string():
 	var res = ""
 	for attribute_name in attributes_dict:
-		res += attribute_name + "=\"" + attributes_dict[attribute_name].xml_escape() + "\"\n"
+		res += attribute_name + "=\"" + str(attributes_dict[attribute_name]).xml_escape() + "\"\n"
+	print(res)
 	return res
 
 
@@ -81,6 +82,7 @@ func set_attribute(name, value):
 
 func add_my_default_attributes():
 	if node_name == "svg":
+		set_attribute("xmlns", "http://www.w3.org/2000/svg")
 		set_attribute("xmlns:"+my_namespace, "https://github.com/Ists-Cilveks/UNLWS-renderer")
 
 func add_child(child):
