@@ -10,10 +10,7 @@ var defs_node
 func _init():
 	defs_node = XML_Node.new("defs")
 	g_node = XML_Node.new("g")
-	var svg_attributes = {
-		"xmlns": "http://www.w3.org/2000/svg",
-		"xmlns:svg": "http://www.w3.org/2000/svg",
-	}
+	var svg_attributes = {}
 	svg_node = XML_Node.new("svg", svg_attributes, [defs_node, g_node])
 	xml_node = XML_Node.new(null, {}, [svg_node])
 
