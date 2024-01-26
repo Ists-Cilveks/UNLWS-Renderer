@@ -47,7 +47,6 @@ func get_attributes_string():
 	var res = ""
 	for attribute_name in attributes_dict:
 		res += attribute_name + "=\"" + str(attributes_dict[attribute_name]).xml_escape() + "\"\n"
-	print(res)
 	return res
 
 
