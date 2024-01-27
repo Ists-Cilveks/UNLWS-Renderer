@@ -42,6 +42,4 @@ texture = ExtResource("3_5ftf5")
 [node name="HeldGlyph" type="Node2D" parent="Mouse"]
 script = ExtResource("4_v27g6")
 
-[node name="Sprite" type="Sprite2D" parent="Mouse/HeldGlyph"]
-
 [connection signal="glyph_name_selected" from="GlyphSearch" to="Mouse" method="_on_glyph_search_glyph_name_selected"]

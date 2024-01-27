@@ -1,5 +1,7 @@
 class_name Glyph_Instance extends Node2D
 
+var binding_point_class = preload("./binding_point.tscn")
+
 var glyph_type
 
 var style_dict = {}
@@ -7,9 +9,16 @@ var style_dict = {}
 var instance_g_node
 var focus_bp_name
 var focus_bp
+var bp_container_node
+var sprite_node
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
-func _init(glyph_type, position = Vector2(), rotation = 0, focus_bp_name = null):
+func _init(glyph_type = null, position = Vector2(), rotation = 0, focus_bp_name = null):
+	if glyph_type:
+		init(glyph_type, position, rotation, focus_bp_name)
+
+@warning_ignore("shadowed_variable", "shadowed_variable_base_class")
+func init(glyph_type, position = Vector2(), rotation = 0, focus_bp_name = null):
 	#var file = FileAccess.open(svg_path, FileAccess.READ)
 	#var content = file.get_as_text()
 	#var all_paths = get_paths_from_svg(content)
@@ -38,7 +47,18 @@ func _init(glyph_type, position = Vector2(), rotation = 0, focus_bp_name = null)
 	#l.width = 20
 	#for point in selected_path.curve.get_baked_points():
 		#l.add_point(point + selected_path.position)
-
+	
+	bp_container_node = find_child("BPContainer")
+	if bp_container_node: # TODO: Might be good to always or never have access to a BPContainer object rather than it depending on whether this script is part of a binding_point.tscn scene.
+		for name_of_bp_to_copy in glyph_type.binding_points:
+			var new_bp = binding_point_class.instantiate()
+			new_bp.init(glyph_type.binding_points[name_of_bp_to_copy].dict)
+			bp_container_node.add_child(new_bp)
+	
+	sprite_node = find_child("Sprite")
+	if sprite_node: # TODO: Might be good to always or never have access to a Sprite object rather than it depending on whether this script is part of a binding_point.tscn scene.
+		var texture = glyph_type.get_texture()
+		sprite_node.texture = texture
 
 func add_style(new_dict):
 	for glyph_name in new_dict:
@@ -60,5 +80,14 @@ func update_node_transform():
 func get_transform_string():
 	var res = ""
 	res += "translate("+str(position.x)+" "+str(position.y)+")\n"
-	res += "rotate("+str(rotation)+" "+str(focus_bp.x)+" "+str(focus_bp.y)+")\n"
+	res += "rotate("+str(rotation)+" "+str(focus_bp.position.x)+" "+str(focus_bp.position.y)+")\n"
+	res = res.left(len(res)-1)
 	return res
+
+
+func show_binding_points():
+	if bp_container_node:
+		bp_container_node.show_all()
+func hide_binding_points():
+	if bp_container_node:
+		bp_container_node.hide_all()

@@ -7,9 +7,9 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	var test_text = UNLWS_Text.new()
 	
-	#glyphs["eat"].set_bp_info("A", Vector2(20.8, 26.4), 180)
-	#glyphs["eat"].set_bp_info("B", Vector2(27.8, 30.4), 270)
-	#glyphs["cat"].set_bp_info("X", Vector2(31.85, 26.25), 0)
+	#glyphs["eat"].set_bp_info("A", Vector2(20.8-20.299457, 26.4-17.823843), 180)
+	#glyphs["eat"].set_bp_info("B", Vector2(27.8-20.299457, 30.4-17.823843), 270)
+	#glyphs["cat"].set_bp_info("X", Vector2(31.85-15.725407, 26.25-15.184546), 0)
 	
 	test_text.add_glyph(Glyph_Instance.new(glyphs["cat"]))
 	test_text.add_glyph(Glyph_Instance.new(glyphs["eat"], Vector2(10, 0), 0, "A"))

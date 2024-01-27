@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b744yx6d1y0pg"]
+
+[ext_resource type="Texture2D" uid="uid://c43mngk2xy2ls" path="res://Images/Icons/Binding Points/default.svg" id="1_alowh"]
+[ext_resource type="Script" path="res://BindingPoint.gd" id="1_wousu"]
+
+[node name="BindingPoint" type="Node2D"]
+script = ExtResource("1_wousu")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_alowh")

@@ -7,6 +7,8 @@ func _process(_delta):
 #	position = lagged_target_pos + (lagged_target_pos - old_pos)*0.5
 	position = get_viewport().get_mouse_position()
 
+func place_held_glyph(new_parent):
+	$HeldGlyph.place(new_parent)
 
 func _on_glyph_search_glyph_name_selected(glyph_name):
-	$HeldGlyph.change_glyph(glyph_name)
+	$HeldGlyph.set_by_name(glyph_name)
