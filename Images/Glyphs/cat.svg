@@ -1,7 +1,12 @@
 <svg
+	width="16.58816"
+	height="11.770386"
+	viewBox="0 0 16.58816 11.770385"
+	version="1.1"
 	xmlns="http://www.w3.org/2000/svg"
 	xmlns:unlws-renderer="https://github.com/Ists-Cilveks/UNLWS-renderer">
 	<g
+		transform="translate(-15.725407,-15.184546)"
 		id="cat">
 		<path
 			style="fill:none;fill-opacity:0.494828;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
@@ -13,6 +18,26 @@
 			name="X"
 			x="31.8500003814697"
 			y="26.25"
+			angle="0" />
+		<unlws-renderer:bp
+			name="X"
+			x="16.1245937347412"
+			y="10.5245933532715"
+			angle="0" />
+		<unlws-renderer:bp
+			name="X"
+			x="16.1245937347412"
+			y="10.5245933532715"
+			angle="0" />
+		<unlws-renderer:bp
+			name="X"
+			x="16.1245937347412"
+			y="11.0654535293579"
+			angle="0" />
+		<unlws-renderer:bp
+			name="X"
+			x="16.1245937347412"
+			y="11.0654535293579"
 			angle="0" />
 	</g>
 </svg>

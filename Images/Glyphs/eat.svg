@@ -1,7 +1,12 @@
 <svg
+	width="12.794782"
+	height="13.116347"
+	viewBox="0 0 12.794782 13.116347"
+	version="1.1"
 	xmlns="http://www.w3.org/2000/svg"
 	xmlns:unlws-renderer="https://github.com/Ists-Cilveks/UNLWS-renderer">
 	<g
+		transform="translate(-20.299457,-17.823843)"
 		id="eat">
 		<path
 			style="fill:none;fill-opacity:0.494828;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
@@ -15,6 +20,46 @@
 			name="B"
 			x="27.7999992370605"
 			y="30.3999996185303"
+			angle="270" />
+		<unlws-renderer:bp
+			name="A"
+			x="0.5005429983139"
+			y="6.10054302215576"
+			angle="180" />
+		<unlws-renderer:bp
+			name="B"
+			x="9.97615718841553"
+			y="12.5761566162109"
+			angle="270" />
+		<unlws-renderer:bp
+			name="A"
+			x="0.5005429983139"
+			y="6.10054302215576"
+			angle="180" />
+		<unlws-renderer:bp
+			name="B"
+			x="9.97615718841553"
+			y="12.5761566162109"
+			angle="270" />
+		<unlws-renderer:bp
+			name="A"
+			x="0.5005429983139"
+			y="8.57615661621094"
+			angle="180" />
+		<unlws-renderer:bp
+			name="B"
+			x="7.50054311752319"
+			y="12.5761566162109"
+			angle="270" />
+		<unlws-renderer:bp
+			name="A"
+			x="0.5005429983139"
+			y="8.57615661621094"
+			angle="180" />
+		<unlws-renderer:bp
+			name="B"
+			x="7.50054311752319"
+			y="12.5761566162109"
 			angle="270" />
 	</g>
 </svg>

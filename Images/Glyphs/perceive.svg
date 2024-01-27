@@ -1,7 +1,12 @@
 <svg
+	width="11.719015"
+	height="11.617887"
+	viewBox="0 0 11.719015 11.617887"
+	version="1.1"
 	xmlns="http://www.w3.org/2000/svg"
 	xmlns:unlws-renderer="https://github.com/Ists-Cilveks/UNLWS-renderer">
 	<g
+		transform="translate(-9.3552178,-6.5674847)"
 		id="perceive">
 		<path
 			style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"

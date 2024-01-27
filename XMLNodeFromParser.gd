@@ -4,20 +4,6 @@ class_name XML_Node_From_Parser extends XML_Node
 func _init(parser):
 	var node_type = parser.get_node_type()
 	var attributes_dict = {}
-	var children = []
-	# Parse children
-	if not parser.is_empty() and node_type in [XMLParser.NODE_ELEMENT, XMLParser.NODE_NONE]: # The only nodes that need to be checked for children are the start node and elements that aren't empty (<element />)
-		while parser.read() != ERR_FILE_EOF:
-			if parser.get_node_type() == XMLParser.NODE_TEXT:# TODO: I'm not sure this is reliable. Does this get rid of all the nodes that are unneeded (there could be other types)? Are there text nodes (and info in them) that are necessary?
-				continue
-			var potential_child = XML_Node_From_Parser.new(parser)
-			#print(potential_child.node_type)
-			if potential_child.node_type == XMLParser.NODE_ELEMENT_END:
-				break
-			elif !is_node_worth_storing(potential_child):
-				continue
-			else:
-				children.append(potential_child)
 	
 	# TODO: Make sure there is a main g node so that it can be added to refs etc. If multiple children are g nodes, make a parent g node.
 	
@@ -37,6 +23,21 @@ func _init(parser):
 		pass
 	else:
 		node_full_text = "" # TODO: how to actually extract source text from the parser?
+	
+	# Parse children
+	var children = []
+	if not parser.is_empty() and node_type in [XMLParser.NODE_ELEMENT, XMLParser.NODE_NONE]: # The only nodes that need to be checked for children are the start node and elements that aren't empty (<element />)
+		while parser.read() != ERR_FILE_EOF:
+			if parser.get_node_type() == XMLParser.NODE_TEXT:# TODO: I'm not sure this is reliable. Does this get rid of all the nodes that are unneeded (there could be other types)? Are there text nodes (and info in them) that are necessary?
+				continue
+			var potential_child = XML_Node_From_Parser.new(parser)
+			#print(potential_child.node_type)
+			if potential_child.node_type == XMLParser.NODE_ELEMENT_END:
+				break
+			elif !is_node_worth_storing(potential_child):
+				continue
+			else:
+				children.append(potential_child)
 	
 	super(node_name, attributes_dict, children, node_type)
 
