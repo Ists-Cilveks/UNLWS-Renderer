@@ -30,7 +30,7 @@ An app to write [UNLWS](https://s.ai/nlws/) texts using glyphs in SVG format
     * I'll need to pay extra attention to namespaces and IDs.
 * Use a GUI to define what binding points a glyph has, how to form a scalar family from it etc.
 * Enable writing texts quickly using the GUI and keyboard shortcuts.
-    * Glyph search, so you can write the first letters of a glyph name (or a synonym) and select it from a list.
+    * Glyph search, so you can write the first letters of a glyph name (or a synonym) and select it from a list. (Currently, a glyph can be selected by writing its full name and pressing enter)
     * Select and edit multiple glyphs at once.
     * Undo feature.
 * Export (and import) texts from SVG files (using custom namespaces sparingly).
