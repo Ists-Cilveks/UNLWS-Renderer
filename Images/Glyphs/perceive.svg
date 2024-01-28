@@ -14,5 +14,17 @@
 		<path
 			style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
 			d="m 10.194609,10.106993 c 3.313333,3.666687 6.93839,7.388467 6.93839,7.388467" />
+		<unlws-renderer:bp
+			name="X"
+			x="11"
+			y="11"
+			angle="0"
+			xml_node="&lt;Object#25182602478&gt;" />
+		<unlws-renderer:bp
+			name="S"
+			x="0.5"
+			y="0.20000000298023"
+			angle="0"
+			xml_node="&lt;Object#25199379695&gt;" />
 	</g>
 </svg>

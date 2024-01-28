@@ -10,6 +10,8 @@ func _ready():
 	#glyphs["eat"].set_bp_info("A", Vector2(20.8-20.299457, 26.4-17.823843), 180)
 	#glyphs["eat"].set_bp_info("B", Vector2(27.8-20.299457, 30.4-17.823843), 90)
 	#glyphs["cat"].set_bp_info("X", Vector2(31.85-15.725407, 26.25-15.184546), 0)
+	#glyphs["perceive"].set_bp_info("X", Vector2(11, 11), 0)
+	#glyphs["perceive"].set_bp_info("S", Vector2(0.5, 0.2), 0)
 	
 	test_text.add_glyph(Glyph_Instance.new(glyphs["cat"], "X", Vector2(20, 15), 0))
 	test_text.add_glyph(Glyph_Instance.new(glyphs["eat"], "B", Vector2(20, 15), 180))
