@@ -3,9 +3,13 @@
 [ext_resource type="Script" path="res://GlyphInstance.gd" id="1_7xa21"]
 
 [node name="GlyphInstance" type="Node2D"]
+scale = Vector2(10, 10)
 script = ExtResource("1_7xa21")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="FocusedOnBP" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite2D" parent="FocusedOnBP"]
+scale = Vector2(0.04, 0.04)
 centered = false
 
-[node name="BPContainer" type="Node2D" parent="."]
+[node name="BPContainer" type="Node2D" parent="FocusedOnBP"]

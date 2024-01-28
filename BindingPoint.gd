@@ -16,9 +16,9 @@ func init(init_dict):
 			dict[key] = init_dict[key]
 	
 	if "x" in dict and "y" in dict:
-		position = Vector2(dict["x"]*25, dict["y"]*25)
+		position = Vector2(dict["x"], dict["y"])
 	if "angle" in dict:
-		rotation = dict["angle"]
+		rotation_degrees = dict["angle"]
 
 func set_attribute(key, value):
 	dict[key] = value

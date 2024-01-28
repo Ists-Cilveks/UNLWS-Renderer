@@ -8,11 +8,13 @@ func _ready():
 	var test_text = UNLWS_Text.new()
 	
 	#glyphs["eat"].set_bp_info("A", Vector2(20.8-20.299457, 26.4-17.823843), 180)
-	#glyphs["eat"].set_bp_info("B", Vector2(27.8-20.299457, 30.4-17.823843), 270)
+	#glyphs["eat"].set_bp_info("B", Vector2(27.8-20.299457, 30.4-17.823843), 90)
 	#glyphs["cat"].set_bp_info("X", Vector2(31.85-15.725407, 26.25-15.184546), 0)
 	
-	test_text.add_glyph(Glyph_Instance.new(glyphs["cat"]))
-	test_text.add_glyph(Glyph_Instance.new(glyphs["eat"], Vector2(10, 0), 0, "A"))
+	test_text.add_glyph(Glyph_Instance.new(glyphs["cat"], "X", Vector2(20, 15), 0))
+	test_text.add_glyph(Glyph_Instance.new(glyphs["eat"], "B", Vector2(20, 15), 180))
+	test_text.add_glyph(Glyph_Instance.new(glyphs["amused"], "X", Vector2(50, 20), 270))
+	test_text.add_glyph(Glyph_Instance.new(glyphs["eat"], "A", Vector2(50, 20), 90))
 
 	var xml_string = test_text.xml_node.get_string()
 	var test_file = FileAccess.open("res://Output/text.svg", FileAccess.WRITE)
