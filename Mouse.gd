@@ -9,6 +9,8 @@ func _process(_delta):
 
 func place_held_glyph(new_parent):
 	$HeldGlyph.place(new_parent)
+	$Cursor.show()
 
 func _on_glyph_search_glyph_name_selected(glyph_name):
 	$HeldGlyph.set_by_name(glyph_name)
+	$Cursor.hide()
