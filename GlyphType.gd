@@ -71,8 +71,13 @@ func set_bp_info(bp_name, position, angle):
 		"y": position.y,
 		"angle": angle,
 	}
-	var new_bp = Binding_Point.new(bp_attributes_dict)
+	var new_bp = binding_points[bp_name]
+	if new_bp:
+		new_bp.init(bp_attributes_dict)
+	else:
+		new_bp = Binding_Point.new(bp_attributes_dict)
 	binding_points[bp_name] = new_bp
+	
 	set_bp_node(new_bp)
 
 func set_bp_node(new_bp):
@@ -82,7 +87,9 @@ func set_bp_node(new_bp):
 	# Find the bp node called bp_name or create one if it doesn't exist
 	var needed_bp_node
 	for bp in existing_bp_nodes:
-		if "name" in bp.attributes_dict and bp.attributes_dict["name"] == new_bp["name"]:
+		if "name" in bp.attributes_dict \
+		and "name" in new_bp.dict \
+		and bp.attributes_dict["name"] == new_bp.dict["name"]:
 			needed_bp_node = bp
 			break
 	if !needed_bp_node:
