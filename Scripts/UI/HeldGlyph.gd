@@ -1,6 +1,6 @@
 extends Node2D
 
-var glyph_instance_scene = preload("./glyph_instance.tscn")
+var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
 
 var glyphs = Glyph_List.glyphs
 

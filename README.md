@@ -11,7 +11,7 @@ An app to write [UNLWS](https://s.ai/nlws/) texts using glyphs in SVG format
 1. If the glyph SVGs don't have binding point information yet:
     * Manually find the binding point positions and the angle (clockwise from the +X direction, in degrees) at which the binding point line ends.
     * Then choose how to add the binding point:
-        * Add a command to the `.../UNLWS_editor.gd` script (the file has examples).
+        * Add a command to the `.../Scripts/UNLWS_editor.gd` script (the file has examples).
         * Add the `<unlws-renderer:bp>` tag with the necessary attributes to the SVG code (see the example SVGs in `.../Images/Glyphs/`).
 1. Put your SVGs in the Input folder (`.../Input/`).
     * One glyph per SVG file, the standard line width is `line-width:1`. Currently the file needs to have a `<g>` tag that contains everything else (all the elements that are drawn are its descendants, and all attributes that need to be saved belong to it or its descendants)
@@ -20,7 +20,7 @@ An app to write [UNLWS](https://s.ai/nlws/) texts using glyphs in SVG format
 20
 #### Create texts (wip)
 1. First import all the glyphs that you will use (and define their BPs).
-1. Add commands to `.../UNLWS_editor.gd` (examples are given) to instance the glyphs in the right positions.
+1. Add commands to `.../Scripts/UNLWS_editor.gd` (examples are given) to instance the glyphs in the right positions.
 1. The text is saved to `.../Output` as an SVG as soon as the project runs.
 
 ## Future work
