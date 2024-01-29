@@ -44,6 +44,7 @@ func get_xml_node_from_svg_path(svg_path):
 	
 	var new_xml_node = XML_Node_From_Parser.new(parser)
 	var g_node = new_xml_node.get_main_node_with_name("g")
+	assert(g_node, "UNSUPPORTED SVG: There isn't a single main <g> element")
 	g_node.set_attribute("id", name)
 	
 	#print(new_xml_node.get_string())

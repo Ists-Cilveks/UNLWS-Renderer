@@ -26,8 +26,8 @@ func get_all_files(path: String, file_ext := "", files := []) -> Array: #Loops t
 			if dir.current_is_dir():
 				files = get_all_files(dir.get_current_dir() + file_name, file_ext, files)
 			else:
-				if not file_ext is String or len(file_ext) == 0 or file_name.get_extension() == file_ext:
-					files.append(dir.get_current_dir() + file_name)
+				if len(file_ext) == 0 or file_name.get_extension() == file_ext:
+					files.append(path + file_name)
 
 			file_name = dir.get_next()
 	else:
