@@ -1,8 +1,18 @@
 extends Node2D
+## An object that follows the mouses movements to display a cursor
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-#	var old_pos = position
-#	var lagged_target_pos = get_viewport().get_mouse_position()
-#	position = lagged_target_pos + (lagged_target_pos - old_pos)*0.5
-	position = get_viewport().get_mouse_position()
+func _ready():
+	Event_Bus.started_holding_glyphs.connect(hide_cursor)
+	Event_Bus.stopped_holding_glyphs.connect(show_cursor)
+
+# Track the mouse position
+func _input(event):
+	if event is InputEventMouseMotion:
+		position = get_global_mouse_position()
+
+
+func hide_cursor():
+	$Cursor.hide()
+
+func show_cursor():
+	$Cursor.show()
