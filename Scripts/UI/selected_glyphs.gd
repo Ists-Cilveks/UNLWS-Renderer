@@ -4,6 +4,12 @@ var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
 
 var glyphs = Glyph_List.glyphs
 
+func _process(_delta):
+#	var old_pos = position
+#	var lagged_target_pos = get_viewport().get_mouse_position()
+#	position = lagged_target_pos + (lagged_target_pos - old_pos)*0.5
+	position = get_viewport().get_mouse_position()
+
 func set_by_name(glyph_name):
 	remove()
 	if glyph_name in glyphs:
@@ -19,7 +25,19 @@ func remove(delete = true):
 		if delete:
 			child.free()
 
-func place(new_parent):
+func place():
 	var children = get_children()
 	for child in children:
-		child.reparent(new_parent)
+		remove_child(child)
+		Event_Bus.glyph_placed.emit(child)
+
+
+func place_held_glyph(new_parent):
+	$HeldGlyph.place(new_parent)
+	$Cursor.show()
+
+func _on_glyph_search_glyph_name_selected(glyph_name):
+	$HeldGlyph.set_by_name(glyph_name)
+	$Cursor.hide()
+
+

@@ -1,7 +1,5 @@
 extends Control
 
-signal glyph_name_selected(glyph_name)
-
 func erase_all_text():
 	$GlyphSearchEntry.text = ""
 
@@ -20,7 +18,7 @@ func cancel_input():
 	hide()
 
 func input_complete():
-	glyph_name_selected.emit($GlyphSearchEntry.text)
+	Event_Bus.glyph_name_selected.emit($GlyphSearchEntry.text)
 	cancel_input()
 
 func _input(event):

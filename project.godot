@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Event_Bus="*res://Scripts/Globals/EventBus.gd"
 Glyph_List="*res://Scripts/Globals/GlyphList.gd"
+Undo_Redo="*res://Scripts/Globals/UndoRedo.gd"
 
 [filesystem]
 
