@@ -1,4 +1,6 @@
 class_name Glyph_Instance extends Node2D
+## An instance of a glyph with a certain name, position etc.
+## To instance it, load the glyph_instance.tscn scene, do not just call new()
 
 var binding_point_class = preload("./binding_point.tscn")
 
