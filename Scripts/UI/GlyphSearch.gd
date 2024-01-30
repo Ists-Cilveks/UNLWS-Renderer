@@ -1,5 +1,8 @@
 extends Control
 
+var glyph_instance_scene = load("res://Scripts/Glyphs/glyph_instance.tscn")
+var glyphs = Glyph_List.glyphs
+
 func erase_all_text():
 	$GlyphSearchEntry.text = ""
 
@@ -18,7 +21,12 @@ func cancel_input():
 	hide()
 
 func input_complete():
-	Event_Bus.glyph_name_selected.emit($GlyphSearchEntry.text)
+	var glyph_name = $GlyphSearchEntry.text
+	if glyph_name in glyphs:
+		var glyph_type = glyphs[glyph_name]
+		var instance = glyph_instance_scene.instantiate()
+		instance.init(glyph_type)
+		Event_Bus.glyph_search_succeeded.emit(instance)
 	cancel_input()
 
 func _input(event):
