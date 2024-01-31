@@ -29,7 +29,10 @@ func delete():
 func place(new_parent):
 	var children = get_children()
 	for child in children:
-		child.reparent(new_parent)
+		Undo_Redo.add_do_method(func(): child.reparent(new_parent))
+		var lambda_self = self
+		Undo_Redo.add_undo_method(func(): child.reparent(lambda_self, false))
+
 
 func overwrite(new_instance):
 	delete()

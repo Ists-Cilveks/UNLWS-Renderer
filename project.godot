@@ -25,6 +25,13 @@ Undo_Redo="*res://Scripts/Globals/UndoRedo.gd"
 
 import/blender/enabled=false
 
+[input]
+
+undo={
+"deadzone": 0.5,
+"events": []
+}
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

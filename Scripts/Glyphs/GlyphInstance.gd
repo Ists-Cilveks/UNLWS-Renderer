@@ -121,3 +121,15 @@ func show_binding_points():
 func hide_binding_points():
 	if bp_container_node:
 		bp_container_node.hide_all()
+
+
+func get_restore_dict():
+	return {
+		glyph_type = glyph_type,
+		focus_bp_name = focus_bp_name,
+		position = position,
+		rotation = rotation,
+	}
+
+func restore_from_dict(dict):
+	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"])
