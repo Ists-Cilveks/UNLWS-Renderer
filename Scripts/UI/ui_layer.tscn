@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/UI/GlyphSearch.gd" id="1_ns67w"]
 [ext_resource type="Script" path="res://Scripts/UI/ui_layer.gd" id="1_yd5ga"]
-[ext_resource type="Script" path="res://Scripts/UI/mouse.gd" id="3_1ip1p"]
+[ext_resource type="Script" path="res://Scripts/UI/Mouse.gd" id="3_1ip1p"]
 [ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="3_5ftf5"]
 [ext_resource type="Script" path="res://Scripts/UI/undo_button.gd" id="5_aa3he"]
 [ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="6_lcx2g"]
