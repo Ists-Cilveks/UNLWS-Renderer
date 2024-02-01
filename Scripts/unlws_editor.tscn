@@ -16,7 +16,7 @@ script = ExtResource("1_5jbj8")
 
 [node name="UILayer" parent="." instance=ExtResource("2_qpyj2")]
 
-[node name="Canvas" type="Node2D" parent="."]
+[node name="Canvas" type="CanvasLayer" parent="."]
 script = ExtResource("3_pniuy")
 
 [node name="SelectedGlyphs" type="Node2D" parent="Canvas"]

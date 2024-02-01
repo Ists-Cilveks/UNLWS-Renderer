@@ -2,6 +2,7 @@ extends Control
 
 var glyph_instance_scene = load("res://Scripts/Glyphs/glyph_instance.tscn")
 var glyphs = Glyph_List.glyphs
+var test_instance = glyph_instance_scene.instantiate()
 
 func erase_all_text():
 	$GlyphSearchEntry.text = ""
@@ -23,10 +24,35 @@ func cancel_input():
 func input_complete():
 	var glyph_name = $GlyphSearchEntry.text
 	if glyph_name in glyphs:
+		Undo_Redo.create_action("Overwrite held glyph with search")
 		var glyph_type = glyphs[glyph_name]
 		var instance = glyph_instance_scene.instantiate()
 		instance.init(glyph_type)
 		Event_Bus.glyph_search_succeeded.emit(instance)
+		#var emitter = func(): Event_Bus.glyph_search_succeeded.emit(instance)
+		#var create_and_emit_current_instance = func create_and_emit_current_instance():
+			##return emitter
+			#Event_Bus.glyph_search_succeeded.emit(instance)
+		#Undo_Redo.add_do_method(create_and_emit_current_instance)
+		#Undo_Redo.undo_redo.add_do_method(create_and_emit_current_instance)
+		#Undo_Redo.undo_redo.add_do_method(func create_and_emit_current_instance():
+			##var glyph_type = glyphs[glyph_name]
+			##var instance = glyph_instance_scene.instantiate()
+			##instance.init(glyph_type)
+			##Event_Bus.glyph_search_succeeded.emit(instance)
+		#)
+		#Undo_Redo.undo_redo.add_do_method(func create_and_emit_current_instance(): Event_Bus.glyph_search_succeeded.emit(glyph_instance_scene.instantiate()))
+		#Undo_Redo.undo_redo.add_do_method(func create_and_emit_current_instance(): test_instance.init(glyphs[glyph_name]))
+		#var create_and_emit_current_instance = func create_and_emit_current_instance():
+		#var glyph_type = glyphs[glyph_name]
+		#var instance = glyph_instance_scene.instantiate()
+		#instance.init(glyph_type)
+		#instance 
+		#Undo_Redo.add_do_method(func create_and_emit_current_instance():
+			#return emitter
+			#Event_Bus.glyph_search_succeeded.emit(instance))
+		#Undo_Redo.add_do_method(func(): Event_Bus.glyph_search_succeeded.emit(instance))
+		Undo_Redo.commit_action()
 	cancel_input()
 
 func _input(event):
