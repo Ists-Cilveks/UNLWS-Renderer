@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://css6xu7374m8y"]
+[gd_scene load_steps=6 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://Scripts/UNLWS_editor.gd" id="1_5jbj8"]
 [ext_resource type="PackedScene" uid="uid://sjoa8yoclxtp" path="res://Scripts/UI/ui_layer.tscn" id="2_qpyj2"]
 [ext_resource type="Script" path="res://Scripts/glyph_canvas.gd" id="3_pniuy"]
 [ext_resource type="Script" path="res://Scripts/UI/selected_glyphs.gd" id="3_xo3q2"]
+[ext_resource type="Script" path="res://Scripts/UI/placed_glyphs.gd" id="5_41scr"]
 
 [node name="UNLWSEditor" type="Control"]
 layout_mode = 3
@@ -24,3 +25,4 @@ z_index = 1
 script = ExtResource("3_xo3q2")
 
 [node name="Glyphs" type="Node2D" parent="Canvas"]
+script = ExtResource("5_41scr")
