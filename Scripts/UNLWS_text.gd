@@ -20,12 +20,13 @@ func add_required_def(id, g_node_copy):
 		defs_node.add_child(g_node_copy)
 
 func add_glyph(instance):
-	var instance_g_node = instance.glyph_type.xml_node.get_main_node_with_name("g").deep_copy()
+	var type_g_node = instance.glyph_type.xml_node.get_main_node_with_name("g").deep_copy()
 	var glyph_name = instance.glyph_type.name
-	add_required_def(glyph_name, instance_g_node)
+	add_required_def(glyph_name, type_g_node)
 	#g_node.add_child(instance.glyph_type.xml_node.get_main_node_with_name("g"))
 	var transform_string = instance.get_transform_string()
 	g_node.add_child(XML_Node.new("use", {
 		"href": "#"+glyph_name,
 		"transform": transform_string
 	}))
+	g_node.set_attribute("id", instance.id)

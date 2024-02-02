@@ -5,6 +5,7 @@ class_name Glyph_Instance extends Node2D
 var binding_point_class = preload("./binding_point.tscn")
 
 var glyph_type
+var id
 
 var style_dict = {}
 
@@ -23,12 +24,18 @@ func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotati
 		init(glyph_type, focus_bp_name, position, rotation)
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
-func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0):
+func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, id = null):
 	#var file = FileAccess.open(svg_path, FileAccess.READ)
 	#var content = file.get_as_text()
 	#var all_paths = get_paths_from_svg(content)
 	self.glyph_type = glyph_type
 	self.instance_g_node = glyph_type.xml_node.get_main_node_with_name("g").deep_copy()
+	
+	if id:
+		self.name = id
+	else:
+		self.name = glyph_type.get_new_id()
+	self.id = self.name
 	
 	#print(glyph_type.name)
 	
@@ -123,13 +130,16 @@ func hide_binding_points():
 		bp_container_node.hide_all()
 
 
-func get_restore_dict():
-	return {
+func get_restore_dict(preserve_id = true):
+	var res = {
 		glyph_type = glyph_type,
 		focus_bp_name = focus_bp_name,
 		position = position,
 		rotation = rotation,
 	}
+	if preserve_id:
+		res["id"] = id
+	return res
 
 func restore_from_dict(dict):
-	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"])
+	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"])

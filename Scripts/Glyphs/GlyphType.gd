@@ -7,6 +7,7 @@ var texture
 var xml_node
 var all_paths = []
 var binding_points = {}
+var num_instances = 0 # Used to quickly create unique IDs for Glyph_Instances
 
 func _init(init_name, init_sprite_path):
 	name = init_name
@@ -121,3 +122,10 @@ func get_bp_dict_from_xml_node(g_node):
 			#return res2
 		#bp_node.get_attributes_string = get_attributes_string
 	return res
+
+
+func get_new_id():
+	var new_id = name + "-instance-" + str(num_instances)
+	num_instances += 1
+	print(new_id, "  ", num_instances)
+	return new_id
