@@ -61,42 +61,14 @@ func delete():
 	remove(true)
 
 func place(new_parent):
-	#var lambda_self = self
-	#var lambda_glyph_instance_scene = glyph_instance_scene
-	#
-	## "do" part (place all held glyphs)
-	#var reparent_all_children = func reparent_all_children():
-		#var do_children = lambda_self.get_children()
-		#for child in do_children:
-			#child.reparent(new_parent)
-	#Undo_Redo.add_do_method(reparent_all_children)
-	#
-	## "undo" part (hold the glyphs that were previously placed)
-	## TODO: this is bad. Undoing glyph placement should be done with reparenting,
-	## not saving the data of the glyphs temporarily in a lambda and then calling it
-	## to delete the current selection and reconstruct the glyphs.
-	## FIXME: i can't delete everything, because it's in the actual canvas,
-	## not just the current selection
-	#Undo_Redo.add_undo_method(delete_without_undo_redo)
-	#var undo_children = get_children()
-	#for child in undo_children:
-		#var restore_dict = child.get_restore_dict()
-		#var restore_child = func restore_child():
-			#var instance = lambda_glyph_instance_scene.instantiate()
-			#instance.restore_from_dict(restore_dict)
-			#lambda_self.add_child(instance)
-		#Undo_Redo.add_undo_method(restore_child)
-		##Undo_Redo.add_undo_method(func(): child.reparent(lambda_self, false))
-	
 	var children = get_children()
 	for child in children:
-		reparent_glyph_instance_by_name(child.name, new_parent)
+		reparent_glyph_instance_by_name(child.name, new_parent, Vector2(child.position))
 
 
 func overwrite(new_instance):
-	#delete()
-	#add_child(new_instance)
 	delete()
+	#add_child(new_instance)
 	#Undo_Redo.add_do_method(func(): lambda_self.add_child(new_instance)) # Doesn't work because new_instance is lost
 	var lambda_self = self
 	var lambda_glyph_instance_scene = glyph_instance_scene
@@ -109,8 +81,22 @@ func overwrite(new_instance):
 	Undo_Redo.add_do_method(restore_child)
 
 
-func reparent_glyph_instance_by_name(glyph_name, new_parent):
+func reparent_glyph_instance_by_name(glyph_name, new_parent, old_position = null):
 	var lambda_self = self
 	var node_path = NodePath(glyph_name)
-	Undo_Redo.add_do_method(func(): lambda_self.get_node(node_path).reparent(new_parent))
-	Undo_Redo.add_undo_method(func(): new_parent.get_node(node_path).reparent(lambda_self))
+	#Undo_Redo.add_do_method(func(): lambda_self.get_node(node_path).reparent(new_parent)) # Doesn't preserve position on redo
+	var node = get_node(node_path)
+	
+	var new_position = new_parent.to_local(node.global_position)
+	var do_method = func do_method():
+		var do_node = lambda_self.get_node(node_path)
+		do_node.position = new_position
+		do_node.reparent(new_parent, false)
+	Undo_Redo.add_do_method(do_method)
+	
+	var undo_method = func undo_method():
+		var undo_node = new_parent.get_node(node_path)
+		if old_position != null:
+			undo_node.position = old_position
+		undo_node.reparent(lambda_self, false)
+	Undo_Redo.add_undo_method(undo_method)
