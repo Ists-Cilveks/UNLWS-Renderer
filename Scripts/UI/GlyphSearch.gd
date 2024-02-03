@@ -17,9 +17,13 @@ func backspace_input():
 	$GlyphSearchEntry.text = $GlyphSearchEntry.text.left(len($GlyphSearchEntry.text)-1)
 
 func cancel_input():
+	var key_handled = false
+	if $GlyphSearchEntry.text:
+		key_handled = true
 	erase_all_text()
 #	glyph_name_input_cancelled.emit()
 	hide()
+	return key_handled
 
 func input_complete():
 	var glyph_name = $GlyphSearchEntry.text
@@ -45,7 +49,7 @@ func _input(event):
 		if event.is_action_pressed("ui_text_backspace_all_to_left"):
 			erase_all_text()
 		elif event.is_action_pressed("ui_cancel"):
-			cancel_input()
+			key_handled = cancel_input()
 		elif event.is_action_pressed("ui_text_backspace"):
 			backspace_input()
 		elif event.is_action_pressed("ui_accept"):

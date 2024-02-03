@@ -4,11 +4,14 @@ extends Node2D
 var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
 
 var glyphs = Glyph_List.glyphs
+var is_holding_glyphs = false
+var is_selecting_glyphs = false
 
 # Track the mouse position
 func _input(event):
 	if event is InputEventMouseMotion:
 		position = get_global_mouse_position()
+
 
 func set_by_name(glyph_name):
 	remove()
@@ -17,6 +20,20 @@ func set_by_name(glyph_name):
 		var node = glyph_instance_scene.instantiate()
 		node.init(glyph_type)
 		add_child(node)
+
+
+func stop_holding():
+	Undo_Redo.add_do_property(self, "is_holding_glyphs", false)
+	Undo_Redo.add_undo_property(self, "is_holding_glyphs", is_holding_glyphs)
+	Undo_Redo.add_do_method(func(): Event_Bus.stopped_holding_glyphs.emit())
+	Undo_Redo.add_undo_method(func(): Event_Bus.started_holding_glyphs.emit())
+
+func start_holding():
+	Undo_Redo.add_do_property(self, "is_holding_glyphs", true)
+	Undo_Redo.add_undo_property(self, "is_holding_glyphs", is_holding_glyphs)
+	Undo_Redo.add_do_method(func(): Event_Bus.started_holding_glyphs.emit())
+	Undo_Redo.add_undo_method(func(): Event_Bus.stopped_holding_glyphs.emit())
+
 
 # Remove all children (without having pointers to them)
 func remove_without_undo_redo(delete_after_removing = true):
@@ -56,6 +73,8 @@ func remove(delete_after_removing = true):
 			Undo_Redo.add_undo_method(restore_child)
 		else:
 			Undo_Redo.add_undo_method(func(): lambda_self.add_child(child))
+	
+	stop_holding()
 
 func delete():
 	remove(true)
@@ -64,6 +83,8 @@ func place(new_parent):
 	var children = get_children()
 	for child in children:
 		reparent_glyph_instance_by_name(child.name, new_parent, Vector2(child.position))
+	
+	stop_holding()
 
 
 func overwrite(new_instance):
@@ -79,6 +100,8 @@ func overwrite(new_instance):
 		instance.restore_from_dict(restore_dict)
 		lambda_self.add_child(instance)
 	Undo_Redo.add_do_method(restore_child)
+	
+	start_holding()
 
 
 func reparent_glyph_instance_by_name(glyph_name, new_parent, old_position = null):
