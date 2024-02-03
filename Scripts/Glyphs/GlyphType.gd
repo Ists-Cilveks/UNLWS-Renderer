@@ -127,5 +127,4 @@ func get_bp_dict_from_xml_node(g_node):
 func get_new_id():
 	var new_id = name + "-instance-" + str(num_instances)
 	num_instances += 1
-	print(new_id, "  ", num_instances)
 	return new_id
