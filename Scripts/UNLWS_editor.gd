@@ -1,4 +1,4 @@
-extends Control
+extends Node
 
 var glyphs = Glyph_List.glyphs
 

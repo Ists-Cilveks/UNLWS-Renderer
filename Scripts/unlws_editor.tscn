@@ -6,20 +6,17 @@
 [ext_resource type="Script" path="res://Scripts/UI/selected_glyphs.gd" id="3_xo3q2"]
 [ext_resource type="Script" path="res://Scripts/UI/placed_glyphs.gd" id="5_41scr"]
 
-[node name="UNLWSEditor" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="UNLWSEditor" type="Node"]
 script = ExtResource("1_5jbj8")
 
 [node name="UILayer" parent="." instance=ExtResource("2_qpyj2")]
 layer = 2
 
-[node name="Canvas" type="CanvasLayer" parent="."]
+[node name="Canvas" type="Node" parent="."]
 script = ExtResource("3_pniuy")
+
+[node name="Camera" type="Camera2D" parent="Canvas"]
+zoom = Vector2(2, 2)
 
 [node name="SelectedGlyphs" type="Node2D" parent="Canvas"]
 z_index = 1

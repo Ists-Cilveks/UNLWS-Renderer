@@ -10,9 +10,6 @@
 [node name="UILayer" type="CanvasLayer"]
 script = ExtResource("1_yd5ga")
 
-[node name="Camera" type="Camera2D" parent="."]
-zoom = Vector2(2, 2)
-
 [node name="GlyphSearch" type="Control" parent="."]
 visible = false
 z_index = 14
