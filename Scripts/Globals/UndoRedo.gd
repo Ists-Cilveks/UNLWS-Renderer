@@ -35,13 +35,11 @@ func add_undo_property(object, property, value):
 	undo_redo.add_undo_property(object, property, value)
 
 func undo():
-	assert(undo_redo.has_undo())
 	if undo_redo.has_undo():
 		undo_redo.undo()
 		send_undo_signals()
 
 func redo():
-	assert(undo_redo.has_redo())
 	if undo_redo.has_redo():
 		undo_redo.redo()
 		send_do_signals()
