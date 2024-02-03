@@ -52,7 +52,7 @@ text = "Redo
 script = ExtResource("6_lcx2g")
 
 [node name="Mouse" type="Node2D" parent="."]
-z_index = 10
+z_index = 16
 script = ExtResource("3_1ip1p")
 
 [node name="Cursor" type="Sprite2D" parent="Mouse"]

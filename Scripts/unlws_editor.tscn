@@ -16,6 +16,7 @@ grow_vertical = 2
 script = ExtResource("1_5jbj8")
 
 [node name="UILayer" parent="." instance=ExtResource("2_qpyj2")]
+layer = 2
 
 [node name="Canvas" type="CanvasLayer" parent="."]
 script = ExtResource("3_pniuy")
