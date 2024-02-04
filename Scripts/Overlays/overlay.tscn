@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://cygnq37lffaup"]
+
+[ext_resource type="Script" path="res://Scripts/Overlays/overlay.gd" id="1_6pdbe"]
+
+[node name="Overlay" type="Control"]
+z_index = 50
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("1_6pdbe")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.376471, 0.376471, 0.376471, 0.792157)
+
+[node name="CloseButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -112.0
+offset_top = 66.0
+offset_right = -62.0
+offset_bottom = 116.0
+grow_horizontal = 0
+text = "×"
+
+[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]

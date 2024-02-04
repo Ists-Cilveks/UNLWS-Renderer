@@ -18,7 +18,7 @@ func backspace_input():
 
 func cancel_input():
 	var key_handled = false
-	if $GlyphSearchEntry.text:
+	if len($GlyphSearchEntry.text) != 0:
 		key_handled = true
 	erase_all_text()
 #	glyph_name_input_cancelled.emit()
@@ -43,30 +43,24 @@ func input_complete():
 func _input(event):
 #	var glyph_input_box = $"GlyphSearch/SearchEntry"
 #	var glyph_input_box = self
-	if event is InputEventKey and event.pressed:
-#		print(event.as_text())
-		var key_handled = true
-		if event.is_action_pressed("ui_text_backspace_all_to_left"):
-			erase_all_text()
-		elif event.is_action_pressed("ui_cancel"):
-			key_handled = cancel_input()
-		elif event.is_action_pressed("ui_text_backspace"):
-			backspace_input()
-		elif event.is_action_pressed("ui_accept"):
+	var key_handled = false
+	if event.is_action_pressed("ui_text_backspace_all_to_left.macos"):
+		erase_all_text()
+		key_handled = true
+	elif event.is_action_pressed("ui_cancel"):
+		key_handled = cancel_input()
+	elif event.is_action_pressed("ui_text_backspace"):
+		backspace_input()
+		key_handled = true
+	elif event.is_action_pressed("ui_accept"):
 #			$"Mouse/HeldGlyph".change_glyph(self, $GlyphSearchEntry.text)
-			key_handled = input_complete()
-		else:
-#			var key = OS.get_keycode_string(event.keycode).to_lower()
-#			var key = OS.get_keycode_string(event.unicode).to_lower()
-			var key = String.chr(event.unicode).to_lower()
-#			print(key)
-			if not event.ctrl_pressed and len(key) == 1:
-				
-	#			$"GlyphSearch/SearchEntry".grab_focus()
-	#			print(event.as_text())
-				append_text(key)
-			else:
-				key_handled = false
-		if key_handled:
-			# Prevents buttons from being pressed by enter or space if the gui buttons are focused
-			accept_event()
+		key_handled = input_complete()
+	elif event is InputEventKey and event.pressed:
+		var key = String.chr(event.unicode).to_lower()
+		if not event.meta_pressed and len(key) == 1:
+			append_text(key)
+			key_handled = true
+	
+	if key_handled:
+		# Prevents buttons from being pressed by enter or space if the gui buttons are focused
+		accept_event()

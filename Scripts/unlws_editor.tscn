@@ -10,7 +10,6 @@
 script = ExtResource("1_5jbj8")
 
 [node name="UILayer" parent="." instance=ExtResource("2_qpyj2")]
-layer = 2
 
 [node name="Canvas" type="Node" parent="."]
 script = ExtResource("3_pniuy")
