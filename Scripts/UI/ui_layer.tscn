@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://sjoa8yoclxtp"]
+[gd_scene load_steps=9 format=3 uid="uid://sjoa8yoclxtp"]
 
 [ext_resource type="Script" path="res://Scripts/UI/GlyphSearch.gd" id="1_ns67w"]
 [ext_resource type="Script" path="res://Scripts/UI/ui_layer.gd" id="1_yd5ga"]
-[ext_resource type="PackedScene" uid="uid://cygnq37lffaup" path="res://Scripts/Overlays/overlay.tscn" id="2_sx0r8"]
+[ext_resource type="Script" path="res://Scripts/Overlays/overlay_container.gd" id="2_35tc7"]
+[ext_resource type="PackedScene" uid="uid://cygnq37lffaup" path="res://Scripts/Overlays/overlay.tscn" id="2_67nec"]
 [ext_resource type="Script" path="res://Scripts/UI/Mouse.gd" id="3_1ip1p"]
 [ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="3_5ftf5"]
 [ext_resource type="Script" path="res://Scripts/UI/undo_button.gd" id="5_aa3he"]
@@ -11,14 +12,28 @@
 [node name="UILayer" type="CanvasLayer"]
 script = ExtResource("1_yd5ga")
 
-[node name="OverlayLayer" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="ControlsInfo" parent="OverlayLayer" node_paths=PackedStringArray("show_button") instance=ExtResource("2_sx0r8")]
+[node name="OverlayContainer" type="SubViewportContainer" parent="."]
 visible = false
-show_button = NodePath("../../GridContainer/ShowControls")
+z_index = 40
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_35tc7")
 
-[node name="Text" type="RichTextLabel" parent="OverlayLayer/ControlsInfo"]
+[node name="OverlayViewport" type="SubViewport" parent="OverlayContainer"]
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="OverlayCamera" type="Camera2D" parent="OverlayContainer/OverlayViewport"]
+anchor_mode = 0
+
+[node name="ControlsInfo" parent="OverlayContainer/OverlayViewport" instance=ExtResource("2_67nec")]
+visible = false
+
+[node name="Text" type="RichTextLabel" parent="OverlayContainer/OverlayViewport/ControlsInfo"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -88,5 +103,6 @@ script = ExtResource("3_1ip1p")
 [node name="Cursor" type="Sprite2D" parent="Mouse"]
 texture = ExtResource("3_5ftf5")
 
+[connection signal="resized" from="OverlayContainer" to="OverlayContainer" method="_on_resized"]
 [connection signal="pressed" from="GridContainer/Undo" to="GridContainer/Undo" method="_on_pressed"]
 [connection signal="pressed" from="GridContainer/Redo" to="GridContainer/Redo" method="_on_pressed"]
