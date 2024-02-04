@@ -15,10 +15,15 @@ func _on_close_button_pressed():
 
 func hide_and_signal():
 	hide()
-	Event_Bus.overlay_opened.emit()
+	Focus_Handler.pop()
+	Event_Bus.overlay_closed.emit()
 
 func show_and_signal():
 	show()
-	print("asdf")
-	$CloseButton.grab_focus.call_deferred()
-	Event_Bus.overlay_closed.emit()
+	#var focus_owner = get_viewport().gui_get_focus_owner()
+	#if focus_owner:
+		#focus_owner.release_focus.call_deferred()
+	#$CloseButton.grab_focus.call_deferred()
+	Focus_Handler.push($CloseButton)
+	print(get_viewport().gui_get_focus_owner())
+	Event_Bus.overlay_opened.emit()
