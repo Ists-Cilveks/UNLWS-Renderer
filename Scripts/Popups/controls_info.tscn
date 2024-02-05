@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cygnq37lffaup" path="res://Scripts/Popups/popup.tscn" id="1_cacc3"]
 
-[node name="Popup" instance=ExtResource("1_cacc3")]
+[node name="ControlsInfo" instance=ExtResource("1_cacc3")]
 
 [node name="Text" type="RichTextLabel" parent="." index="1"]
 layout_mode = 1
