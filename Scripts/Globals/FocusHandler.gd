@@ -1,6 +1,6 @@
 extends Node
 ## A singleton to save and restore which element was in focus.
-## Useful when there's something like an overlay that takes focus and then gives it back.
+## Useful when there's something like a popup that takes focus and then gives it back.
 
 ## When you open a new layer (that takes away control from everything else), call push to grab focus.
 ## When you close the layer, call pop to release focus and let the previous element grab it.

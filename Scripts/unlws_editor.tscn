@@ -9,8 +9,6 @@
 [node name="UNLWSEditor" type="Node"]
 script = ExtResource("1_5jbj8")
 
-[node name="UILayer" parent="." instance=ExtResource("2_qpyj2")]
-
 [node name="Canvas" type="Node" parent="."]
 script = ExtResource("3_pniuy")
 
@@ -23,3 +21,6 @@ script = ExtResource("3_xo3q2")
 
 [node name="Glyphs" type="Node2D" parent="Canvas"]
 script = ExtResource("5_41scr")
+
+[node name="UILayer" parent="." instance=ExtResource("2_qpyj2")]
+layer = 10

@@ -7,8 +7,8 @@ signal glyph_search_succeeded(glyph_instance)
 signal started_holding_glyphs()
 signal stopped_holding_glyphs()
 
-signal overlay_opened()
-signal overlay_closed()
+signal popup_opened(popup)
+signal popup_closing(popup)
 
 signal search_halted()
 signal search_resumed()
