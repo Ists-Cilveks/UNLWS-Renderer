@@ -9,3 +9,6 @@ signal stopped_holding_glyphs()
 
 signal overlay_opened()
 signal overlay_closed()
+
+signal search_halted()
+signal search_resumed()

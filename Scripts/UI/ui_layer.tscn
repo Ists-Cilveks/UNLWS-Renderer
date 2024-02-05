@@ -1,45 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://sjoa8yoclxtp"]
+[gd_scene load_steps=11 format=3 uid="uid://sjoa8yoclxtp"]
 
-[ext_resource type="Script" path="res://Scripts/UI/GlyphSearch.gd" id="1_ns67w"]
 [ext_resource type="Script" path="res://Scripts/UI/ui_layer.gd" id="1_yd5ga"]
+[ext_resource type="Script" path="res://Scripts/UI/glyph_search.gd" id="2_1ipew"]
+[ext_resource type="Script" path="res://Scripts/UI/overlay_layer.gd" id="2_6mjcm"]
 [ext_resource type="PackedScene" uid="uid://cygnq37lffaup" path="res://Scripts/Overlays/overlay.tscn" id="2_sx0r8"]
 [ext_resource type="Script" path="res://Scripts/UI/Mouse.gd" id="3_1ip1p"]
 [ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="3_5ftf5"]
+[ext_resource type="Script" path="res://Scripts/UI/glyph_search_entry.gd" id="3_xfvli"]
 [ext_resource type="Script" path="res://Scripts/UI/grid_container.gd" id="4_8fyeo"]
 [ext_resource type="Script" path="res://Scripts/UI/undo_button.gd" id="5_aa3he"]
 [ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="6_lcx2g"]
 
 [node name="UILayer" type="CanvasLayer"]
 script = ExtResource("1_yd5ga")
-
-[node name="OverlayLayer" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="ControlsInfo" parent="OverlayLayer" node_paths=PackedStringArray("show_button") instance=ExtResource("2_sx0r8")]
-visible = false
-show_button = NodePath("../../GridContainer/ShowControls")
-
-[node name="Text" type="RichTextLabel" parent="OverlayLayer/ControlsInfo"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -162.0
-offset_top = -252.0
-offset_right = 162.0
-offset_bottom = 252.0
-grow_horizontal = 2
-grow_vertical = 2
-focus_mode = 2
-bbcode_enabled = true
-text = "[b]Controls:[/b]
-ctrl+z: undo
-ctrl+y: redo
-"
-fit_content = true
-selection_enabled = true
 
 [node name="GlyphSearch" type="Control" parent="."]
 visible = false
@@ -48,7 +21,8 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_ns67w")
+focus_mode = 2
+script = ExtResource("2_1ipew")
 
 [node name="GlyphSearchEntry" type="LineEdit" parent="GlyphSearch"]
 layout_mode = 0
@@ -57,7 +31,7 @@ offset_top = 158.0
 offset_right = 560.0
 offset_bottom = 189.0
 placeholder_text = "Glyph name:"
-editable = false
+script = ExtResource("3_xfvli")
 
 [node name="GridContainer" type="GridContainer" parent="."]
 z_index = 12
@@ -90,6 +64,36 @@ script = ExtResource("3_1ip1p")
 
 [node name="Cursor" type="Sprite2D" parent="Mouse"]
 texture = ExtResource("3_5ftf5")
+
+[node name="OverlayLayer" type="CanvasLayer" parent="."]
+layer = 2
+script = ExtResource("2_6mjcm")
+
+[node name="ControlsInfo" parent="OverlayLayer" node_paths=PackedStringArray("show_button") instance=ExtResource("2_sx0r8")]
+visible = false
+show_button = NodePath("../../GridContainer/ShowControls")
+
+[node name="Text" type="RichTextLabel" parent="OverlayLayer/ControlsInfo"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -162.0
+offset_top = -252.0
+offset_right = 162.0
+offset_bottom = 252.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+bbcode_enabled = true
+text = "[b]Controls:[/b]
+ctrl+z: undo
+ctrl+y: redo
+"
+fit_content = true
+selection_enabled = true
 
 [connection signal="pressed" from="GridContainer/Undo" to="GridContainer/Undo" method="_on_pressed"]
 [connection signal="pressed" from="GridContainer/Redo" to="GridContainer/Redo" method="_on_pressed"]
