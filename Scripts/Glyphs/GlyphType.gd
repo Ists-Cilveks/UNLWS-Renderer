@@ -5,7 +5,6 @@ var sprite_path
 var texture_is_loaded = false
 var texture
 var xml_node
-var all_paths = []
 var binding_points = {}
 var num_instances = 0 # Used to quickly create unique IDs for Glyph_Instances
 
