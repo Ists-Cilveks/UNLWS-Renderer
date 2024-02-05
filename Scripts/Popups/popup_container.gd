@@ -1,14 +1,15 @@
 extends ColorRect
-## A container that creates and deletes popups using buttons attached to with export.
+## A container that creates and deletes popups using signals.
 
-var controls_info_scene = preload("./controls_info.tscn")
-
-@export var controls_info_button : Button
+func _enter_tree():
+	Event_Bus.popup_closing.connect(delete_popup)
+	Event_Bus.add_popup_signal.connect(learn_popup_signal)
 
 func _ready():
-	Event_Bus.popup_closing.connect(delete_popup)
 	set_input_handling(false)
-	controls_info_button.pressed.connect(func(): add_popup_scene(controls_info_scene))
+
+func learn_popup_signal(activation_signal, popup_scene):
+	activation_signal.connect(func(): add_popup_scene(popup_scene))
 
 func add_popup_scene(scene):
 	set_input_handling(true)

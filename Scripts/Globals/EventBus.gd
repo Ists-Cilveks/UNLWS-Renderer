@@ -12,3 +12,5 @@ signal popup_closing(popup)
 
 signal search_halted()
 signal search_resumed()
+
+signal add_popup_signal(activation_signal, popup_scene)

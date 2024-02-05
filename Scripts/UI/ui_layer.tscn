@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://sjoa8yoclxtp"]
+[gd_scene load_steps=12 format=3 uid="uid://sjoa8yoclxtp"]
 
 [ext_resource type="Script" path="res://Scripts/UI/ui_layer.gd" id="1_yd5ga"]
 [ext_resource type="Script" path="res://Scripts/UI/glyph_search.gd" id="2_1ipew"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://Scripts/UI/glyph_search_entry.gd" id="3_xfvli"]
 [ext_resource type="Script" path="res://Scripts/UI/grid_container.gd" id="4_8fyeo"]
 [ext_resource type="Script" path="res://Scripts/UI/undo_button.gd" id="5_aa3he"]
+[ext_resource type="Script" path="res://Scripts/Popups/show_controls_button.gd" id="5_w3ltm"]
+[ext_resource type="Script" path="res://Scripts/Popups/edit_glyph_button.gd" id="6_g0okt"]
 [ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="6_lcx2g"]
 [ext_resource type="Script" path="res://Scripts/Popups/popup_container.gd" id="7_rdghn"]
 
@@ -37,6 +39,12 @@ script = ExtResource("6_lcx2g")
 [node name="ShowControls" type="Button" parent="GridContainer"]
 layout_mode = 2
 text = "Controls"
+script = ExtResource("5_w3ltm")
+
+[node name="EditGlyph" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "Edit glyph"
+script = ExtResource("6_g0okt")
 
 [node name="GlyphSearch" type="Control" parent="."]
 visible = false
@@ -57,7 +65,7 @@ offset_bottom = 189.0
 placeholder_text = "Glyph name:"
 script = ExtResource("3_xfvli")
 
-[node name="PopupContainer" type="ColorRect" parent="." node_paths=PackedStringArray("controls_info_button")]
+[node name="PopupContainer" type="ColorRect" parent="."]
 visible = false
 z_index = 14
 anchors_preset = 15
@@ -67,7 +75,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.376471, 0.376471, 0.376471, 0.792157)
 script = ExtResource("7_rdghn")
-controls_info_button = NodePath("../GridContainer/ShowControls")
 
 [node name="Mouse" type="Node2D" parent="."]
 z_index = 100
