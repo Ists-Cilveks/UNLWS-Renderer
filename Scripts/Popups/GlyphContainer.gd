@@ -1,14 +1,16 @@
 extends Control
 
-signal glyph_type_set(glyph_type)
-
-var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
+var glyph_instance
 
 func _ready():
-	init(Glyph_List.glyphs["eat"])
+	#init(Glyph_List.glyphs["eat"])
+	pass
 
-func init(glyph_type):
-	var glyph_instance = glyph_instance_scene.instantiate()
-	glyph_instance.init(glyph_type)
+func init(new_instance):
+	glyph_instance = new_instance
+	assert(len(get_children()) == 0)
 	add_child(glyph_instance)
-	glyph_type_set.emit(glyph_type)
+
+
+func _on_container_glyph_instance_set(new_instance):
+	init(new_instance)

@@ -4,7 +4,7 @@
 
 [node name="ControlsInfo" instance=ExtResource("1_cacc3")]
 
-[node name="Text" type="RichTextLabel" parent="." index="1"]
+[node name="Text" type="RichTextLabel" parent="Container" index="1"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
