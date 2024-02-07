@@ -113,7 +113,7 @@ func update_rotation(): # TODO: rename update_rotation and set_glyph_rotation to
 func update_node_transform():
 	instance_g_node.set_attribute("transform", get_transform_string())
 
-func get_transform_string(): # TODO: needs translation to the focus_bp as well
+func get_transform_string():
 	var res = ""
 	res += "translate("+str(position.x)+" "+str(position.y)+")\n"
 	res += "translate("+str(-focus_bp.position.x)+" "+str(-focus_bp.position.y)+")\n"
