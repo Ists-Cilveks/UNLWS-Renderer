@@ -76,6 +76,16 @@ func get_style_dict():
 	return style_dict
 
 
+func set_instance_attribute(attribute_name, value):
+	instance_g_node.set_attribute(attribute_name, value)
+
+func get_instance_attribute(attribute_name):
+	return instance_g_node.get_attribute(attribute_name)
+
+func get_instance_attributes():
+	return instance_g_node.attributes_dict
+
+
 @warning_ignore("shadowed_variable")
 func set_focus_bp(focus_bp_name, update=true):
 	if not focus_bp_name in glyph_type.binding_points:

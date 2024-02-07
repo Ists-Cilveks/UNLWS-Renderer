@@ -80,6 +80,9 @@ func deep_copy(): # TODO: I haven't really checked this and don't know how to ðŸ
 func set_attribute(name, value):
 	attributes_dict[name] = value
 
+func get_attribute(name):
+	return attributes_dict[name]
+
 func add_my_default_attributes():
 	if node_name == "svg":
 		set_attribute("xmlns", "http://www.w3.org/2000/svg")
