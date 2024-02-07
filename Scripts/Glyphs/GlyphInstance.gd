@@ -25,9 +25,6 @@ func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotati
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
 func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, id = null):
-	#var file = FileAccess.open(svg_path, FileAccess.READ)
-	#var content = file.get_as_text()
-	#var all_paths = get_paths_from_svg(content)
 	self.glyph_type = glyph_type
 	self.instance_g_node = glyph_type.xml_node.get_main_node_with_name("g").deep_copy()
 	
@@ -36,17 +33,6 @@ func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, 
 	else:
 		self.name = glyph_type.get_new_id()
 	self.id = self.name
-	
-	#print(glyph_type.name)
-	
-	#var all_paths = glyph_type.all_paths
-	## From https://www.reddit.com/r/godot/comments/iban3j/comment/g1uwybu/ by https://www.reddit.com/user/bippinbits/
-	#var selected_path = all_paths[0]
-	#var l := Line2D.new()
-	#l.default_color = Color(1,1,1,1)
-	#l.width = 20
-	#for point in selected_path.curve.get_baked_points():
-		#l.add_point(point + selected_path.position)
 	
 	focused_on_bp_node = find_child("FocusedOnBP")
 	
