@@ -8,7 +8,7 @@ var is_holding_glyphs = false
 var is_selecting_glyphs = false
 
 # Track the mouse position
-func _input(event):
+func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		position = get_global_mouse_position()
 

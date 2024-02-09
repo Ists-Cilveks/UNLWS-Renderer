@@ -13,3 +13,4 @@ func _on_close_button_pressed():
 func remove():
 	Event_Bus.popup_closing.emit(self)
 	Focus_Handler.pop()
+	# TODO: un-hide the mouse cursor if it was hidden on a lower layer (and remember to re-hide it)
