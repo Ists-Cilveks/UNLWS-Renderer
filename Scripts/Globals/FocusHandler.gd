@@ -9,7 +9,8 @@ var focus_stack = []
 
 func push(new_element = null):
 	var element = release_current_focus()
-	focus_stack.append(element)
+	if element != null:
+		focus_stack.append(element)
 	
 	if new_element != null:
 		new_element.grab_focus()
@@ -17,14 +18,13 @@ func push(new_element = null):
 func pop():
 	release_current_focus()
 	
-	assert(len(focus_stack) > 0)
-	var popped_element = focus_stack.pop_back()
-	popped_element.grab_focus()
+	if len(focus_stack) > 0:
+		var popped_element = focus_stack.pop_back()
+		popped_element.grab_focus()
 
 
 func release_current_focus():
 	var element = get_viewport().gui_get_focus_owner()
-	#assert(element)
 	if element != null:
 		element.release_focus()
 	return element
