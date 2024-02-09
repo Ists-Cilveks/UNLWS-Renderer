@@ -18,5 +18,6 @@ texture = ExtResource("2_8g0ro")
 [node name="CollisionCircle" type="CollisionShape2D" parent="DragArea"]
 shape = SubResource("CircleShape2D_7s0vq")
 
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="mouse_entered" from="DragArea" to="." method="_on_drag_area_mouse_entered"]
 [connection signal="mouse_exited" from="DragArea" to="." method="_on_drag_area_mouse_exited"]

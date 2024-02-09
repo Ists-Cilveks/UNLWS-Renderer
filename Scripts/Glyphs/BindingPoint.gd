@@ -10,7 +10,7 @@ var drag_start_pos
 var drag_current_pos
 
 func _ready():
-	$Sprite.modulate = Global_Colors.binding_point["default"]
+	update_style()
 
 func _init(init_dict = {}):
 	init(init_dict)
@@ -18,10 +18,7 @@ func _init(init_dict = {}):
 
 func _unhandled_input(event):
 	if editing_enabled and mouse_hovering:
-		if event is InputEventMouseButton:
-			if event.is_pressed():
-				being_dragged = true
-				Drag_Handler.start_drag(self, event)
+		Drag_Handler.check_drag_start(event, self)
 
 
 func _on_drag_area_mouse_entered():
@@ -37,9 +34,14 @@ func update_drag_position(new_position):
 	position = new_position
 
 func end_drag():
+	assert(being_dragged)
 	being_dragged = false
 	update_style()
 
+func start_drag():
+	assert(not being_dragged)
+	being_dragged = true
+	update_style()
 
 func init(init_dict):
 	#print(init_dict)
@@ -62,8 +64,8 @@ func set_attribute(key, value):
 func set_editing_mode(enabled):
 	if editing_enabled == enabled: return
 	editing_enabled = enabled
-	if not editing_enabled:
-		being_dragged = false
+	if not editing_enabled and being_dragged:
+		Drag_Handler.end_drag()
 	update_style()
 
 
@@ -78,3 +80,8 @@ func update_style():
 	$Sprite.modulate = Global_Colors.binding_point[color_name]
 	if being_dragged:
 		$Sprite.modulate = Color(1, 0, 0)
+
+
+func _on_tree_exiting():
+	if being_dragged:
+		Drag_Handler.end_drag()
