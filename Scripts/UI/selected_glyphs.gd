@@ -3,7 +3,6 @@ extends Node2D
 
 var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
 
-var glyphs = Glyph_List.glyphs
 var is_holding_glyphs = false
 var is_selecting_glyphs = false
 
@@ -15,8 +14,8 @@ func _unhandled_input(event):
 
 func set_by_name(glyph_name):
 	remove()
-	if glyph_name in glyphs:
-		var glyph_type = glyphs[glyph_name]
+	if glyph_name in Glyph_List.glyphs:
+		var glyph_type = Glyph_List.glyphs[glyph_name]
 		var node = glyph_instance_scene.instantiate()
 		node.init(glyph_type)
 		add_child(node)
