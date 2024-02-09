@@ -3,7 +3,7 @@ class_name Binding_Point extends Node2D
 var bp_name = ""
 var dict = {}
 
-var editing_enabled = true
+var editing_enabled = false
 var mouse_hovering = false
 var being_dragged = false
 var drag_start_pos

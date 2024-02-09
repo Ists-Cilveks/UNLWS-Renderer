@@ -124,3 +124,10 @@ func reparent_glyph_instance_by_name(glyph_name, new_parent, old_position = null
 			undo_node.position = old_position
 		undo_node.reparent(lambda_self, false)
 	Undo_Redo.add_undo_method(undo_method)
+
+
+func _on_child_entered_tree(node):
+	if is_selecting_glyphs:
+		node.set_editing_mode(true)
+	else:
+		node.set_editing_mode(false)

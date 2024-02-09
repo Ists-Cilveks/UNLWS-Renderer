@@ -18,3 +18,8 @@ extends Node2D
 	#var lambda_self = self
 	#Undo_Redo.add_do_method(func(): lambda_self.get_node(glyph_name).reparent(new_parent))
 	#Undo_Redo.add_undo_method(func(): new_parent.get_node(glyph_name).reparent(lambda_self))
+
+
+func _on_child_entered_tree(node):
+	#node.set_binding_point_visibility(false)
+	node.set_editing_mode(false)

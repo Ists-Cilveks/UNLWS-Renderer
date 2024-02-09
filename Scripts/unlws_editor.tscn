@@ -170,3 +170,5 @@ script = ExtResource("17_37ibm")
 
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" method="_on_pressed"]
+[connection signal="child_entered_tree" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" method="_on_child_entered_tree"]
+[connection signal="child_entered_tree" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" method="_on_child_entered_tree"]
