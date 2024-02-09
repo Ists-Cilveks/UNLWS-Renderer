@@ -11,7 +11,7 @@ func _input(event):
 		position = get_global_mouse_position()
 
 
-func hide_cursor():
+func hide_cursor(_children):
 	$Cursor.hide()
 
 func show_cursor():

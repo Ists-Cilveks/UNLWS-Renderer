@@ -4,7 +4,7 @@ extends Node
 signal glyph_placed(glyph)
 signal glyph_search_succeeded(glyph_instance)
 
-signal started_holding_glyphs()
+signal started_holding_glyphs(children)
 signal stopped_holding_glyphs()
 
 signal popup_opened(popup)

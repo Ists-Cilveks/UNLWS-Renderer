@@ -24,13 +24,15 @@ func set_by_name(glyph_name):
 func stop_holding():
 	Undo_Redo.add_do_property(self, "is_holding_glyphs", false)
 	Undo_Redo.add_undo_property(self, "is_holding_glyphs", is_holding_glyphs)
+	var lambda_self = self
 	Undo_Redo.add_do_method(func(): Event_Bus.stopped_holding_glyphs.emit())
-	Undo_Redo.add_undo_method(func(): Event_Bus.started_holding_glyphs.emit())
+	Undo_Redo.add_undo_method(func(): Event_Bus.started_holding_glyphs.emit(lambda_self.get_children()))
 
 func start_holding():
 	Undo_Redo.add_do_property(self, "is_holding_glyphs", true)
 	Undo_Redo.add_undo_property(self, "is_holding_glyphs", is_holding_glyphs)
-	Undo_Redo.add_do_method(func(): Event_Bus.started_holding_glyphs.emit())
+	var lambda_self = self
+	Undo_Redo.add_do_method(func(): Event_Bus.started_holding_glyphs.emit(lambda_self.get_children()))
 	Undo_Redo.add_undo_method(func(): Event_Bus.stopped_holding_glyphs.emit())
 
 
