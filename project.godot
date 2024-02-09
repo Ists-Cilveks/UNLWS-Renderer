@@ -23,6 +23,10 @@ Undo_Redo="*res://Scripts/Globals/UndoRedo.gd"
 Focus_Handler="*res://Scripts/Globals/FocusHandler.gd"
 Global_Colors="*res://Styles/GlobalColors.gd"
 
+[display]
+
+window/size/mode=2
+
 [filesystem]
 
 import/blender/enabled=false

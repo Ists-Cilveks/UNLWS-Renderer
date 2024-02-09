@@ -1,26 +1,175 @@
-[gd_scene load_steps=6 format=3 uid="uid://css6xu7374m8y"]
+[gd_scene load_steps=17 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://Scripts/UNLWS_editor.gd" id="1_5jbj8"]
-[ext_resource type="PackedScene" uid="uid://sjoa8yoclxtp" path="res://Scripts/UI/ui_layer.tscn" id="2_qpyj2"]
 [ext_resource type="Script" path="res://Scripts/glyph_canvas.gd" id="3_pniuy"]
 [ext_resource type="Script" path="res://Scripts/UI/selected_glyphs.gd" id="3_xo3q2"]
 [ext_resource type="Script" path="res://Scripts/UI/placed_glyphs.gd" id="5_41scr"]
+[ext_resource type="Script" path="res://Scripts/UI/glyph_search.gd" id="5_ucxqq"]
+[ext_resource type="Script" path="res://Scripts/UI/glyph_search_entry.gd" id="6_io2bl"]
+[ext_resource type="Script" path="res://Scripts/UI/Mouse.gd" id="7_mh8ie"]
+[ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="8_wgcwp"]
+[ext_resource type="Script" path="res://Scripts/UI/grid_container.gd" id="9_sl25d"]
+[ext_resource type="Script" path="res://Scripts/UI/undo_button.gd" id="10_o0csu"]
+[ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="11_5gwt3"]
+[ext_resource type="Script" path="res://Scripts/Popups/show_controls_button.gd" id="12_v1us4"]
+[ext_resource type="LabelSettings" uid="uid://pqgvl8pp1tfe" path="res://Styles/bold_label.tres" id="14_ijhnr"]
+[ext_resource type="Script" path="res://Scripts/Popups/glyph_attributes_info.gd" id="15_go35b"]
+[ext_resource type="Script" path="res://temp/PathLineEdit.gd" id="16_ofrlu"]
+[ext_resource type="Script" path="res://Scripts/Popups/popup_container.gd" id="17_37ibm"]
 
 [node name="UNLWSEditor" type="Node"]
 script = ExtResource("1_5jbj8")
 
-[node name="Canvas" type="Node" parent="."]
-script = ExtResource("3_pniuy")
+[node name="GlyphSearch" type="Control" parent="."]
+visible = false
+z_index = 14
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+focus_mode = 2
+script = ExtResource("5_ucxqq")
 
-[node name="Camera" type="Camera2D" parent="Canvas"]
+[node name="GlyphSearchEntry" type="LineEdit" parent="GlyphSearch"]
+layout_mode = 0
+offset_left = 412.0
+offset_top = 158.0
+offset_right = 560.0
+offset_bottom = 189.0
+placeholder_text = "Glyph name:"
+script = ExtResource("6_io2bl")
+
+[node name="Mouse" type="Node2D" parent="."]
+z_index = 100
+script = ExtResource("7_mh8ie")
+
+[node name="Cursor" type="Sprite2D" parent="Mouse"]
+texture = ExtResource("8_wgcwp")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Control" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer/HSplitContainer/Control"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer"]
+z_index = 12
+layout_mode = 2
+script = ExtResource("9_sl25d")
+
+[node name="Undo" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer"]
+layout_mode = 2
+disabled = true
+text = "Undo"
+script = ExtResource("10_o0csu")
+
+[node name="Redo" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer"]
+layout_mode = 2
+disabled = true
+text = "Redo
+"
+script = ExtResource("11_5gwt3")
+
+[node name="ShowControls" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer"]
+layout_mode = 2
+text = "Controls"
+script = ExtResource("12_v1us4")
+
+[node name="MarginContainer1" type="MarginContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer"]
+layout_mode = 2
+mouse_filter = 0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="InfoScrollContainer" type="ScrollContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1"]
+clip_contents = false
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Info" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GlyphAttributesLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+layout_mode = 2
+text = "Glyph attributes"
+label_settings = ExtResource("14_ijhnr")
+
+[node name="GlyphAttributes" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 5
+columns = 2
+script = ExtResource("15_go35b")
+
+[node name="FileDataLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+layout_mode = 2
+text = "File data"
+label_settings = ExtResource("14_ijhnr")
+
+[node name="FileData" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 5
+columns = 2
+
+[node name="PathLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/FileData"]
+layout_mode = 2
+text = "File path"
+
+[node name="PathLineEdit" type="LineEdit" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/FileData"]
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+script = ExtResource("16_ofrlu")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/HSplitContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(973, 638)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]
 zoom = Vector2(2, 2)
 
-[node name="SelectedGlyphs" type="Node2D" parent="Canvas"]
+[node name="Canvas" type="Node" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]
+script = ExtResource("3_pniuy")
+
+[node name="SelectedGlyphs" type="Node2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas"]
 z_index = 1
 script = ExtResource("3_xo3q2")
 
-[node name="Glyphs" type="Node2D" parent="Canvas"]
+[node name="Glyphs" type="Node2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas"]
 script = ExtResource("5_41scr")
 
-[node name="UILayer" parent="." instance=ExtResource("2_qpyj2")]
-layer = 10
+[node name="PopupContainer" type="ColorRect" parent="MarginContainer"]
+visible = false
+z_index = 14
+layout_mode = 2
+color = Color(0.376471, 0.376471, 0.376471, 0.792157)
+script = ExtResource("17_37ibm")
+
+[connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" method="_on_pressed"]

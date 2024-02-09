@@ -29,6 +29,7 @@ func delete_popup(popup):
 
 func set_input_handling(enabled):
 	set_process_unhandled_input(enabled)
+	# TODO: can still focus outside this element using tab
 
 func _unhandled_input(_event):
 	accept_event()
