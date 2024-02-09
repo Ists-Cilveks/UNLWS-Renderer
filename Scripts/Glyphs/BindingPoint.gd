@@ -48,7 +48,6 @@ func update_style():
 
 
 func _on_drag_area_mouse_entered():
-	print("asdfasdf")
 	mouse_hovering = true
 	update_style()
 
