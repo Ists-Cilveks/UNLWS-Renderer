@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://sjoa8yoclxtp"]
+[gd_scene load_steps=13 format=3 uid="uid://sjoa8yoclxtp"]
 
 [ext_resource type="Script" path="res://Scripts/UI/ui_layer.gd" id="1_yd5ga"]
 [ext_resource type="Script" path="res://Scripts/UI/glyph_search.gd" id="2_1ipew"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://Scripts/Popups/edit_glyph_button.gd" id="6_g0okt"]
 [ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="6_lcx2g"]
 [ext_resource type="Script" path="res://Scripts/Popups/popup_container.gd" id="7_rdghn"]
+[ext_resource type="PackedScene" uid="uid://b744yx6d1y0pg" path="res://Scripts/Glyphs/binding_point.tscn" id="12_cqd03"]
 
 [node name="UILayer" type="CanvasLayer"]
 script = ExtResource("1_yd5ga")
@@ -66,15 +67,20 @@ placeholder_text = "Glyph name:"
 script = ExtResource("3_xfvli")
 
 [node name="PopupContainer" type="ColorRect" parent="."]
-visible = false
 z_index = 14
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.376471, 0.376471, 0.376471, 0.792157)
 script = ExtResource("7_rdghn")
+
+[node name="BindingPoint" parent="." instance=ExtResource("12_cqd03")]
+z_index = 100
+position = Vector2(579, 302)
+scale = Vector2(10, 10)
 
 [node name="Mouse" type="Node2D" parent="."]
 z_index = 100

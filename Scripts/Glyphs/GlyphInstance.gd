@@ -18,6 +18,9 @@ var sprite_node
 
 var base_rotation
 
+var binding_point_visibility = true
+var editing_enabled = false
+
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
 func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotation = 0):
 	if glyph_type:
@@ -139,3 +142,12 @@ func get_restore_dict(preserve_id = true):
 
 func restore_from_dict(dict):
 	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"])
+
+
+func set_binding_point_visibility(enabled):
+	binding_point_visibility = enabled
+	bp_container_node.set_visibility(enabled)
+
+func set_editing_mode(enabled):
+	editing_enabled = enabled
+	bp_container_node.set_editing_mode(enabled)
