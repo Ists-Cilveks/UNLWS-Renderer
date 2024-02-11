@@ -64,10 +64,18 @@ func delete_all_without_undo_redo():
 
 
 func remove_all(delete_after_removing = true):
-	var restore_all_children_function = get_restore_all_children_function()
-	var lambda_self = self
-	Undo_Redo.add_do_method(func(): lambda_self.remove_all_without_undo_redo(delete_after_removing))
-	Undo_Redo.add_undo_method(restore_all_children_function)
+	# TODO: undoing deletion of selected glyphs doesn't work
+	if get_child_count() > 0:
+		var restore_all_children_function = get_restore_all_children_function()
+		var lambda_self = self
+		Undo_Redo.add_do_method(func(): lambda_self.remove_all_without_undo_redo(delete_after_removing))
+		Undo_Redo.add_do_method(func(): Event_Bus.stopped_holding_glyphs.emit())
+		Undo_Redo.add_do_property(self, "is_holding_glyphs", false)
+		Undo_Redo.add_do_property(self, "is_selecting_glyphs", false)
+		Undo_Redo.add_undo_method(restore_all_children_function)
+		Undo_Redo.add_undo_method(func(): Event_Bus.started_holding_glyphs.emit())
+		Undo_Redo.add_undo_property(self, "is_holding_glyphs", is_holding_glyphs)
+		Undo_Redo.add_undo_property(self, "is_selecting_glyphs", is_selecting_glyphs)
 
 func delete_all():
 	remove_all(true)

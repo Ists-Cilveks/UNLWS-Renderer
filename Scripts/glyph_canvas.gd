@@ -18,21 +18,27 @@ func _unhandled_input(event):
 		if $SelectedGlyphs.is_holding_glyphs:
 			if event.is_action_pressed("ui_text_delete") or event.is_action_pressed("ui_cancel"):
 				Undo_Redo.create_action("Delete held glyphs")
-				$SelectedGlyphs.delete()
+				delete_selected_or_held_glyphs()
 				Undo_Redo.commit_action()
 		if $SelectedGlyphs.is_selecting_glyphs:
 			if event.is_action_pressed("ui_text_delete"):
 				Undo_Redo.create_action("Delete selected glyphs")
-				$SelectedGlyphs.delete()
+				delete_selected_or_held_glyphs()
 				Undo_Redo.commit_action()
 			elif event.is_action_pressed("ui_cancel"):
 				Undo_Redo.create_action("Deselect glyphs")
-				place_selected_glyphs()
+				deselect_selected_glyphs()
 				Undo_Redo.commit_action()
 
 
 func place_selected_glyphs():
 	$SelectedGlyphs.place_all($Glyphs)
+
+func deselect_selected_glyphs():
+	$SelectedGlyphs.deselect_all()
+
+func delete_selected_or_held_glyphs():
+	$SelectedGlyphs.delete_all()
 
 func hold_instance(new_instance):
 	$SelectedGlyphs.overwrite_hold(new_instance)
