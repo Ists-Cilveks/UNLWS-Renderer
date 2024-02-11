@@ -3,6 +3,8 @@ class_name Glyph_Instance extends Node2D
 ## To instance it, load the glyph_instance.tscn scene, do not just call new()
 
 var binding_point_class = preload("./binding_point.tscn")
+var sprite_shader = preload("./glyph_instance_sprite.gdshader")
+var sprite_material = ShaderMaterial.new()
 
 var glyph_type
 var id
@@ -52,6 +54,8 @@ func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, 
 	if sprite_node: # TODO: Might be good to always or never have access to a Sprite object rather than it depending on whether this script is part of a binding_point.tscn scene.
 		var texture = glyph_type.get_texture()
 		sprite_node.texture = texture
+		sprite_node.set_material(sprite_material)
+		sprite_material.set_shader(sprite_shader)
 	
 	set_glyph_position(position, false)
 	set_glyph_rotation(rotation, false)
@@ -183,3 +187,7 @@ func get_is_selected():
 func set_is_selected(enabled):
 	if is_selected == enabled: return
 	is_selected = enabled
+	if is_selected:
+		sprite_material.set_shader_parameter('difference', 0.5)
+	else:
+		sprite_material.set_shader_parameter('difference', 0)
