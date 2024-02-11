@@ -21,6 +21,7 @@ var base_rotation
 var binding_point_visibility = true
 var editing_enabled = false
 var real_parent # The semi-permanent parent, never the SelectedGlyphs node (or maybe something else that's temporary).
+var is_selected = false
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
 func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotation = 0):
@@ -174,3 +175,11 @@ func set_editing_mode(enabled):
 func permanent_reparent(new_parent):
 	reparent(new_parent)
 	real_parent = new_parent
+
+
+func get_is_selected():
+	return is_selected
+
+func set_is_selected(enabled):
+	if is_selected == enabled: return
+	is_selected = enabled

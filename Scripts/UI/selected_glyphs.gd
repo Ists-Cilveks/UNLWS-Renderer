@@ -156,6 +156,7 @@ func reparent_glyph_instance_by_name(glyph_name, new_parent, old_position = null
 func deselect_instance(child):
 	if child.real_parent:
 		child.reparent(child.real_parent)
+		child.set_is_selected(false)
 	else:
 		delete_child_without_undo_redo(child)
 	if get_child_count() == 0:
@@ -167,6 +168,7 @@ func deselect_instance(child):
 
 func select_instance(child):
 	child.reparent(self)
+	child.set_is_selected(true)
 	Event_Bus.started_selecting_glyphs.emit(get_children())
 	is_selecting_glyphs = true
 
@@ -180,14 +182,14 @@ func attempt_to_overwrite_selection(new_instance):
 	if is_holding_glyphs: return false
 	if is_selecting_glyphs:
 		deselect_all()
-	new_instance.reparent(self)
+	select_instance(new_instance)
 	is_selecting_glyphs = true
 	Event_Bus.started_selecting_glyphs.emit(get_children())
 	return true
 
 func attempt_to_select_extra_instance(new_instance):
 	if is_holding_glyphs: return false
-	if new_instance in get_children():
+	if new_instance.get_is_selected():
 		deselect_instance(new_instance)
 	else:
 		select_instance(new_instance)
