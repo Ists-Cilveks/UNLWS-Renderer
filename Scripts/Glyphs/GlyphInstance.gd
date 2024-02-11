@@ -20,6 +20,7 @@ var base_rotation
 
 var binding_point_visibility = true
 var editing_enabled = false
+var real_parent # The semi-permanent parent, never the SelectedGlyphs node (or maybe something else that's temporary).
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
 func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotation = 0):
@@ -55,7 +56,24 @@ func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, 
 	set_glyph_rotation(rotation, false)
 
 	set_focus_bp(focus_bp_name)
-	
+
+
+func _unhandled_input(event):
+	if event is InputEventMouseButton \
+		and event.is_pressed() \
+		and event.button_index == MOUSE_BUTTON_LEFT:
+
+		var local_pos = sprite_node.to_local(get_viewport().get_canvas_transform().affine_inverse() * event.position)
+
+		if sprite_node.is_pixel_opaque(local_pos):
+			var lambda_viewport = get_viewport()
+			var if_successful = func if_glyph_selection_is_successful():
+				lambda_viewport.set_input_as_handled()
+			if event.is_ctrl_pressed():
+				Event_Bus.glyph_extra_selection_attempted.emit(self, if_successful)
+			else:
+				Event_Bus.glyph_selection_attempted.emit(self, if_successful)
+
 
 func add_style(new_dict):
 	for glyph_name in new_dict:
@@ -151,3 +169,8 @@ func set_binding_point_visibility(enabled):
 func set_editing_mode(enabled):
 	editing_enabled = enabled
 	bp_container_node.set_editing_mode(enabled)
+
+
+func permanent_reparent(new_parent):
+	reparent(new_parent)
+	real_parent = new_parent

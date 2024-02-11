@@ -3,6 +3,9 @@ extends Node
 
 func _ready():
 	Event_Bus.glyph_search_succeeded.connect(hold_instance)
+	Event_Bus.glyph_selection_attempted.connect(select_instance)
+	Event_Bus.glyph_extra_selection_attempted.connect(select_extra_instance)
+	
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
@@ -29,8 +32,18 @@ func _unhandled_input(event):
 
 
 func place_selected_glyphs():
-	$SelectedGlyphs.place($Glyphs)
+	$SelectedGlyphs.place_all($Glyphs)
 
 func hold_instance(new_instance):
-	$SelectedGlyphs.overwrite(new_instance)
+	$SelectedGlyphs.overwrite_hold(new_instance)
 
+
+func select_instance(new_instance, if_successful):
+	var successful = $SelectedGlyphs.attempt_to_overwrite_selection(new_instance)
+	if successful:
+		if_successful.call()
+
+func select_extra_instance(new_instance, if_successful):
+	var successful = $SelectedGlyphs.attempt_to_select_extra_instance(new_instance)
+	if successful:
+		if_successful.call()
