@@ -2,6 +2,9 @@ class_name Glyph_Instance extends Node2D
 ## An instance of a glyph with a certain name, position etc.
 ## To instance it, load the glyph_instance.tscn scene, do not just call new()
 
+## name and id: each glyph instance must have a unique id which is also its name.
+## The name is used to find the node in the tree
+
 var binding_point_class = preload("./binding_point.tscn")
 var sprite_shader = preload("./glyph_instance_sprite.gdshader")
 var sprite_material = ShaderMaterial.new()
@@ -157,7 +160,9 @@ func get_restore_dict(preserve_id = true):
 		glyph_type = glyph_type,
 		focus_bp_name = focus_bp_name,
 		position = position,
-		rotation = rotation,
+		rotation = base_rotation,
+		#is_selected = is_selected,
+		real_parent = real_parent,
 	}
 	if preserve_id:
 		res["id"] = id
@@ -165,6 +170,8 @@ func get_restore_dict(preserve_id = true):
 
 func restore_from_dict(dict):
 	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"])
+	#set_is_selected(dict["is_selected"])
+	set_real_parent(dict["real_parent"])
 
 
 func set_binding_point_visibility(enabled):
@@ -177,8 +184,14 @@ func set_editing_mode(enabled):
 
 
 func permanent_reparent(new_parent):
-	reparent(new_parent)
+	reparent(new_parent, false)
+	set_real_parent(new_parent)
+
+func set_real_parent(new_parent):
 	real_parent = new_parent
+
+func get_real_parent():
+	return real_parent
 
 
 func get_is_selected():

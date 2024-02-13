@@ -26,9 +26,9 @@ func _unhandled_input(event):
 				delete_selected_or_held_glyphs()
 				Undo_Redo.commit_action()
 			elif event.is_action_pressed("ui_cancel"):
-				Undo_Redo.create_action("Deselect glyphs")
+				#Undo_Redo.create_action("Deselect glyphs")
 				deselect_selected_glyphs()
-				Undo_Redo.commit_action()
+				#Undo_Redo.commit_action()
 
 
 func place_selected_glyphs():
@@ -53,3 +53,14 @@ func select_extra_instance(new_instance, if_successful):
 	var successful = $SelectedGlyphs.attempt_to_select_extra_instance(new_instance)
 	if successful:
 		if_successful.call()
+
+
+func get_descendant_by_name(node_name):
+	return find_child(node_name, true, false)
+
+func remove_descendant_by_name_without_undo_redo(node_name, delete_after_removing = true):
+	var node = get_descendant_by_name(node_name)
+	if delete_after_removing:
+		node.free()
+	else:
+		node.get_parent().remove_child(node)
