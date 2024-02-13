@@ -33,10 +33,12 @@ func start_drag(event, new_node):
 
 # Given an event and a node that can be dragged and is hovered,
 # determine if the event should start a drag, and if so, start it.
-func check_drag_start(event, check_node):
+func start_drag_if_possible(event, check_node, on_success = null):
 	if is_dragging: return # Don't drag multiple nodes at once
 	if event is InputEventMouseButton \
 		and event.button_index == MOUSE_BUTTON_LEFT \
 		and event.is_pressed():
+			if on_success != null:
+				on_success.call()
 			check_node.start_drag()
 			Drag_Handler.start_drag(event, check_node)
