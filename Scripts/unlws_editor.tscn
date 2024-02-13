@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://css6xu7374m8y"]
+[gd_scene load_steps=23 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://Scripts/UNLWS_editor.gd" id="1_5jbj8"]
 [ext_resource type="Script" path="res://Scripts/glyph_canvas.gd" id="3_pniuy"]
@@ -15,6 +15,40 @@
 [ext_resource type="Script" path="res://Scripts/Popups/glyph_attributes_info.gd" id="15_go35b"]
 [ext_resource type="Script" path="res://temp/PathLineEdit.gd" id="16_ofrlu"]
 [ext_resource type="Script" path="res://Scripts/Popups/popup_container.gd" id="17_37ibm"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_0145j"]
+device = -1
+command_or_control_autoremap = true
+keycode = 90
+unicode = 122
+
+[sub_resource type="Shortcut" id="Shortcut_myr5r"]
+events = [SubResource("InputEventKey_0145j")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_n0lb7"]
+device = -1
+command_or_control_autoremap = true
+keycode = 89
+unicode = 121
+
+[sub_resource type="InputEventKey" id="InputEventKey_mt04f"]
+device = -1
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 90
+unicode = 122
+
+[sub_resource type="Shortcut" id="Shortcut_hnquk"]
+events = [SubResource("InputEventKey_n0lb7"), SubResource("InputEventKey_mt04f")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_ftsia"]
+device = -1
+command_or_control_autoremap = true
+keycode = 69
+unicode = 101
+
+[sub_resource type="Shortcut" id="Shortcut_ehh6t"]
+events = [SubResource("InputEventKey_ftsia")]
 
 [node name="UNLWSEditor" type="Node"]
 script = ExtResource("1_5jbj8")
@@ -69,12 +103,14 @@ layout_mode = 2
 [node name="Undo" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer"]
 layout_mode = 2
 disabled = true
+shortcut = SubResource("Shortcut_myr5r")
 text = "Undo"
 script = ExtResource("10_o0csu")
 
 [node name="Redo" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer"]
 layout_mode = 2
 disabled = true
+shortcut = SubResource("Shortcut_hnquk")
 text = "Redo
 "
 script = ExtResource("11_5gwt3")
@@ -101,6 +137,12 @@ horizontal_scroll_mode = 0
 [node name="Info" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="EditingModeButton" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+layout_mode = 2
+toggle_mode = true
+shortcut = SubResource("Shortcut_ehh6t")
+text = "Edit glyph"
 
 [node name="GlyphAttributesLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
 layout_mode = 2
