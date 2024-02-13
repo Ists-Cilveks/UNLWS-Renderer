@@ -20,3 +20,10 @@ signal add_popup_signal(activation_signal, popup_scene)
 
 signal glyph_selection_attempted(glyph_instance, if_successful)
 signal glyph_extra_selection_attempted(glyph_instance, if_successful)
+
+signal glyph_editing_requested()
+signal stop_glyph_editing()
+signal glyph_editing_started()
+signal glyph_editing_stopped()
+signal became_able_to_start_glyph_editing()
+signal became_unable_to_start_glyph_editing()

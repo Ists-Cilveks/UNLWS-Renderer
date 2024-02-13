@@ -6,6 +6,14 @@ var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
 var is_holding_glyphs = false
 var is_selecting_glyphs = false
 
+var editing_enabled = false
+
+
+func _ready():
+	Event_Bus.glyph_editing_requested.connect(attempt_to_begin_glyph_editing)
+	Event_Bus.stop_glyph_editing.connect(func(): set_editing_mode(false))
+
+
 # Track the mouse position
 func _unhandled_input(event):
 	if event is InputEventMouseMotion \
@@ -208,6 +216,7 @@ func select_instance(child):
 
 func deselect_all():
 	if not is_selecting_glyphs: return
+	set_editing_mode(false)
 	is_selecting_glyphs = false
 	for child in get_children():
 		deselect_instance(child)
@@ -229,3 +238,39 @@ func attempt_to_select_extra_instance(new_instance):
 		select_instance(new_instance)
 	return true
 #endregion
+
+
+func set_editing_mode(enabled):
+	if editing_enabled == enabled:
+		return
+	editing_enabled = enabled
+	for child in get_children():
+		child.set_editing_mode(editing_enabled)
+	if editing_enabled:
+		Event_Bus.glyph_editing_started.emit()
+	else:
+		Event_Bus.glyph_editing_stopped.emit()
+
+func can_start_editing_mode():
+	if get_child_count() == 1 and not is_holding_glyphs:
+		return true
+	return false
+
+func attempt_to_begin_glyph_editing():
+	if not can_start_editing_mode():
+		return
+	set_editing_mode(true)
+
+func signal_ability_to_start_editing_mode():
+	if can_start_editing_mode():
+		Event_Bus.became_able_to_start_glyph_editing.emit()
+	else:
+		Event_Bus.became_unable_to_start_glyph_editing.emit()
+
+func _on_child_order_changed():
+	signal_ability_to_start_editing_mode()
+
+func _unhandled_key_input(event):
+	if event is InputEventKey:
+		if event.is_action_pressed("ui_accept"):
+			attempt_to_begin_glyph_editing()

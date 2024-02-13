@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://css6xu7374m8y"]
+[gd_scene load_steps=24 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://Scripts/UNLWS_editor.gd" id="1_5jbj8"]
 [ext_resource type="Script" path="res://Scripts/glyph_canvas.gd" id="3_pniuy"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/glyph_search_entry.gd" id="6_io2bl"]
 [ext_resource type="Script" path="res://Scripts/UI/Mouse.gd" id="7_mh8ie"]
 [ext_resource type="Texture2D" uid="uid://b2d5w02d3vhtj" path="res://Images/Icons/Cursors/crosshair.svg" id="8_wgcwp"]
+[ext_resource type="Script" path="res://Scripts/editing_mode_button.gd" id="9_r78ay"]
 [ext_resource type="Script" path="res://Scripts/UI/undo_button.gd" id="10_o0csu"]
 [ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="11_5gwt3"]
 [ext_resource type="Script" path="res://Scripts/Popups/show_controls_button.gd" id="12_v1us4"]
@@ -140,9 +141,11 @@ size_flags_horizontal = 3
 
 [node name="EditingModeButton" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
 layout_mode = 2
+disabled = true
 toggle_mode = true
 shortcut = SubResource("Shortcut_ehh6t")
 text = "Edit glyph"
+script = ExtResource("9_r78ay")
 
 [node name="GlyphAttributesLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
 layout_mode = 2
@@ -212,4 +215,6 @@ script = ExtResource("17_37ibm")
 
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/EditingModeButton" to="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/EditingModeButton" method="_on_pressed"]
+[connection signal="child_order_changed" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" method="_on_child_order_changed"]
 [connection signal="child_entered_tree" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" method="_on_child_entered_tree"]
