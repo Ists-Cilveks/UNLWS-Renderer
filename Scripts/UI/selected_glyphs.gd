@@ -126,6 +126,7 @@ func get_restore_child_function(child, make_self_parent = false):
 		instance.restore_from_dict(restore_dict)
 		if make_self_parent:
 			lambda_self.add_child(instance)
+			instance.set_real_parent(lambda_self)
 		else:
 			assert(instance.real_parent != null)
 			instance.real_parent.add_child(instance)
