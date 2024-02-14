@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="11_5gwt3"]
 [ext_resource type="Script" path="res://Scripts/Popups/show_controls_button.gd" id="12_v1us4"]
 [ext_resource type="LabelSettings" uid="uid://pqgvl8pp1tfe" path="res://Styles/bold_label.tres" id="14_ijhnr"]
-[ext_resource type="Script" path="res://Scripts/Popups/glyph_attributes_info.gd" id="15_go35b"]
+[ext_resource type="Script" path="res://Scripts/UI/glyph_attributes_info.gd" id="15_go35b"]
 [ext_resource type="Script" path="res://temp/PathLineEdit.gd" id="16_ofrlu"]
 [ext_resource type="Script" path="res://Scripts/Popups/popup_container.gd" id="17_37ibm"]
 
