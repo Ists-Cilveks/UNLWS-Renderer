@@ -11,8 +11,6 @@ func _ready():
 	
 	# Allowed to fail (file may be deleted)
 	settings.load(user_settings_folder_path+"settings.cfg")
-	
-	print(get_setting("glyph editing", "allow_editing_multiple_glyphs"))
 
 func save_settings():
 	DirAccess.make_dir_absolute(user_settings_folder_path)
