@@ -23,6 +23,7 @@ Undo_Redo="*res://Scripts/Globals/UndoRedo.gd"
 Focus_Handler="*res://Scripts/Globals/FocusHandler.gd"
 Global_Colors="*res://Styles/GlobalColors.gd"
 Drag_Handler="*res://Scripts/Globals/DragHandler.gd"
+Settings_Handler="*res://Scripts/Globals/SettingsHandler.gd"
 
 [display]
 
