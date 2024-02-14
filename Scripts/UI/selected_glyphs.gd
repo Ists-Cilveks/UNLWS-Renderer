@@ -243,6 +243,8 @@ func attempt_to_select_extra_instance(new_instance):
 func set_editing_mode(enabled):
 	if editing_enabled == enabled:
 		return
+	if enabled and not can_start_editing_mode():
+		return
 	editing_enabled = enabled
 	for child in get_children():
 		child.set_editing_mode(editing_enabled)
@@ -252,7 +254,10 @@ func set_editing_mode(enabled):
 		Event_Bus.glyph_editing_stopped.emit()
 
 func can_start_editing_mode():
-	if get_child_count() == 1 and not is_holding_glyphs:
+	if ((Settings_Handler.get_setting("glyph editing", "allow_editing_multiple_glyphs") \
+		and get_child_count() > 0) \
+		or get_child_count() == 1) \
+		and not is_holding_glyphs:
 		return true
 	return false
 
