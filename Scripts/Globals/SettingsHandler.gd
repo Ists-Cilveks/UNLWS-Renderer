@@ -20,10 +20,7 @@ func save_settings():
 		return
 
 func get_setting(section, setting_name):
-	print("getting_again ", settings.get_value(section, setting_name))
 	return settings.get_value(section, setting_name)
 
 func set_setting(section, setting_name, value):
-	print("asdfasdf ", value)
 	settings.set_value(section, setting_name, value)
-	print("now getting ", settings.get_value(section, setting_name))

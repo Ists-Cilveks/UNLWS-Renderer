@@ -10,8 +10,8 @@ var editing_enabled = false
 
 
 func _ready():
-	Event_Bus.glyph_editing_requested.connect(attempt_to_begin_glyph_editing)
-	Event_Bus.stop_glyph_editing.connect(func(): set_editing_mode(false))
+	Event_Bus.glyph_editing_requested.connect(func(): attempt_to_set_editing_mode(true))
+	Event_Bus.stop_glyph_editing.connect(func(): attempt_to_set_editing_mode(false))
 
 
 # Track the mouse position
@@ -216,7 +216,7 @@ func select_instance(child):
 
 func deselect_all():
 	if not is_selecting_glyphs: return
-	set_editing_mode(false)
+	attempt_to_set_editing_mode(false)
 	is_selecting_glyphs = false
 	for child in get_children():
 		deselect_instance(child)
@@ -240,7 +240,7 @@ func attempt_to_select_extra_instance(new_instance):
 #endregion
 
 
-func set_editing_mode(enabled):
+func attempt_to_set_editing_mode(enabled):
 	if editing_enabled == enabled:
 		return
 	if enabled and not can_start_editing_mode():
@@ -261,11 +261,6 @@ func can_start_editing_mode():
 		return true
 	return false
 
-func attempt_to_begin_glyph_editing():
-	if not can_start_editing_mode():
-		return
-	set_editing_mode(true)
-
 func signal_ability_to_start_editing_mode():
 	if can_start_editing_mode():
 		Event_Bus.became_able_to_start_glyph_editing.emit()
@@ -278,4 +273,4 @@ func _on_child_order_changed():
 func _unhandled_key_input(event):
 	if event is InputEventKey:
 		if event.is_action_pressed("ui_accept"):
-			attempt_to_begin_glyph_editing()
+			attempt_to_set_editing_mode(true)
