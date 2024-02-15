@@ -102,8 +102,8 @@ func delete_all():
 	remove_all(true)
 
 
-func place_child(child, new_parent):
-	reparent_glyph_instance_by_name(child.name, new_parent, Vector2(child.position))
+func place_child(child, new_parent, actually_reparent = true):
+	change_glyph_instance_parent_by_name(child.name, new_parent, Vector2(child.position), child.real_parent, actually_reparent)
 	signal_stop_holding_child(child)
 
 func place_all(new_parent):
@@ -167,7 +167,8 @@ func overwrite_hold(new_instance: Glyph_Instance):
 	signal_start_holding_child(new_instance)
 
 
-func reparent_glyph_instance_by_name(glyph_name, new_parent, old_position = null, old_real_parent = null):
+func change_glyph_instance_parent_by_name(glyph_name, new_parent, old_position = null, old_real_parent = null, actually_reparent = true):
+	# If not actually_reparent, the child's real_parent will be set but it won't physically be reparented.
 	var lambda_self = self
 	var node_path = NodePath(glyph_name)
 	#Undo_Redo.add_do_method(func(): lambda_self.get_node(node_path).reparent(new_parent)) # Doesn't preserve position on redo
@@ -180,11 +181,17 @@ func reparent_glyph_instance_by_name(glyph_name, new_parent, old_position = null
 		if new_parent == lambda_self:
 			do_node.reparent(new_parent, false)
 		else:
+			if actually_reparent:
 			do_node.permanent_reparent(new_parent)
+			else:
+				do_node.set_real_parent(new_parent)
 	Undo_Redo.add_do_method(do_method)
 	
 	var undo_method = func undo_method():
-		var undo_node = new_parent.get_node(node_path)
+		var current_parent = new_parent
+		if not actually_reparent:
+			current_parent = lambda_self
+		var undo_node = current_parent.get_node(node_path)
 		if old_position != null:
 			undo_node.position = old_position
 		if old_real_parent != null:
