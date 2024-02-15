@@ -6,8 +6,6 @@ var dict = {}
 var editing_enabled = false
 var mouse_hovering = false
 var being_dragged = false
-var drag_start_pos
-var drag_current_pos
 
 func _ready():
 	update_style()
@@ -40,20 +38,45 @@ func end_drag():
 	assert(being_dragged)
 	being_dragged = false
 	update_style()
+	Undo_Redo.create_action("Change binding point position by dragging")
+	var lambda_dict = dict
+	var new_x = position.x
+	var new_y = position.y
+	Undo_Redo.add_do_method(func():
+		lambda_dict["owner"].set_bp_position(new_x, new_y)
+	)
+	var start_x = Drag_Handler.local_node_start_pos.x
+	var start_y = Drag_Handler.local_node_start_pos.y
+	Undo_Redo.add_undo_method(func():
+		#print(lambda_dict, "undoing")
+		lambda_dict["owner"].set_bp_position(start_x, start_y)
+	)
+	Undo_Redo.commit_action()
 
 func start_drag():
 	assert(not being_dragged)
 	being_dragged = true
 	update_style()
 
-func init(init_dict):
-	#print(init_dict)
+
+func init(init_dict, create_copy = false):
+	assert(typeof(init_dict) == typeof({}))
+	
+	if not create_copy:
+		dict = init_dict
+	
 	for key in init_dict:
 		if key in ["x", "y", "angle"]:
 			dict[key] = float(init_dict[key])
-		else:
-			assert(typeof(init_dict) == typeof({}))
+		elif create_copy: # If dict = init_dict, this would be a no-op
 			dict[key] = init_dict[key]
+	
+	#print(dict, "setting/creating")
+	#print(init_dict, "init")
+	
+	dict["owner"] = self
+	#if set_init_dict_owner_to_self: # Allows 
+		#init_dict["owner"] = self
 	
 	if "x" in dict and "y" in dict:
 		position = Vector2(dict["x"], dict["y"])
@@ -62,6 +85,13 @@ func init(init_dict):
 
 func set_attribute(key, value):
 	dict[key] = value
+
+func set_bp_position(x, y):
+	position = Vector2(x, y)
+	set_attribute("x", x)
+	set_attribute("y", y)
+	if "xml_node" in dict:
+		pass # TODO: keep the XML node up to date (assuming that's necessary)
 
 
 func set_editing_mode(enabled):
@@ -88,3 +118,12 @@ func update_style():
 func _on_tree_exiting():
 	if being_dragged:
 		Drag_Handler.end_drag()
+
+
+#region save/restore with a dict
+func get_restore_dict():
+	return dict
+
+func restore_from_dict(restore_dict):
+	init(restore_dict)
+#endregion

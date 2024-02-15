@@ -5,7 +5,7 @@ class_name Glyph_Instance extends Node2D
 ## name and id: each glyph instance must have a unique id which is also its name.
 ## The name is used to find the node in the tree
 
-var binding_point_class = preload("./binding_point.tscn")
+var binding_point_scene = preload("./binding_point.tscn")
 var sprite_shader = preload("./glyph_instance_sprite.gdshader")
 var sprite_material = ShaderMaterial.new()
 
@@ -34,7 +34,7 @@ func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotati
 		init(glyph_type, focus_bp_name, position, rotation)
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
-func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, id = null):
+func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, id = null, bp_list = null):
 	self.glyph_type = glyph_type
 	self.instance_g_node = glyph_type.xml_node.get_main_node_with_name("g").deep_copy()
 	
@@ -48,10 +48,10 @@ func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, 
 	
 	bp_container_node = find_child("BPContainer")
 	if bp_container_node: # TODO: Might be good to always or never have access to a BPContainer object rather than it depending on whether this script is part of a binding_point.tscn scene.
-		for name_of_bp_to_copy in glyph_type.binding_points:
-			var new_bp = binding_point_class.instantiate()
-			new_bp.init(glyph_type.binding_points[name_of_bp_to_copy].dict)
-			bp_container_node.add_child(new_bp)
+		if bp_list == null: # Use the default BPs defined in the glyph type
+			bp_container_node.restore_bps_from_glyph_type(glyph_type)
+		else: # Restore BPs from a dictionary
+			bp_container_node.restore_bps_from_dicts(bp_list)
 	
 	sprite_node = find_child("Sprite")
 	if sprite_node: # TODO: Might be good to always or never have access to a Sprite object rather than it depending on whether this script is part of a binding_point.tscn scene.
@@ -155,6 +155,7 @@ func hide_binding_points():
 		bp_container_node.hide_all()
 
 
+#region save/restore with a dict
 func get_restore_dict(preserve_id = true):
 	var res = {
 		glyph_type = glyph_type,
@@ -163,15 +164,17 @@ func get_restore_dict(preserve_id = true):
 		rotation = base_rotation,
 		#is_selected = is_selected,
 		real_parent = real_parent,
+		binding_point_dicts = bp_container_node.get_bp_restore_dicts(),
 	}
 	if preserve_id:
 		res["id"] = id
 	return res
 
 func restore_from_dict(dict):
-	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"])
+	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"], dict["binding_point_dicts"])
 	#set_is_selected(dict["is_selected"])
 	set_real_parent(dict["real_parent"])
+#endregion
 
 
 func set_binding_point_visibility(enabled):
