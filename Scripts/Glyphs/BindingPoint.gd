@@ -48,7 +48,6 @@ func end_drag():
 	var start_x = Drag_Handler.local_node_start_pos.x
 	var start_y = Drag_Handler.local_node_start_pos.y
 	Undo_Redo.add_undo_method(func():
-		#print(lambda_dict, "undoing")
 		lambda_dict["owner"].set_bp_position(start_x, start_y)
 	)
 	Undo_Redo.commit_action()
@@ -71,12 +70,7 @@ func init(init_dict, create_copy = false):
 		elif create_copy: # If dict = init_dict, this would be a no-op
 			dict[key] = init_dict[key]
 	
-	#print(dict, "setting/creating")
-	#print(init_dict, "init")
-	
 	dict["owner"] = self
-	#if set_init_dict_owner_to_self: # Allows 
-		#init_dict["owner"] = self
 	
 	if "x" in dict and "y" in dict:
 		position = Vector2(dict["x"], dict["y"])
