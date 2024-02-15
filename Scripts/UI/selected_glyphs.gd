@@ -107,10 +107,15 @@ func place_child(child, new_parent, actually_reparent = true):
 	signal_stop_holding_child(child)
 
 func place_all(new_parent):
-	Undo_Redo.add_do_method(deselect_all)
+	var keep_selected = true
 	Undo_Redo.add_undo_method(deselect_all)
 	for child in get_children():
-		place_child(child, new_parent)
+		place_child(child, new_parent, true)
+	if keep_selected:
+		for child in get_children():
+			# TODO: using call_deferred here to get around the "delay" in Undo_Redo is not great.
+			# It could be done, but it looks like several other functions would need reworking.
+			select_instance.call_deferred(child)
 
 
 func get_restore_all_children_function():
@@ -182,7 +187,7 @@ func change_glyph_instance_parent_by_name(glyph_name, new_parent, old_position =
 			do_node.reparent(new_parent, false)
 		else:
 			if actually_reparent:
-			do_node.permanent_reparent(new_parent)
+				do_node.permanent_reparent(new_parent)
 			else:
 				do_node.set_real_parent(new_parent)
 	Undo_Redo.add_do_method(do_method)
