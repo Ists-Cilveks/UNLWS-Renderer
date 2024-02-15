@@ -268,7 +268,7 @@ func signal_ability_to_start_editing_mode():
 		Event_Bus.became_unable_to_start_glyph_editing.emit()
 
 func _on_child_order_changed():
-	signal_ability_to_start_editing_mode()
+	signal_ability_to_start_editing_mode.call_deferred()
 
 func _unhandled_key_input(event):
 	if event is InputEventKey:
