@@ -83,6 +83,8 @@ func init(init_dict, create_copy = false):
 		position = Vector2(dict["x"], dict["y"])
 	if "angle" in dict:
 		rotation_degrees = dict["angle"]
+	if "name" in dict:
+		bp_name = dict["name"]
 
 func set_attribute(key, value):
 	dict[key] = value
