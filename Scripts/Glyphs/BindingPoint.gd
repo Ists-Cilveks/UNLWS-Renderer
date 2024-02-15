@@ -1,6 +1,13 @@
 class_name Binding_Point extends Node2D
+## An UNLWS binding point (BP), to be instantiated with the binding point scene as a Glyph_Instance's child.
+## Has a position and rotation (to tell which direction rel lines should connect to)
 
 var bp_name = ""
+
+## dict holds all permanent information about this BP.
+## If a BP is being instanced from a glyph type, the dict should be copied element by element. (see create_copy in init)
+## Otherwise, if the dict of a specific (potentially user-modified) BP was saved and restored, the dict should be passed by reference.
+## This allows the dict to stay up-to-date on what its owner is, so Undo_Redo functions can rely on it while setting/restoring the BP's properties.
 var dict = {}
 
 var editing_enabled = false
