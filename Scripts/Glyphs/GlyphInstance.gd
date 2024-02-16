@@ -25,7 +25,7 @@ var base_rotation
 
 var binding_point_visibility = true
 var editing_enabled = false
-var real_parent # The semi-permanent parent, never the SelectedGlyphs node (or maybe something else that's temporary).
+var real_parent # The semi-permanent parent, usually not the SelectedGlyphs node (or maybe something else that's temporary).
 var is_selected = false
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
