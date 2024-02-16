@@ -47,14 +47,14 @@ func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, 
 	focused_on_bp_node = find_child("FocusedOnBP")
 	
 	bp_container_node = find_child("BPContainer")
-	if bp_container_node: # TODO: Might be good to always or never have access to a BPContainer object rather than it depending on whether this script is part of a binding_point.tscn scene.
+	if bp_container_node: # TODO: Might be good to always or never have access to a BPContainer object rather than it depending on whether this script is part of a glyph_instance.tscn scene.
 		if bp_list == null: # Use the default BPs defined in the glyph type
 			bp_container_node.restore_bps_from_glyph_type(glyph_type)
 		else: # Restore BPs from a dictionary
 			bp_container_node.restore_bps_from_dicts(bp_list)
 	
 	sprite_node = find_child("Sprite")
-	if sprite_node: # TODO: Might be good to always or never have access to a Sprite object rather than it depending on whether this script is part of a binding_point.tscn scene.
+	if sprite_node: # TODO: Might be good to always or never have access to a Sprite object rather than it depending on whether this script is part of a glyph_instance.tscn scene.
 		var texture = glyph_type.get_texture()
 		sprite_node.texture = texture
 		sprite_node.set_material(sprite_material)
