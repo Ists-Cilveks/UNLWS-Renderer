@@ -7,7 +7,13 @@ func _ready():
 			"settings": [
 				["allow_editing_multiple_glyphs", "Allow editing multiple glyphs at once"],
 			]
-		}
+		},
+		{
+			"section_name": "text creation",
+			"settings": [
+				["deselect_glyphs_after_placing", "Deselect glyphs as soon as they are placed"],
+			]
+		},
 	]
 	
 	for section in all_settings:

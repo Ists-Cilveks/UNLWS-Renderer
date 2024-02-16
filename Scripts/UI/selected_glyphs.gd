@@ -107,7 +107,7 @@ func place_child(child, new_parent, actually_reparent = true):
 	signal_stop_holding_child(child)
 
 func place_all(new_parent):
-	var keep_selected = true
+	var keep_selected = not Settings_Handler.get_setting("text creation", "deselect_glyphs_after_placing")
 	Undo_Redo.add_undo_method(deselect_all)
 	for child in get_children():
 		place_child(child, new_parent, true)
