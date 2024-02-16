@@ -2,14 +2,15 @@ extends Node
 
 var settings = ConfigFile.new()
 var user_settings_folder_path = "user://Settings/"
-var default_settings_path = "res://Scripts/Globals/default_settings.cfg"
 
 func _ready():
-	#var error = settings.load("./default_settings.cfg")
-	var default_settings_error = settings.load(default_settings_path)
-	if default_settings_error != OK: return
+	# Set default values for all settings
+	for_each_default_setting(func(section, setting, _label, value):
+		set_setting(section, setting, value)
+	)
 	
-	# Allowed to fail (file may be deleted)
+	# Load user settings file (if it exists) and overwrite settings with them.
+	# Allowed to fail (file may have been deleted)
 	settings.load(user_settings_folder_path+"settings.cfg")
 
 func save_settings():
@@ -24,3 +25,28 @@ func get_setting(section, setting_name):
 
 func set_setting(section, setting_name, value):
 	settings.set_value(section, setting_name, value)
+
+
+func for_each_default_setting(lambda):
+	for section in default_settings:
+		var section_name = section["section_name"]
+		for setting_arr in section["settings"]:
+			var setting_name = setting_arr[0]
+			var label_text = setting_arr[1]
+			var default_value = setting_arr[2]
+			lambda.call(section_name, setting_name, label_text, default_value)
+
+var default_settings = [
+	{
+		"section_name": "glyph editing",
+		"settings": [
+			["allow_editing_multiple_glyphs", "Allow editing multiple glyphs at once", false],
+		]
+	},
+	{
+		"section_name": "text creation",
+		"settings": [
+			["deselect_glyphs_after_placing", "Deselect glyphs as soon as they are placed", false],
+		]
+	},
+]
