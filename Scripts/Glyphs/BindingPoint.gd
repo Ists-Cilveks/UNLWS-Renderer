@@ -28,15 +28,9 @@ func _input(event):
 func _unhandled_input(event):
 	if editing_enabled:
 		if mouse_rotation_hovering:
-			var lambda_viewport = get_viewport()
-			var on_drag_start_success = func on_drag_start_success():
-				lambda_viewport.set_input_as_handled()
-			Drag_Handler.start_drag_if_possible(event, self, on_drag_start_success, true)
+			Drag_Handler.start_drag_if_possible(event, self, true, true)
 		elif mouse_drag_hovering:
-			var lambda_viewport = get_viewport()
-			var on_drag_start_success = func on_drag_start_success():
-				lambda_viewport.set_input_as_handled()
-			Drag_Handler.start_drag_if_possible(event, self, on_drag_start_success)
+			Drag_Handler.start_drag_if_possible(event, self, true)
 
 
 func _on_drag_area_mouse_entered():
