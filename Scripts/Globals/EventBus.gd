@@ -27,3 +27,5 @@ signal glyph_editing_started()
 signal glyph_editing_stopped()
 signal became_able_to_start_glyph_editing()
 signal became_unable_to_start_glyph_editing()
+
+signal glyph_type_saving_attemped()

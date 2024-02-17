@@ -1,5 +1,7 @@
 class_name Glyph_Type extends Object
 
+signal changed()
+
 var name
 var sprite_path
 var texture_is_loaded = false
@@ -7,6 +9,7 @@ var texture
 var xml_node
 var binding_points = {}
 var num_instances = 0 # Used to quickly create unique IDs for Glyph_Instances
+
 
 func _init(init_name, init_sprite_path):
 	name = init_name
@@ -72,12 +75,13 @@ func set_bp_info(bp_name, position, angle):
 		"y": position.y,
 		"angle": angle,
 	}
-	var new_bp = binding_points[bp_name]
-	if new_bp:
+	var new_bp
+	if bp_name in binding_points:
+		new_bp = binding_points[bp_name]
 		new_bp.init(bp_attributes_dict)
 	else:
 		new_bp = Binding_Point.new(bp_attributes_dict)
-	binding_points[bp_name] = new_bp
+		binding_points[bp_name] = new_bp
 	
 	set_bp_node(new_bp)
 
@@ -86,6 +90,7 @@ func set_bp_node(new_bp):
 	var bp_node_name = g_node.my_namespace+":bp"
 	var existing_bp_nodes = g_node.get_children_with_name(bp_node_name)
 	# Find the bp node called bp_name or create one if it doesn't exist
+	# TODO: use get_bp_node
 	var needed_bp_node
 	for bp in existing_bp_nodes:
 		if "name" in bp.attributes_dict \
@@ -103,6 +108,28 @@ func set_bp_node(new_bp):
 			str(new_bp.dict[attribute_name]))
 	
 	new_bp.dict["xml_node"] = needed_bp_node
+
+# Find the bp node called bp_name
+# TODO: untested
+func get_bp_node(bp_name):
+	var g_node = xml_node.get_main_node_with_name("g")
+	var bp_node_name = g_node.my_namespace+":bp"
+	var existing_bp_nodes = g_node.get_children_with_name(bp_node_name)
+	var needed_bp_node
+	for bp in existing_bp_nodes:
+		if "name" in bp.attributes_dict \
+		and bp.attributes_dict["name"] == bp_name:
+			needed_bp_node = bp
+			break
+	assert(needed_bp_node != null)
+	return needed_bp_node
+
+func delete_bp(bp_key):
+	var bp = binding_points[bp_key]
+	var bp_node = get_bp_node(bp.get_attribute("name"))
+	var g_node = xml_node.get_main_node_with_name("g")
+	g_node.remove_child(bp_node)
+	
 
 func get_bp_dict_from_xml_node(g_node):
 	var res = {}
@@ -127,3 +154,20 @@ func get_new_id():
 	var new_id = name + "-instance-" + str(num_instances)
 	num_instances += 1
 	return new_id
+
+
+func update_from_instance(instance):
+	for bp_name in binding_points:
+		delete_bp(bp_name)
+	binding_points = {}
+	
+	var instance_binding_points = instance.get_binding_points()
+	for bp in instance_binding_points:
+		set_bp_info(bp.get_attribute("name"), bp.get_bp_position(), bp.get_attribute("angle"))
+	
+	changed.emit()
+
+func save_from_instance(instance):
+	update_from_instance(instance)
+	DirAccess.make_dir_absolute(Global_Paths.glyph_save_folder)
+	save(Global_Paths.glyph_save_folder+name+".svg")

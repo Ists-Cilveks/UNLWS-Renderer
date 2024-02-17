@@ -28,5 +28,5 @@ func restore_bps_from_dicts(all_dicts):
 func restore_bps_from_glyph_type(glyph_type):
 	for name_of_bp_to_copy in glyph_type.binding_points:
 		var new_bp = binding_point_scene.instantiate()
-		new_bp.init(glyph_type.binding_points[name_of_bp_to_copy].dict)
+		new_bp.init(glyph_type.binding_points[name_of_bp_to_copy].get_copied_restore_dict())
 		add_child(new_bp)

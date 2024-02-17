@@ -90,6 +90,9 @@ func add_my_default_attributes():
 
 func add_child(child):
 	children.append(child)
+func remove_child(child):
+	assert(child in children)
+	children.erase(child)
 
 func get_children_with_name(name):
 	var res = []

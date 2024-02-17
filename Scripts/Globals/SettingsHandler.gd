@@ -1,7 +1,6 @@
 extends Node
 
 var settings = ConfigFile.new()
-var user_settings_folder_path = "user://Settings/"
 
 func _ready():
 	# Set default values for all settings

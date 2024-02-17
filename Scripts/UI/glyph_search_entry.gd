@@ -1,7 +1,7 @@
 extends LineEdit
 
 
-var glyph_instance_scene = load("res://Scripts/Glyphs/glyph_instance.tscn")
+var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
 var glyphs = Glyph_List.glyphs
 var test_instance = glyph_instance_scene.instantiate()
 

@@ -12,7 +12,7 @@ var editing_enabled = false
 func _ready():
 	Event_Bus.glyph_editing_requested.connect(func(): attempt_to_set_editing_mode(true))
 	Event_Bus.stop_glyph_editing.connect(func(): attempt_to_set_editing_mode(false))
-
+	Event_Bus.glyph_type_saving_attemped.connect(attempt_to_save_glyph_type)
 
 # Track the mouse position
 func _unhandled_input(event):
@@ -286,3 +286,12 @@ func _unhandled_key_input(event):
 	if event is InputEventKey:
 		if event.is_action_pressed("ui_accept"):
 			attempt_to_set_editing_mode(true)
+
+
+#region Save glyph types
+func attempt_to_save_glyph_type():
+	if get_child_count() != 1:
+		return
+	var instance = get_children()[0]
+	instance.overwrite_own_glyph_type()
+#endregion

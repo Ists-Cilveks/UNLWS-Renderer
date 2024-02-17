@@ -88,6 +88,8 @@ func init(init_dict, create_copy = false):
 
 func set_attribute(key, value):
 	dict[key] = value
+func get_attribute(key):
+	return dict[key]
 
 func set_bp_position(x, y):
 	position = Vector2(x, y)
@@ -95,6 +97,9 @@ func set_bp_position(x, y):
 	set_attribute("y", y)
 	if "xml_node" in dict:
 		pass # TODO: keep the XML node up to date (assuming that's necessary)
+
+func get_bp_position():
+	return position
 
 
 func set_editing_mode(enabled):
@@ -124,6 +129,16 @@ func _on_tree_exiting():
 
 
 #region save/restore with a dict
+func get_copied_restore_dict():
+	var res = {
+		"name": bp_name,
+		"x": position.x,
+		"y": position.y,
+		"angle": dict["angle"],
+		"owner": dict["owner"],
+	}
+	return res
+
 func get_restore_dict():
 	return dict
 

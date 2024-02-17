@@ -35,7 +35,7 @@ func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotati
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
 func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, id = null, bp_list = null):
-	self.glyph_type = glyph_type
+	set_glyph_type(glyph_type)
 	self.instance_g_node = glyph_type.xml_node.get_main_node_with_name("g").deep_copy()
 	
 	if id:
@@ -47,7 +47,7 @@ func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, 
 	focused_on_bp_node = find_child("FocusedOnBP")
 	
 	bp_container_node = find_child("BPContainer")
-	if bp_container_node: # TODO: Might be good to always or never have access to a BPContainer object rather than it depending on whether this script is part of a glyph_instance.tscn scene.
+	if bp_container_node: # TODO: Might bp_container_nodebe good to always or never have access to a BPContainer object rather than it depending on whether this script is part of a glyph_instance.tscn scene.
 		if bp_list == null: # Use the default BPs defined in the glyph type
 			bp_container_node.restore_bps_from_glyph_type(glyph_type)
 		else: # Restore BPs from a dictionary
@@ -120,6 +120,12 @@ func set_focus_bp(focus_bp_name, update=true):
 		update_rotation()
 		update_node_transform()
 
+func set_glyph_type(new_type):
+	if glyph_type != null:
+		assert(false) # TODO: handle removing the old glyph type (signals, etc.(?))
+	glyph_type = new_type
+	glyph_type.changed.connect(func(): pass) # TODO: what to connect this to?
+
 func set_glyph_position(new_position, update=true):
 	position = new_position
 	if update:
@@ -174,6 +180,15 @@ func restore_from_dict(dict):
 	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"], dict["binding_point_dicts"])
 	#set_is_selected(dict["is_selected"])
 	set_real_parent(dict["real_parent"])
+#endregion
+
+
+#region Glyph_Type creation and data access needed for it
+func overwrite_own_glyph_type():
+	glyph_type.save_from_instance(self)
+
+func get_binding_points():
+	return bp_container_node.get_children()
 #endregion
 
 

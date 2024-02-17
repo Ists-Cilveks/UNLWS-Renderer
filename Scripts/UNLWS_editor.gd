@@ -26,9 +26,6 @@ func _ready():
 	var xml_string = test_text.xml_node.get_string()
 	var test_file = FileAccess.open(Global_Paths.output_folder+"text.svg", FileAccess.WRITE)
 	test_file.store_string(xml_string)
-	
-	Glyph_List.save_all_to_folder("res://Images/Glyphs/")
-	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
