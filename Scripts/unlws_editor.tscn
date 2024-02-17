@@ -103,6 +103,7 @@ script = ExtResource("6_io2bl")
 layout_mode = 2
 
 [node name="Control" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer/HSplitContainer/Control"]
@@ -211,7 +212,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/HSplitContainer/SubViewportContainer"]
 handle_input_locally = false
 physics_object_picking = true
-size = Vector2i(2, 2)
+size = Vector2i(930, 638)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]
