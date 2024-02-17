@@ -6,11 +6,6 @@ var glyphs = Glyph_List.glyphs
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
-	# TODO: this isn't a great place to create the necessary empty folders.
-	var res_dir = DirAccess.open("res://")
-	res_dir.make_dir("Output")
-	res_dir.make_dir("Input")
-	
 	# Define binding points
 	#glyphs["eat"].set_bp_info("A", Vector2(20.8-20.299457, 26.4-17.823843), 180)
 	#glyphs["eat"].set_bp_info("B", Vector2(27.8-20.299457, 30.4-17.823843), 90)
@@ -29,7 +24,7 @@ func _ready():
 	test_text.add_glyph(Glyph_Instance.new(glyphs["eat"], "A", Vector2(50, 20), 90))
 
 	var xml_string = test_text.xml_node.get_string()
-	var test_file = FileAccess.open("res://Output/text.svg", FileAccess.WRITE)
+	var test_file = FileAccess.open(Global_Paths.output_folder+"text.svg", FileAccess.WRITE)
 	test_file.store_string(xml_string)
 	
 	Glyph_List.save_all_to_folder("res://Images/Glyphs/")

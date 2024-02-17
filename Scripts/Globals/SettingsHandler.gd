@@ -11,11 +11,11 @@ func _ready():
 	
 	# Load user settings file (if it exists) and overwrite settings with them.
 	# Allowed to fail (file may have been deleted)
-	settings.load(user_settings_folder_path+"settings.cfg")
+	settings.load(Global_Paths.user_settings_folder+"settings.cfg")
 
 func save_settings():
-	DirAccess.make_dir_absolute(user_settings_folder_path)
-	var error = settings.save(user_settings_folder_path+"settings.cfg")
+	DirAccess.make_dir_absolute(Global_Paths.user_settings_folder)
+	var error = settings.save(Global_Paths.user_settings_folder+"settings.cfg")
 	if error != OK:
 		assert(false)
 		return
