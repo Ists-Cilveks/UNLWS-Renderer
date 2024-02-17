@@ -4,5 +4,3 @@
 
 # Project specific ignores
 Images/Glyphs/*.svg.import
-Output/*
-Input/*
