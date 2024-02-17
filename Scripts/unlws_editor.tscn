@@ -211,7 +211,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/HSplitContainer/SubViewportContainer"]
 handle_input_locally = false
 physics_object_picking = true
-size = Vector2i(973, 638)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]

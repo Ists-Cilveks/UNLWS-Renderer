@@ -11,7 +11,8 @@ var bp_name = ""
 var dict = {}
 
 var editing_enabled = false
-var mouse_hovering = false
+var mouse_drag_hovering = false
+var mouse_rotation_hovering = false
 var being_dragged = false
 
 func _ready():
@@ -20,44 +21,77 @@ func _ready():
 func _init(init_dict = {}):
 	init(init_dict)
 
+func _input(event):
+	Drag_Handler.process_input_event(event)
+
 
 func _unhandled_input(event):
-	if editing_enabled and mouse_hovering:
-		var lambda_viewport = get_viewport()
-		var on_drag_start_success = func on_drag_start_success():
-			lambda_viewport.set_input_as_handled()
-		Drag_Handler.start_drag_if_possible(event, self, on_drag_start_success)
+	if editing_enabled:
+		if mouse_rotation_hovering:
+			var lambda_viewport = get_viewport()
+			var on_drag_start_success = func on_drag_start_success():
+				lambda_viewport.set_input_as_handled()
+			Drag_Handler.start_drag_if_possible(event, self, on_drag_start_success, true)
+		elif mouse_drag_hovering:
+			var lambda_viewport = get_viewport()
+			var on_drag_start_success = func on_drag_start_success():
+				lambda_viewport.set_input_as_handled()
+			Drag_Handler.start_drag_if_possible(event, self, on_drag_start_success)
 
 
 func _on_drag_area_mouse_entered():
-	mouse_hovering = true
+	mouse_drag_hovering = true
 	update_style()
 
 func _on_drag_area_mouse_exited():
-	mouse_hovering = false
+	mouse_drag_hovering = false
+	update_style()
+
+
+func _on_rotation_drag_area_mouse_entered():
+	mouse_rotation_hovering = true
+	update_style()
+
+func _on_rotation_drag_area_mouse_exited():
+	mouse_rotation_hovering = false
 	update_style()
 
 
 func update_drag_position(new_position):
-	position = new_position
+	set_bp_position(new_position.x, new_position.y)
+func update_drag_rotation(new_rotation):
+	set_bp_rotation(new_rotation)
 
 func end_drag():
 	assert(being_dragged)
 	being_dragged = false
 	update_style()
-	Undo_Redo.create_action("Change binding point position by dragging")
+	
 	var lambda_dict = dict
-	var new_x = position.x
-	var new_y = position.y
-	Undo_Redo.add_do_method(func():
-		lambda_dict["owner"].set_bp_position(new_x, new_y)
-	)
-	var start_x = Drag_Handler.local_node_start_pos.x
-	var start_y = Drag_Handler.local_node_start_pos.y
-	Undo_Redo.add_undo_method(func():
-		lambda_dict["owner"].set_bp_position(start_x, start_y)
-	)
-	Undo_Redo.commit_action()
+	if Drag_Handler.is_changing_rotation: # The BP's rotation is being dragged
+		Undo_Redo.create_action("Change binding point rotation by dragging")
+		var new_rotation = get_rotation()
+		Undo_Redo.add_do_method(func():
+			lambda_dict["owner"].set_bp_rotation(new_rotation)
+		)
+		var start_rotation = Drag_Handler.local_node_start_rotation
+		Undo_Redo.add_undo_method(func():
+			lambda_dict["owner"].set_bp_rotation(start_rotation)
+		)
+		Undo_Redo.commit_action()
+	else: # The BP's position is being dragged
+		Undo_Redo.create_action("Change binding point position by dragging")
+		var new_x = get_position().x
+		var new_y = get_position().y
+		Undo_Redo.add_do_method(func():
+			lambda_dict["owner"].set_bp_position(new_x, new_y)
+		)
+		var start_x = Drag_Handler.local_node_start_pos.x
+		var start_y = Drag_Handler.local_node_start_pos.y
+		Undo_Redo.add_undo_method(func():
+			lambda_dict["owner"].set_bp_position(start_x, start_y)
+		)
+		Undo_Redo.commit_action()
 
 func start_drag():
 	assert(not being_dragged)
@@ -102,6 +136,16 @@ func get_bp_position():
 	return position
 
 
+func set_bp_rotation(new_rotation):
+	set_rotation(new_rotation)
+	set_attribute("angle", get_rotation_degrees())
+	if "xml_node" in dict:
+		pass # TODO: keep the XML node up to date (assuming that's necessary)
+
+func get_bp_rotation():
+	return position
+
+
 func set_editing_mode(enabled):
 	if editing_enabled == enabled: return
 	editing_enabled = enabled
@@ -111,12 +155,13 @@ func set_editing_mode(enabled):
 
 
 func update_style():
+	var hovering = mouse_drag_hovering or mouse_rotation_hovering
 	var color_name = "default"
 	if editing_enabled:
 		color_name = "editable"
-		if mouse_hovering:
+		if hovering:
 			color_name = "hover_editable"
-	elif mouse_hovering:
+	elif hovering:
 		color_name = "hover"
 	$Sprite.modulate = Global_Colors.binding_point[color_name]
 	if being_dragged:
