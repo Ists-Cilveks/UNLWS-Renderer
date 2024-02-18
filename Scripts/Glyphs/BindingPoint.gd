@@ -21,8 +21,11 @@ func _ready():
 func _init(init_dict = {}):
 	init(init_dict)
 
+
+#region Dragging
 func _input(event):
-	Drag_Handler.process_input_event(event)
+	if being_dragged:
+		Drag_Handler.process_input_event(event)
 
 
 func _unhandled_input(event):
@@ -91,6 +94,7 @@ func start_drag():
 	assert(not being_dragged)
 	being_dragged = true
 	update_style()
+#endregion
 
 
 func init(init_dict, create_copy = false):
