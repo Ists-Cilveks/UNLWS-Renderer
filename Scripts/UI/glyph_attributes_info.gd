@@ -4,18 +4,13 @@ var rows = []
 var glyph_instance
 
 
-func _ready():
-	Event_Bus.started_holding_glyphs.connect(create_attribute_list_from_children)
-	Event_Bus.stopped_holding_glyphs.connect(create_attribute_list_from_children)
-	Event_Bus.started_selecting_glyphs.connect(create_attribute_list_from_children)
-	Event_Bus.stopped_selecting_glyphs.connect(create_attribute_list_from_children)
+func update(new_instance):
+	create_attribute_list_from_instance(new_instance)
 
 
-func create_attribute_list_from_children(children = null):
+func create_attribute_list_from_instance(new_instance):
 	destroy_attribute_list()
-	if children == null or len(children) != 1:
-		return
-	var new_instance = children[0]
+	
 	# TODO: Find some way to check if the received child is a Glyph_Instance or some other not-yet-implemented class (like a rel line)
 	#if not new_instance.is_class("Glyph_Instance"): return
 	glyph_instance = new_instance

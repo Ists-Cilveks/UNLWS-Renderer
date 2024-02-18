@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://css6xu7374m8y"]
+[gd_scene load_steps=29 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://Scripts/UNLWS_editor.gd" id="1_5jbj8"]
 [ext_resource type="Script" path="res://Scripts/glyph_canvas.gd" id="3_pniuy"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://Scripts/editing_mode_button.gd" id="9_r78ay"]
 [ext_resource type="Script" path="res://Scripts/UI/undo_button.gd" id="10_o0csu"]
 [ext_resource type="Script" path="res://Scripts/UI/redo_button.gd" id="11_5gwt3"]
+[ext_resource type="Script" path="res://Scripts/UI/glyph_info_container.gd" id="11_kpgnh"]
 [ext_resource type="Script" path="res://Scripts/Popups/show_controls_button.gd" id="12_v1us4"]
 [ext_resource type="Script" path="res://Scripts/glyph_type_save_button.gd" id="14_1yuho"]
 [ext_resource type="LabelSettings" uid="uid://pqgvl8pp1tfe" path="res://Styles/bold_label.tres" id="14_ijhnr"]
@@ -159,47 +160,62 @@ size_flags_horizontal = 3
 
 [node name="EditingModeButton" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
 layout_mode = 2
+size_flags_horizontal = 3
 disabled = true
 toggle_mode = true
 shortcut = SubResource("Shortcut_ehh6t")
 text = "Edit glyph"
 script = ExtResource("9_r78ay")
 
-[node name="GlyphAttributesLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+[node name="GlyphInfo" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("11_kpgnh")
+
+[node name="GlyphAttributesLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
 text = "Glyph attributes"
 label_settings = ExtResource("14_ijhnr")
 
-[node name="GlyphAttributes" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+[node name="GlyphAttributes" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 5
 columns = 2
 script = ExtResource("15_go35b")
 
-[node name="FileDataLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+[node name="BindingPointInfoLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
+layout_mode = 2
+text = "Binding points"
+
+[node name="BindingPointInfo" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
+layout_mode = 2
+
+[node name="FileDataLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
 text = "File data"
 label_settings = ExtResource("14_ijhnr")
 
-[node name="FileData" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+[node name="FileData" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 5
 columns = 2
 
-[node name="PathLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/FileData"]
+[node name="PathLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/FileData"]
 layout_mode = 2
 text = "File path"
 
-[node name="PathLineEdit" type="LineEdit" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/FileData"]
+[node name="PathLineEdit" type="LineEdit" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/FileData"]
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
 script = ExtResource("16_ofrlu")
 
-[node name="SaveButton" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info"]
+[node name="SaveButton" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Save glyph type"
 script = ExtResource("14_1yuho")
 
@@ -239,6 +255,6 @@ script = ExtResource("17_37ibm")
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/EditingModeButton" to="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/EditingModeButton" method="_on_pressed"]
-[connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/SaveButton" to="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/SaveButton" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/SaveButton" to="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/SaveButton" method="_on_pressed"]
 [connection signal="child_order_changed" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" method="_on_child_order_changed"]
 [connection signal="child_entered_tree" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" method="_on_child_entered_tree"]
