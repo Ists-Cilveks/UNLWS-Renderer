@@ -233,7 +233,7 @@ render_target_update_mode = 4
 
 [node name="Camera" type="Camera2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]
 offset = Vector2(100, 0)
-zoom = Vector2(2, 2)
+zoom = Vector2(20, 20)
 
 [node name="Canvas" type="Node" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]
 script = ExtResource("3_pniuy")

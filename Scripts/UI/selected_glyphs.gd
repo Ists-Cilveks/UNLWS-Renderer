@@ -1,8 +1,6 @@
 extends Node2D
 ## A container of all glyphs that are currently selected
 
-var glyph_instance_scene = preload("../Glyphs/glyph_instance.tscn")
-
 var is_holding_glyphs = false
 var is_selecting_glyphs = false
 
@@ -13,6 +11,8 @@ func _ready():
 	Event_Bus.glyph_editing_requested.connect(func(): attempt_to_set_editing_mode(true))
 	Event_Bus.stop_glyph_editing.connect(func(): attempt_to_set_editing_mode(false))
 	Event_Bus.glyph_type_saving_attemped.connect(attempt_to_save_glyph_type)
+	Event_Bus.request_to_be_held.connect(overwrite_hold)
+	#Event_Bus.request_to_be_held.connect(func(node): overwrite_hold(node, false))
 
 # Track the mouse position
 func _unhandled_input(event):
@@ -21,13 +21,13 @@ func _unhandled_input(event):
 		position = get_global_mouse_position()
 
 
-func set_by_name(glyph_name):
-	remove_all()
-	if glyph_name in Glyph_List.glyphs:
-		var glyph_type = Glyph_List.glyphs[glyph_name]
-		var node = glyph_instance_scene.instantiate()
-		node.init(glyph_type)
-		add_child(node)
+#func set_by_name(glyph_name):
+	#remove_all()
+	#if glyph_name in Glyph_List.glyphs:
+		#var glyph_type = Glyph_List.glyphs[glyph_name]
+		#var node = glyph_instance_scene.instantiate()
+		#node.init(glyph_type)
+		#add_child(node)
 
 
 func signal_stop_holding_child(_child):
@@ -103,18 +103,22 @@ func delete_all():
 
 
 func place_child(child, new_parent, actually_reparent = true):
-	change_glyph_instance_parent_by_name(child.name, new_parent, Vector2(child.position), child.real_parent, actually_reparent)
+	var parent_after_placing = child.get_parent_after_placing()
+	if parent_after_placing != null:
+		new_parent = parent_after_placing
+	change_glyph_instance_parent_by_name(child.name, new_parent, Vector2(child.position), child.get_real_parent(), actually_reparent)
 	signal_stop_holding_child(child)
 
 func place_all(new_parent):
-	var keep_selected = not Settings_Handler.get_setting("text creation", "deselect_glyphs_after_placing")
 	Undo_Redo.add_undo_method(deselect_all)
 	for child in get_children():
 		place_child(child, new_parent, true)
-	if keep_selected:
-		for child in get_children():
+		var keep_selected = false
+		if child.has_method("get_keep_selected"):
+			keep_selected = child.get_keep_selected()
+		if keep_selected:
 			# TODO: using call_deferred here to get around the "delay" in Undo_Redo is not great.
-			# It could be done, but it looks like several other functions would need reworking.
+			# It could be avoided, but it looks like several other functions would need reworking.
 			select_instance.call_deferred(child)
 
 
@@ -129,22 +133,23 @@ func get_restore_all_children_function():
 
 func get_restore_child_function(child, make_self_parent = false):
 	var lambda_self = self
-	var lambda_glyph_instance_scene = glyph_instance_scene
-	
-	var restore_dict = child.get_restore_dict()
-	restore_dict["position"] += position
+	var restore_func = child.get_restore_function()
+	var old_position = Vector2(position)
 	
 	var restore_child_function = func restore_child_function():
-		var instance = lambda_glyph_instance_scene.instantiate()
-		instance.restore_from_dict(restore_dict)
+		#var instance = lambda_glyph_instance_scene.instantiate()
+		#instance.restore_from_dict(restore_dict)
+		var instance = restore_func.call()
 		if make_self_parent:
 			lambda_self.add_child(instance)
-			instance.set_real_parent(lambda_self)
+			#instance.set_real_parent(lambda_self)
 		else:
+			instance.set_position(old_position)
 			assert(instance.real_parent != null)
 			instance.real_parent.add_child(instance)
 	
 	return restore_child_function
+
 
 func restore_child(child, make_self_parent = false):
 	Undo_Redo.add_do_method(get_restore_child_function(child, make_self_parent))
@@ -163,13 +168,14 @@ func remove_child_by_name_without_undo_redo(node_name, delete_after_removing = t
 	remove_child_without_undo_redo(node, delete_after_removing)
 
 
-func overwrite_hold(new_instance: Glyph_Instance):
+func overwrite_hold(new_instance, make_self_parent = true):
 	Undo_Redo.add_do_method(deselect_all)
 	Undo_Redo.add_undo_method(deselect_all)
 	if is_holding_glyphs:
 		delete_all()
-	restore_child(new_instance, true)
+	restore_child(new_instance, make_self_parent)
 	signal_start_holding_child(new_instance)
+	#(func(): new_instance.free()).call_deferred() # TODO: should this be called always?
 
 
 func change_glyph_instance_parent_by_name(glyph_name, new_parent, old_position = null, old_real_parent = null, actually_reparent = true):

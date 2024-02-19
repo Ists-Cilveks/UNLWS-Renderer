@@ -22,11 +22,12 @@ func get_bp_restore_dicts():
 func restore_bps_from_dicts(all_dicts):
 	for dict in all_dicts:
 		var bp = binding_point_scene.instantiate()
-		bp.init(dict)
+		bp.init(dict, false, self)
 		add_child(bp)
 
 func restore_bps_from_glyph_type(glyph_type):
 	for name_of_bp_to_copy in glyph_type.binding_points:
 		var new_bp = binding_point_scene.instantiate()
-		new_bp.init(glyph_type.binding_points[name_of_bp_to_copy].get_copied_restore_dict())
+		var copied_restore_dict = glyph_type.binding_points[name_of_bp_to_copy].get_copied_restore_dict()
+		new_bp.init(copied_restore_dict, false, self)
 		add_child(new_bp)

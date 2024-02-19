@@ -17,7 +17,7 @@ func create_attribute_list_from_instance(new_instance):
 	create_attribute_list()
 
 func create_attribute_list():
-	var attributes = glyph_instance.get_instance_attributes()
+	var attributes = glyph_instance.get_displayable_attributes()
 	for attribute_name in attributes:
 		add_simple_attribute_row(attribute_name)
 

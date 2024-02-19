@@ -7,6 +7,7 @@ class_name Glyph_Instance extends Node2D
 
 var binding_point_scene = preload("./binding_point.tscn")
 var sprite_shader = preload("./glyph_instance_sprite.gdshader")
+var self_scene = preload("./glyph_instance.tscn")
 var sprite_material = ShaderMaterial.new()
 
 var glyph_type
@@ -97,7 +98,7 @@ func set_instance_attribute(attribute_name, value):
 func get_instance_attribute(attribute_name):
 	return instance_g_node.get_attribute(attribute_name)
 
-func get_instance_attributes():
+func get_displayable_attributes():
 	return instance_g_node.attributes_dict
 
 
@@ -176,6 +177,14 @@ func get_restore_dict(preserve_id = true):
 		res["id"] = id
 	return res
 
+func get_restore_function():
+	var lambda_self_scene = self_scene
+	var restore_dict = get_restore_dict()
+	return func restore_glyph_instance():
+		var res = lambda_self_scene.instantiate()
+		res.restore_from_dict(restore_dict)
+		return res
+
 func restore_from_dict(dict):
 	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"], dict["binding_point_dicts"])
 	#set_is_selected(dict["is_selected"])
@@ -207,10 +216,15 @@ func permanent_reparent(new_parent):
 
 func set_real_parent(new_parent):
 	real_parent = new_parent
-
 func get_real_parent():
 	return real_parent
+func get_parent_after_placing():
+	return null
 
+
+func get_keep_selected():
+	var keep_selected = not Settings_Handler.get_setting("text creation", "deselect_glyphs_after_placing")
+	return keep_selected
 
 func get_is_selected():
 	return is_selected

@@ -3,6 +3,7 @@ class_name Binding_Point extends Node2D
 ## Has a position and rotation (to tell which direction rel lines should connect to)
 
 var bp_name = ""
+var self_scene = preload("./binding_point.tscn")
 
 ## dict holds all permanent information about this BP.
 ## If a BP is being instanced from a glyph type, the dict should be copied element by element. (see create_copy in init)
@@ -14,12 +15,15 @@ var editing_enabled = false
 var mouse_drag_hovering = false
 var mouse_rotation_hovering = false
 var being_dragged = false
+var being_held = false
+
+var real_parent
 
 func _ready():
 	update_style()
 
-func _init(init_dict = {}):
-	init(init_dict)
+func _init(init_dict = {}, create_copy = false, new_real_parent = null):
+	init(init_dict, create_copy, new_real_parent)
 
 
 #region Dragging
@@ -34,6 +38,7 @@ func _unhandled_input(event):
 			Drag_Handler.start_drag_if_possible(event, self, true, true)
 		elif mouse_drag_hovering:
 			Drag_Handler.start_drag_if_possible(event, self, true)
+		
 
 
 func _on_drag_area_mouse_entered():
@@ -90,6 +95,11 @@ func end_drag():
 		)
 		Undo_Redo.commit_action()
 
+func end_short_drag_press():
+	assert(being_dragged)
+	being_dragged = false
+	request_to_be_held()
+
 func start_drag():
 	assert(not being_dragged)
 	being_dragged = true
@@ -97,7 +107,18 @@ func start_drag():
 #endregion
 
 
-func init(init_dict, create_copy = false):
+func request_to_be_held():
+	Undo_Redo.create_action("Start holding a binding point")
+	(func(): free()).call_deferred() # TODO: this doesn't seem like a realiable solution.
+	Event_Bus.request_to_be_held.emit(self)
+	Undo_Redo.commit_action()
+
+func start_hold():
+	being_held = true
+	update_style()
+
+
+func init(init_dict, create_copy = false, new_real_parent = null):
 	assert(typeof(init_dict) == typeof({}))
 	
 	if not create_copy:
@@ -110,6 +131,12 @@ func init(init_dict, create_copy = false):
 			dict[key] = init_dict[key]
 	
 	dict["owner"] = self
+	if new_real_parent != null:
+		#print("init param")
+		set_real_parent(new_real_parent)
+	elif "real_parent" in dict:
+		#print("init dict")
+		set_real_parent(dict["real_parent"])
 	
 	if "x" in dict and "y" in dict:
 		position = Vector2(dict["x"], dict["y"])
@@ -118,10 +145,27 @@ func init(init_dict, create_copy = false):
 	if "name" in dict:
 		bp_name = dict["name"]
 
+
+func permanent_reparent(new_parent):
+	reparent(new_parent, false)
+	set_real_parent(new_parent)
+
+func set_real_parent(new_real_parent):
+	#print("setting to ", new_real_parent)
+	real_parent = new_real_parent
+	dict["real_parent"] = new_real_parent
+func get_real_parent():
+	return real_parent
+func get_parent_after_placing():
+	return real_parent
+
 func set_attribute(key, value):
 	dict[key] = value
 func get_attribute(key):
 	return dict[key]
+
+func get_displayable_attributes():
+	return {}
 
 func set_bp_position(x, y):
 	position = Vector2(x, y)
@@ -180,10 +224,20 @@ func get_copied_restore_dict():
 		"angle": dict["angle"],
 		"owner": dict["owner"],
 	}
+	if real_parent != null:
+		res["real_parent"] = real_parent
 	return res
 
 func get_restore_dict():
 	return dict
+
+func get_restore_function():
+	var lambda_self_scene = self_scene
+	var restore_dict = get_restore_dict()
+	return func restore_binding_point():
+		var res = lambda_self_scene.instantiate()
+		res.restore_from_dict(restore_dict)
+		return res
 
 func restore_from_dict(restore_dict):
 	init(restore_dict)

@@ -1,11 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://df0ydx8ai3kyt"]
 
-[ext_resource type="Script" path="res://Scripts/Glyphs/GlyphInstance.gd" id="1_6tv1s"]
-[ext_resource type="Script" path="res://Scripts/Glyphs/bp_container.gd" id="2_ke144"]
+[ext_resource type="Script" path="res://Scripts/Glyphs/GlyphInstance.gd" id="1_h1ta7"]
+[ext_resource type="Script" path="res://Scripts/Glyphs/bp_container.gd" id="2_nebr1"]
 
 [node name="GlyphInstance" type="Node2D"]
-scale = Vector2(10, 10)
-script = ExtResource("1_6tv1s")
+script = ExtResource("1_h1ta7")
 
 [node name="FocusedOnBP" type="Node2D" parent="."]
 
@@ -14,4 +13,4 @@ scale = Vector2(0.04, 0.04)
 centered = false
 
 [node name="BPContainer" type="Node2D" parent="FocusedOnBP"]
-script = ExtResource("2_ke144")
+script = ExtResource("2_nebr1")
