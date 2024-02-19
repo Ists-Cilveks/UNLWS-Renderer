@@ -1,6 +1,12 @@
 extends Node
 
+# To differentiate drags from simple presses, a press has a certain time that the mouse can be pressed for and a certain distance that the mouse can travel from the starting point.
+var MAX_PRESS_TIME = 0.2 # sec
+var MAX_PRESS_DISPLACEMENT = 10 # px
+
 var is_dragging = false
+var drag_is_currently_short
+var global_mouse_start_pos
 var local_mouse_start_pos
 var local_node_start_pos
 var local_node_start_rotation
@@ -12,6 +18,10 @@ var is_changing_rotation # true: a node's rotation is being changed; false: posi
 func process_input_event(event):
 	if is_dragging:
 		if event is InputEventMouseMotion:
+			var global_displacement = global_mouse_start_pos - event.get_global_position()
+			if drag_is_currently_short and \
+				global_displacement.length() >= MAX_PRESS_DISPLACEMENT:
+				drag_is_currently_short = false
 			var canvas_transform = node.get_viewport().get_canvas_transform()
 			
 			# TODO: these are really complicated solutions, there's probably an easier way to get the position and rotation.
@@ -35,8 +45,13 @@ func process_input_event(event):
 
 
 func end_drag():
-	node.end_drag()
+	if drag_is_currently_short:
+		node.end_short_drag_press()
+	else:
+		node.end_drag()
 	is_dragging = false
+	drag_is_currently_short = null
+	global_mouse_start_pos = null
 	local_mouse_start_pos = null
 	local_node_start_pos = null
 	local_node_start_rotation = null
@@ -45,6 +60,10 @@ func end_drag():
 
 func start_drag(event, new_node, rotation_drag = false):
 	node = new_node
+	var lambda_self = self
+	drag_is_currently_short = true
+	get_tree().create_timer(MAX_PRESS_TIME).timeout.connect(func(): lambda_self.drag_is_currently_short = false)
+	global_mouse_start_pos = event.get_global_position()
 	local_mouse_start_pos = node.get_parent().to_local(event.get_global_position())
 	local_node_start_pos = node.get_parent().to_local(node.get_global_position())
 	
