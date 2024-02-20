@@ -7,7 +7,8 @@ class_name Glyph_Instance extends Node2D
 
 var binding_point_scene = preload("./binding_point.tscn")
 var sprite_shader = preload("./glyph_instance_sprite.gdshader")
-var self_scene = preload("./glyph_instance.tscn")
+#var self_scene = preload("./glyph_instance.tscn") # Causes the scene to be invalid because then the scene needs itself to be loaded in order to load.
+var self_scene
 var sprite_material = ShaderMaterial.new()
 
 var glyph_type
@@ -36,6 +37,9 @@ func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotati
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
 func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, id = null, bp_list = null):
+	#self_scene = load("res://Scripts/Glyphs/glyph_instance.tscn")
+	self_scene = load("res://Scripts/Glyphs/glyph_instance.tscn")
+	
 	set_glyph_type(glyph_type)
 	self.instance_g_node = glyph_type.xml_node.get_main_node_with_name("g").deep_copy()
 	
