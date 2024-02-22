@@ -16,9 +16,12 @@ func _ready():
 
 # Track the mouse position
 func _unhandled_input(event):
-	if event is InputEventMouseMotion \
-		and not is_selecting_glyphs:
-		position = get_global_mouse_position()
+	if event is InputEventMouseMotion:
+		update_mouse_position()
+
+func update_mouse_position():
+	if not is_selecting_glyphs:
+		set_position(get_global_mouse_position())
 
 
 #func set_by_name(glyph_name):
