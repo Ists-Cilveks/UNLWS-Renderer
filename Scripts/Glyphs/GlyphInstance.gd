@@ -166,6 +166,12 @@ func hide_binding_points():
 		bp_container_node.hide_all()
 
 
+func start_hold():
+	pass
+func stop_hold():
+	pass
+
+
 #region save/restore with a dict
 func get_restore_dict(preserve_id = true):
 	var res = {
@@ -214,9 +220,12 @@ func set_editing_mode(enabled):
 	bp_container_node.set_editing_mode(enabled)
 
 
-func permanent_reparent(new_parent):
-	reparent(new_parent, false)
+func permanent_reparent(new_parent, keep_global_transform = false):
+	reparent(new_parent, keep_global_transform)
 	set_real_parent(new_parent)
+
+func get_keep_global_transform():
+	return false
 
 func set_real_parent(new_parent):
 	real_parent = new_parent

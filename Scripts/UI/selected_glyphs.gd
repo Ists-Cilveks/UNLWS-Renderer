@@ -33,21 +33,25 @@ func update_mouse_position():
 		#add_child(node)
 
 
-func signal_stop_holding_child(_child):
+func signal_stop_holding_child(child):
 	var lambda_self = self
 	Undo_Redo.add_do_method(func stop_holding_child():
 		if lambda_self.get_child_count() == 0:
 			lambda_self.signal_stop_holding()
 		)
+	Undo_Redo.add_do_method(child.stop_hold)
 	Undo_Redo.add_undo_method(lambda_self.signal_start_holding)
+	Undo_Redo.add_undo_method(child.start_hold)
 
-func signal_start_holding_child(_child):
+func signal_start_holding_child(child):
 	var lambda_self = self
 	Undo_Redo.add_do_method(lambda_self.signal_start_holding)
+	Undo_Redo.add_do_method(child.start_hold)
 	Undo_Redo.add_undo_method(func undo_start_holding_child():
 		if lambda_self.get_child_count() == 0:
 			lambda_self.signal_stop_holding()
 		)
+	Undo_Redo.add_undo_method(child.stop_hold)
 
 func signal_stop_holding():
 	is_holding_glyphs = false
@@ -107,9 +111,10 @@ func delete_all():
 
 func place_child(child, new_parent, actually_reparent = true):
 	var parent_after_placing = child.get_parent_after_placing()
+	var keep_global_transform = child.get_keep_global_transform()
 	if parent_after_placing != null:
 		new_parent = parent_after_placing
-	change_glyph_instance_parent_by_name(child.name, new_parent, Vector2(child.position), child.get_real_parent(), actually_reparent)
+	change_node_parent_by_name(child, new_parent, actually_reparent, keep_global_transform)
 	signal_stop_holding_child(child)
 
 func place_all(new_parent):
@@ -176,27 +181,40 @@ func overwrite_hold(new_instance, make_self_parent = true):
 	Undo_Redo.add_undo_method(deselect_all)
 	if is_holding_glyphs:
 		delete_all()
-	restore_child(new_instance, make_self_parent)
+	if new_instance.get_keep_global_transform():
+		change_node_parent_by_name(new_instance, self, true, true)
+	else:
+		restore_child(new_instance, make_self_parent)
+		#(func(): new_instance.free()).call_deferred() # TODO: should this be called always?
 	signal_start_holding_child(new_instance)
-	#(func(): new_instance.free()).call_deferred() # TODO: should this be called always?
 
 
-func change_glyph_instance_parent_by_name(glyph_name, new_parent, old_position = null, old_real_parent = null, actually_reparent = true):
+func change_node_parent_by_name(node, new_parent, actually_reparent = true, keep_global_transform = false):
 	# If not actually_reparent, the child's real_parent will be set but it won't physically be reparented.
 	var lambda_self = self
+	var glyph_name = node.name
 	var node_path = NodePath(glyph_name)
-	#Undo_Redo.add_do_method(func(): lambda_self.get_node(node_path).reparent(new_parent)) # Doesn't preserve position on redo
-	var node = get_node(node_path)
+	var old_parent = node.get_parent()
+	var old_position = Vector2(node.get_position())
+	var old_real_parent = node.get_real_parent()
 	
-	var new_position = new_parent.to_local(node.global_position)
+	var new_position
+	if keep_global_transform:
+		new_position = Vector2()
+	else:
+		new_position = new_parent.to_local(node.global_position)
 	var do_method = func do_method():
-		var do_node = lambda_self.get_node(node_path)
-		do_node.position = new_position
+		var do_node = old_parent.get_node(node_path)
 		if new_parent == lambda_self:
-			do_node.reparent(new_parent, false)
+			do_node.reparent(new_parent, keep_global_transform)
+			if keep_global_transform:
+				do_node.position = Vector2()
+			lambda_self.update_mouse_position()
 		else:
 			if actually_reparent:
-				do_node.permanent_reparent(new_parent)
+				if not keep_global_transform:
+					do_node.position = new_position
+				do_node.permanent_reparent(new_parent, keep_global_transform)
 			else:
 				do_node.set_real_parent(new_parent)
 	Undo_Redo.add_do_method(do_method)
@@ -206,11 +224,13 @@ func change_glyph_instance_parent_by_name(glyph_name, new_parent, old_position =
 		if not actually_reparent:
 			current_parent = lambda_self
 		var undo_node = current_parent.get_node(node_path)
-		if old_position != null:
-			undo_node.position = old_position
 		if old_real_parent != null:
 			undo_node.set_real_parent(old_real_parent)
-		undo_node.reparent(lambda_self, false)
+		undo_node.reparent(old_parent)
+		if old_parent == lambda_self:
+			lambda_self.update_mouse_position()
+		if old_position != null:
+			undo_node.set_position(old_position)
 	Undo_Redo.add_undo_method(undo_method)
 
 

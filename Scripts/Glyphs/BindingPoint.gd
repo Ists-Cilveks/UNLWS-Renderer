@@ -109,12 +109,15 @@ func start_drag():
 
 func request_to_be_held():
 	Undo_Redo.create_action("Start holding a binding point")
-	(func(): free()).call_deferred() # TODO: this doesn't seem like a realiable solution.
 	Event_Bus.request_to_be_held.emit(self)
 	Undo_Redo.commit_action()
 
 func start_hold():
 	being_held = true
+	update_style()
+
+func stop_hold():
+	being_held = false
 	update_style()
 
 
@@ -146,9 +149,12 @@ func init(init_dict, create_copy = false, new_real_parent = null):
 		bp_name = dict["name"]
 
 
-func permanent_reparent(new_parent):
-	reparent(new_parent, false)
+func permanent_reparent(new_parent, keep_global_transform = false):
+	reparent(new_parent, keep_global_transform)
 	set_real_parent(new_parent)
+
+func get_keep_global_transform():
+	return true
 
 func set_real_parent(new_real_parent):
 	#print("setting to ", new_real_parent)
