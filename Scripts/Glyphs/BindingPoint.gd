@@ -3,7 +3,7 @@ class_name Binding_Point extends Node2D
 ## Has a position and rotation (to tell which direction rel lines should connect to)
 
 var bp_name = ""
-var self_scene = preload("./binding_point.tscn")
+var self_scene
 
 ## dict holds all permanent information about this BP.
 ## If a BP is being instanced from a glyph type, the dict should be copied element by element. (see create_copy in init)
@@ -20,6 +20,7 @@ var being_held = false
 var real_parent
 
 func _ready():
+	self_scene = load("./binding_point.tscn")
 	update_style()
 
 func _init(init_dict = {}, create_copy = false, new_real_parent = null):
