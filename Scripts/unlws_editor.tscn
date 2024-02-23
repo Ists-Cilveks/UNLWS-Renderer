@@ -1,8 +1,8 @@
 [gd_scene load_steps=29 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://Scripts/UNLWS_editor.gd" id="1_5jbj8"]
-[ext_resource type="Script" path="res://Scripts/glyph_canvas.gd" id="3_pniuy"]
-[ext_resource type="Script" path="res://Scripts/UI/selected_glyphs.gd" id="3_xo3q2"]
+[ext_resource type="Script" path="res://Scripts/UI/UNLWSCanvas/glyph_canvas.gd" id="3_pniuy"]
+[ext_resource type="Script" path="res://Scripts/UI/UNLWSCanvas/selected_glyphs.gd" id="3_xo3q2"]
 [ext_resource type="Script" path="res://Scripts/UI/placed_glyphs.gd" id="5_41scr"]
 [ext_resource type="Script" path="res://Scripts/UI/glyph_search.gd" id="5_ucxqq"]
 [ext_resource type="Script" path="res://Scripts/UI/glyph_search_entry.gd" id="6_io2bl"]
@@ -235,7 +235,7 @@ render_target_update_mode = 4
 offset = Vector2(100, 0)
 zoom = Vector2(20, 20)
 
-[node name="Canvas" type="Node" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]
+[node name="Canvas" type="Node2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport"]
 script = ExtResource("3_pniuy")
 
 [node name="SelectedGlyphs" type="Node2D" parent="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas"]

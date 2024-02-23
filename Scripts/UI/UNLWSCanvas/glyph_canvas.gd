@@ -1,4 +1,4 @@
-extends Node
+extends UNLWS_Canvas_Container
 
 
 func _ready():

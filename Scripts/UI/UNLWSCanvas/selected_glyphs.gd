@@ -1,4 +1,4 @@
-extends Node2D
+extends UNLWS_Canvas_Container
 ## A container of all glyphs that are currently selected
 
 var is_holding_glyphs = false
