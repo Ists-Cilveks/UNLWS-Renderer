@@ -159,10 +159,10 @@ func get_transform_string():
 
 
 func show_binding_points():
-	if bp_container_node:
+	if bp_container_node != null:
 		bp_container_node.show_all()
 func hide_binding_points():
-	if bp_container_node:
+	if bp_container_node != null:
 		bp_container_node.hide_all()
 
 
