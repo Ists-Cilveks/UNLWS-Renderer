@@ -1,4 +1,4 @@
-class_name Binding_Point extends Node2D
+class_name Binding_Point extends UNLWS_Canvas_Element
 ## An UNLWS binding point (BP), to be instantiated with the binding point scene as a Glyph_Instance's child.
 ## Has a position and rotation (to tell which direction rel lines should connect to)
 

@@ -1,4 +1,4 @@
-class_name Glyph_Instance extends Node2D
+class_name Glyph_Instance extends UNLWS_Canvas_Element
 ## An instance of a glyph with a certain name, position etc.
 ## To instance it, load the glyph_instance.tscn scene, do not just call new()
 
@@ -26,7 +26,6 @@ var base_rotation
 
 var binding_point_visibility = true
 var editing_enabled = false
-var real_parent # The semi-permanent parent, usually not the SelectedGlyphs node (or maybe something else that's temporary).
 var is_selected = false
 
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
@@ -225,13 +224,6 @@ func permanent_reparent(new_parent, keep_global_transform = false):
 
 func get_keep_global_transform():
 	return false
-
-func set_real_parent(new_parent):
-	real_parent = new_parent
-func get_real_parent():
-	return real_parent
-func get_parent_after_placing():
-	return null
 
 
 func get_keep_selected():
