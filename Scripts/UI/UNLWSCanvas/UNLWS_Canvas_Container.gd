@@ -56,7 +56,6 @@ func get_UNLWS_canvas_root():
 
 #region Undo-able child removal functions
 func remove_all(delete_after_removing = true):
-	# TODO: undoing deletion of selected glyphs doesn't work
 	if get_child_count() > 0:
 		var restore_all_children_function = get_restore_all_children_function()
 		var lambda_self = self
