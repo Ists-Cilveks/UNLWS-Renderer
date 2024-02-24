@@ -20,7 +20,7 @@ var being_held = false
 var real_parent
 
 func _ready():
-	self_scene = load("./binding_point.tscn")
+	self_scene = load("res://Scripts/Glyphs/binding_point.tscn")
 	update_style()
 
 func _init(init_dict = {}, create_copy = false, new_real_parent = null):
