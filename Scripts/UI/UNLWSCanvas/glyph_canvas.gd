@@ -55,12 +55,8 @@ func select_extra_instance(new_instance, if_successful):
 		if_successful.call()
 
 
-func get_descendant_by_name(node_name):
-	return find_child(node_name, true, false)
+func get_UNLWS_canvas_root():
+	return self
 
-func remove_descendant_by_name_without_undo_redo(node_name, delete_after_removing = true):
-	var node = get_descendant_by_name(node_name)
-	if delete_after_removing:
-		node.free()
-	else:
-		node.get_parent().remove_child(node)
+func get_descendant_element_by_unique_name(node_name):
+	return find_child(node_name, true, false)

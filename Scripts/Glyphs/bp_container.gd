@@ -38,5 +38,11 @@ func restore_bps_from_glyph_type(glyph_type):
 		add_child(new_bp)
 
 
+func get_UNLWS_canvas_root():
+	return get_real_parent().get_UNLWS_canvas_root()
+
+func get_real_parent():
+	return get_owner_glyph()
+
 func get_owner_glyph():
 	return get_parent().get_parent()

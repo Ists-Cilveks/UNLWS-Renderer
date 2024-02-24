@@ -203,6 +203,11 @@ func set_editing_mode(enabled):
 	update_style()
 
 
+func get_UNLWS_canvas_root():
+	return get_parent().get_UNLWS_canvas_root()
+
+
+
 func update_style():
 	var hovering = mouse_drag_hovering or mouse_rotation_hovering
 	var color_name = "default"
