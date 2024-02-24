@@ -218,6 +218,7 @@ func update_style():
 
 
 func _on_tree_exiting():
+	# TODO: connect signals in the DragHandler rather than in each node that can be dragged
 	if being_dragged:
 		Drag_Handler.end_drag()
 
