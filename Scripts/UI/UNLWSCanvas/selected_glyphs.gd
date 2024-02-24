@@ -66,19 +66,19 @@ func signal_start_holding():
 
 func remove_all(delete_after_removing = true):
 	super(delete_after_removing)
-		var lambda_self = self
-		Undo_Redo.add_undo_method(deselect_all)
-		if is_holding_glyphs:
-			Undo_Redo.add_do_property(self, "is_holding_glyphs", false)
-			Undo_Redo.add_undo_property(self, "is_holding_glyphs", true)
-			Undo_Redo.add_do_method(func(): Event_Bus.stopped_holding_glyphs.emit())
-			Undo_Redo.add_undo_method(func(): Event_Bus.started_holding_glyphs.emit(lambda_self.get_children()))
-		if is_selecting_glyphs:
-			Undo_Redo.add_do_property(self, "is_selecting_glyphs", false)
-			Undo_Redo.add_undo_property(self, "is_selecting_glyphs", true)
-			# Also restore this node's position so the selection appears in the right place on undo.
-			var lambda_position = Vector2(position)
-			Undo_Redo.add_undo_property(self, "position", lambda_position)
+	var lambda_self = self
+	Undo_Redo.add_undo_method(deselect_all)
+	if is_holding_glyphs:
+		Undo_Redo.add_do_property(self, "is_holding_glyphs", false)
+		Undo_Redo.add_undo_property(self, "is_holding_glyphs", true)
+		Undo_Redo.add_do_method(func(): Event_Bus.stopped_holding_glyphs.emit())
+		Undo_Redo.add_undo_method(func(): Event_Bus.started_holding_glyphs.emit(lambda_self.get_children()))
+	if is_selecting_glyphs:
+		Undo_Redo.add_do_property(self, "is_selecting_glyphs", false)
+		Undo_Redo.add_undo_property(self, "is_selecting_glyphs", true)
+		# Also restore this node's position so the selection appears in the right place on undo.
+		var lambda_position = Vector2(position)
+		Undo_Redo.add_undo_property(self, "position", lambda_position)
 
 
 
@@ -120,11 +120,26 @@ func overwrite_hold(new_instance, make_self_parent = true):
 func change_node_parent_by_name(node, new_parent, actually_reparent = true, keep_global_transform = false):
 	# If not actually_reparent, the child's real_parent will be set but it won't physically be reparented.
 	var lambda_self = self
-	var glyph_name = node.name
-	var node_path = NodePath(glyph_name)
+	var canvas_root = get_UNLWS_canvas_root()
+	var node_name = node.get_name()
 	var old_parent = node.get_parent()
+	var node_real_parent = node.get_real_parent()
+	if node_real_parent == null:
+		if new_parent != self:
+			node_real_parent = new_parent
+		else:
+			node_real_parent = old_parent
+
 	var old_position = Vector2(node.get_position())
 	var old_real_parent = node.get_real_parent()
+	var has_old_real_parent = false
+	var old_real_parent_name
+	if old_real_parent != null:
+		has_old_real_parent = true
+		old_real_parent_name = old_real_parent.get_name()
+	
+	var new_parent_name = new_parent.get_name()
+	var old_parent_name = old_parent.get_name()
 	
 	var new_position
 	if keep_global_transform:
@@ -132,30 +147,35 @@ func change_node_parent_by_name(node, new_parent, actually_reparent = true, keep
 	else:
 		new_position = new_parent.to_local(node.global_position)
 	var do_method = func do_method():
-		var do_node = old_parent.get_node(node_path)
-		if new_parent == lambda_self:
-			do_node.reparent(new_parent, keep_global_transform)
+		var do_node = canvas_root.get_descendant_element_by_unique_name(node_name)
+		var do_new_parent = canvas_root.get_descendant_element_by_unique_name(new_parent_name)
+		assert(do_node != null)
+		if do_new_parent == lambda_self:
+			# TODO: keeping the global transform doesn't work when redoing BP placement.
+			# The BPs are placed in the current cursor position without remembering where it was placed previously.
+			# The appropriate position needs to found before and can then be passed to this lambda function.
+			do_node.reparent(do_new_parent, keep_global_transform)
 			if keep_global_transform:
 				do_node.position = Vector2()
 			lambda_self.update_mouse_position()
 		else:
 			if actually_reparent:
+				assert(do_new_parent != null)
 				if not keep_global_transform:
 					do_node.position = new_position
-				do_node.permanent_reparent(new_parent, keep_global_transform)
+				do_node.permanent_reparent(do_new_parent, keep_global_transform)
 			else:
-				do_node.set_real_parent(new_parent)
+				do_node.set_real_parent(do_new_parent)
 	Undo_Redo.add_do_method(do_method)
 	
 	var undo_method = func undo_method():
-		var current_parent = new_parent
-		if not actually_reparent:
-			current_parent = lambda_self
-		var undo_node = current_parent.get_node(node_path)
-		if old_real_parent != null:
-			undo_node.set_real_parent(old_real_parent)
-		undo_node.reparent(old_parent)
-		if old_parent == lambda_self:
+		var undo_node = canvas_root.get_descendant_element_by_unique_name(node_name)
+		var undo_old_parent = canvas_root.get_descendant_element_by_unique_name(old_parent_name)
+		if has_old_real_parent:
+			var undo_old_real_parent = canvas_root.get_descendant_element_by_unique_name(old_real_parent_name)
+			undo_node.set_real_parent(undo_old_real_parent)
+		undo_node.reparent(undo_old_parent)
+		if undo_old_parent == lambda_self:
 			lambda_self.update_mouse_position()
 		if old_position != null:
 			undo_node.set_position(old_position)

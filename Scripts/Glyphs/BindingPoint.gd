@@ -2,7 +2,8 @@ class_name Binding_Point extends UNLWS_Canvas_Element
 ## An UNLWS binding point (BP), to be instantiated with the binding point scene as a Glyph_Instance's child.
 ## Has a position and rotation (to tell which direction rel lines should connect to)
 
-var bp_name = ""
+var bp_name = "" # Unique within this glyph instance
+var id # Globally unique (includes the glyph's name)
 var self_scene
 
 ## dict holds all permanent information about this BP.
@@ -17,14 +18,55 @@ var mouse_rotation_hovering = false
 var being_dragged = false
 var being_held = false
 
-var real_parent
+var owner_glyph_name
+
 
 func _ready():
 	self_scene = load("res://Scripts/Glyphs/binding_point.tscn")
 	update_style()
 
+
+#region Initialization
 func _init(init_dict = {}, create_copy = false, new_real_parent = null):
 	init(init_dict, create_copy, new_real_parent)
+
+func init(init_dict, create_copy = false, new_real_parent = null):
+	assert(typeof(init_dict) == typeof({}))
+	
+	if not create_copy:
+		dict = init_dict
+	
+	for key in init_dict:
+		if key in ["x", "y", "angle"]:
+			dict[key] = float(init_dict[key])
+		elif create_copy: # If dict = init_dict, this would be a no-op
+			dict[key] = init_dict[key]
+	
+	dict["owner"] = self
+	if new_real_parent != null:
+		#print("init param")
+		set_real_parent(new_real_parent)
+	elif "real_parent" in dict:
+		#print("init dict")
+		set_real_parent(dict["real_parent"])
+	
+	if "owner_glyph_name" in dict:
+		set_owner_glyph_name(dict["owner_glyph_name"])
+	
+	if "x" in dict and "y" in dict:
+		position = Vector2(dict["x"], dict["y"])
+	if "angle" in dict:
+		rotation_degrees = dict["angle"]
+	
+	if "name" in dict:
+		bp_name = dict["name"]
+	
+	if "id" not in dict and owner_glyph_name != null:
+		dict["id"] = get_new_id()
+	if "id" in dict:
+		id = dict["id"]
+		name = id
+#endregion
 
 
 #region Dragging
@@ -108,6 +150,7 @@ func start_drag():
 #endregion
 
 
+#region Holding
 func request_to_be_held():
 	Undo_Redo.create_action("Start holding a binding point")
 	Event_Bus.request_to_be_held.emit(self)
@@ -120,34 +163,12 @@ func start_hold():
 func stop_hold():
 	being_held = false
 	update_style()
+#endregion
 
 
-func init(init_dict, create_copy = false, new_real_parent = null):
-	assert(typeof(init_dict) == typeof({}))
-	
-	if not create_copy:
-		dict = init_dict
-	
-	for key in init_dict:
-		if key in ["x", "y", "angle"]:
-			dict[key] = float(init_dict[key])
-		elif create_copy: # If dict = init_dict, this would be a no-op
-			dict[key] = init_dict[key]
-	
-	dict["owner"] = self
-	if new_real_parent != null:
-		#print("init param")
-		set_real_parent(new_real_parent)
-	elif "real_parent" in dict:
-		#print("init dict")
-		set_real_parent(dict["real_parent"])
-	
-	if "x" in dict and "y" in dict:
-		position = Vector2(dict["x"], dict["y"])
-	if "angle" in dict:
-		rotation_degrees = dict["angle"]
-	if "name" in dict:
-		bp_name = dict["name"]
+#region Setters and getters
+func get_new_id():
+	return bp_name + "-bp-of-" + get_owner_glyph_name()
 
 
 func permanent_reparent(new_parent, keep_global_transform = false):
@@ -157,14 +178,18 @@ func permanent_reparent(new_parent, keep_global_transform = false):
 func get_keep_global_transform():
 	return true
 
+
 func set_real_parent(new_real_parent):
 	#print("setting to ", new_real_parent)
 	real_parent = new_real_parent
 	dict["real_parent"] = new_real_parent
-func get_real_parent():
-	return real_parent
-func get_parent_after_placing():
-	return real_parent
+
+func set_owner_glyph_name(new_name):
+	owner_glyph_name = new_name
+
+func get_owner_glyph_name():
+	return owner_glyph_name
+
 
 func set_attribute(key, value):
 	dict[key] = value
@@ -207,6 +232,10 @@ func get_UNLWS_canvas_root():
 	return get_parent().get_UNLWS_canvas_root()
 
 
+func get_parent_after_placing():
+	return get_real_parent()
+#endregion
+
 
 func update_style():
 	var hovering = mouse_drag_hovering or mouse_rotation_hovering
@@ -237,6 +266,8 @@ func get_copied_restore_dict():
 		"angle": dict["angle"],
 		"owner": dict["owner"],
 	}
+	if owner_glyph_name != null:
+		res["owner_glyph_name"] = owner_glyph_name
 	if real_parent != null:
 		res["real_parent"] = real_parent
 	return res
