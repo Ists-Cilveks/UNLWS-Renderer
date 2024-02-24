@@ -2,6 +2,11 @@ extends Node2D
 
 var binding_point_scene = preload("./binding_point.tscn")
 
+
+func _ready():
+	name = "BP-container-of-" + get_owner_glyph().get_name()
+
+
 func set_visibility(enabled):
 	if enabled:
 		show()
@@ -31,3 +36,7 @@ func restore_bps_from_glyph_type(glyph_type):
 		var copied_restore_dict = glyph_type.binding_points[name_of_bp_to_copy].get_copied_restore_dict()
 		new_bp.init(copied_restore_dict, false, self)
 		add_child(new_bp)
+
+
+func get_owner_glyph():
+	return get_parent().get_parent()
