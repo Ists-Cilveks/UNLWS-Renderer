@@ -5,7 +5,6 @@ class_name Glyph_Instance extends Node2D
 ## name and id: each glyph instance must have a unique id which is also its name.
 ## The name is used to find the node in the tree
 
-var binding_point_scene = preload("./binding_point.tscn")
 var sprite_shader = preload("./glyph_instance_sprite.gdshader")
 #var self_scene = preload("./glyph_instance.tscn") # Causes the scene to be invalid because then the scene needs itself to be loaded in order to load.
 var self_scene
