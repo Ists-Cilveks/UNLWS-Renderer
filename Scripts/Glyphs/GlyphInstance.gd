@@ -28,6 +28,8 @@ var binding_point_visibility = true
 var editing_enabled = false
 var is_selected = false
 
+
+#region Initialization
 @warning_ignore("shadowed_variable", "shadowed_variable_base_class")
 func _init(glyph_type = null, focus_bp_name = null, position = Vector2(), rotation = 0):
 	if glyph_type:
@@ -69,41 +71,6 @@ func init(glyph_type, focus_bp_name = null, position = Vector2(), rotation = 0, 
 	set_focus_bp(focus_bp_name)
 
 
-func _unhandled_input(event):
-	if event is InputEventMouseButton \
-		and event.is_pressed() \
-		and event.button_index == MOUSE_BUTTON_LEFT:
-
-		var local_pos = sprite_node.to_local(get_viewport().get_canvas_transform().affine_inverse() * event.position)
-
-		if sprite_node.is_pixel_opaque(local_pos):
-			var lambda_viewport = get_viewport()
-			var if_successful = func if_glyph_selection_is_successful():
-				lambda_viewport.set_input_as_handled()
-			if event.is_ctrl_pressed():
-				Event_Bus.glyph_extra_selection_attempted.emit(self, if_successful)
-			else:
-				Event_Bus.glyph_selection_attempted.emit(self, if_successful)
-
-
-func add_style(new_dict):
-	for glyph_name in new_dict:
-		style_dict[glyph_name] = new_dict[glyph_name]
-
-func get_style_dict():
-	return style_dict
-
-
-func set_instance_attribute(attribute_name, value):
-	instance_g_node.set_attribute(attribute_name, value)
-
-func get_instance_attribute(attribute_name):
-	return instance_g_node.get_attribute(attribute_name)
-
-func get_displayable_attributes():
-	return instance_g_node.attributes_dict
-
-
 @warning_ignore("shadowed_variable")
 func set_focus_bp(focus_bp_name, update=true):
 	if not focus_bp_name in glyph_type.binding_points:
@@ -122,6 +89,45 @@ func set_focus_bp(focus_bp_name, update=true):
 	if update:
 		update_rotation()
 		update_node_transform()
+#endregion
+
+
+#region Input
+func _unhandled_input(event):
+	if event is InputEventMouseButton \
+		and event.is_pressed() \
+		and event.button_index == MOUSE_BUTTON_LEFT:
+
+		var local_pos = sprite_node.to_local(get_viewport().get_canvas_transform().affine_inverse() * event.position)
+
+		if sprite_node.is_pixel_opaque(local_pos):
+			var lambda_viewport = get_viewport()
+			var if_successful = func if_glyph_selection_is_successful():
+				lambda_viewport.set_input_as_handled()
+			if event.is_ctrl_pressed():
+				Event_Bus.glyph_extra_selection_attempted.emit(self, if_successful)
+			else:
+				Event_Bus.glyph_selection_attempted.emit(self, if_successful)
+#endregion
+
+func add_style(new_dict):
+	for glyph_name in new_dict:
+		style_dict[glyph_name] = new_dict[glyph_name]
+
+func get_style_dict():
+	return style_dict
+
+
+#region Getters and setters
+func set_instance_attribute(attribute_name, value):
+	instance_g_node.set_attribute(attribute_name, value)
+
+func get_instance_attribute(attribute_name):
+	return instance_g_node.get_attribute(attribute_name)
+
+func get_displayable_attributes():
+	return instance_g_node.attributes_dict
+
 
 func set_glyph_type(new_type):
 	if glyph_type != null:
@@ -156,6 +162,25 @@ func get_transform_string():
 	return res
 
 
+func set_binding_point_visibility(enabled):
+	binding_point_visibility = enabled
+	bp_container_node.set_visibility(enabled)
+
+func set_editing_mode(enabled):
+	editing_enabled = enabled
+	bp_container_node.set_editing_mode(enabled)
+
+
+func permanent_reparent(new_parent, keep_global_transform = false):
+	reparent(new_parent, keep_global_transform)
+	set_real_parent(new_parent)
+
+
+func get_UNLWS_canvas_root():
+	return get_parent().get_UNLWS_canvas_root()
+#endregion
+
+
 func show_binding_points():
 	if bp_container_node != null:
 		bp_container_node.show_all()
@@ -164,13 +189,7 @@ func hide_binding_points():
 		bp_container_node.hide_all()
 
 
-func start_hold():
-	pass
-func stop_hold():
-	pass
-
-
-#region save/restore with a dict
+#region Save/restore with a dict
 func get_restore_dict(preserve_id = true):
 	var res = {
 		glyph_type = glyph_type,
@@ -209,19 +228,7 @@ func get_binding_points():
 #endregion
 
 
-func set_binding_point_visibility(enabled):
-	binding_point_visibility = enabled
-	bp_container_node.set_visibility(enabled)
-
-func set_editing_mode(enabled):
-	editing_enabled = enabled
-	bp_container_node.set_editing_mode(enabled)
-
-
-func permanent_reparent(new_parent, keep_global_transform = false):
-	reparent(new_parent, keep_global_transform)
-	set_real_parent(new_parent)
-
+#region Selection and holding
 func get_keep_global_transform():
 	return false
 
@@ -240,3 +247,10 @@ func set_is_selected(enabled):
 		sprite_material.set_shader_parameter('difference', 0.5)
 	else:
 		sprite_material.set_shader_parameter('difference', 0)
+
+
+func start_hold():
+	pass
+func stop_hold():
+	pass
+#endregion
