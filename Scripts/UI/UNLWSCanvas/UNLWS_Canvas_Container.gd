@@ -56,6 +56,7 @@ func get_UNLWS_canvas_root():
 
 #region Undo-able child removal functions
 func remove_all(delete_after_removing = true):
+	# TODO: if a glyph is deleted while its BP is being dragged, undoing will crash
 	if get_child_count() > 0:
 		var restore_all_children_function = get_restore_all_children_function()
 		var lambda_self = self
