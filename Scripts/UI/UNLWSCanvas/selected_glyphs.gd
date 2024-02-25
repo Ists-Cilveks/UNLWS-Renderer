@@ -119,7 +119,9 @@ func overwrite_hold(new_instance, make_self_parent = true):
 
 func change_node_parent_by_name(node, new_parent, actually_reparent = true, keep_global_transform = false):
 	# If not actually_reparent, the child's real_parent will be set but it won't physically be reparented.
-	var lambda_self = self
+	assert(node != null)
+	assert(new_parent != null)
+	
 	var canvas_root = get_UNLWS_canvas_root()
 	var node_name = node.get_name()
 	var old_parent = node.get_parent()
@@ -142,43 +144,54 @@ func change_node_parent_by_name(node, new_parent, actually_reparent = true, keep
 	var old_parent_name = old_parent.get_name()
 	
 	var new_position
+	var new_rotation
 	if keep_global_transform:
 		new_position = Vector2()
 	else:
 		new_position = new_parent.to_local(node.global_position)
+		new_rotation = node.get_rotation()
+	
+	var is_being_added_to_selected_glyphs = new_parent == self
+	
+	# Find the new_position that needs to be set when doing or redoing
+	if keep_global_transform and not is_being_added_to_selected_glyphs:
+		# TODO: This is lazy, since the node doesn't need to be reparented at this point.
+		# The necessary new_position and new_rotation should be figured out without actually reparenting.
+		assert(actually_reparent, "Unexpected case of reparenting")
+		node.permanent_reparent(new_parent, true)
+		new_position = node.get_position()
+		new_rotation = node.get_rotation()
+	
 	var do_method = func do_method():
 		var do_node = canvas_root.get_descendant_element_by_unique_name(node_name)
 		var do_new_parent = canvas_root.get_descendant_element_by_unique_name(new_parent_name)
 		assert(do_node != null)
-		if do_new_parent == lambda_self:
-			# TODO: keeping the global transform doesn't work when redoing BP placement.
-			# The BPs are placed in the current cursor position without remembering where it was placed previously.
-			# The appropriate position needs to found before and can then be passed to this lambda function.
+		assert(do_new_parent != null)
+		if is_being_added_to_selected_glyphs:
 			do_node.reparent(do_new_parent, keep_global_transform)
-			if keep_global_transform:
-				do_node.position = Vector2()
-			lambda_self.update_mouse_position()
+			do_node.set_position(new_position)
 		else:
 			if actually_reparent:
 				assert(do_new_parent != null)
-				if not keep_global_transform:
-					do_node.position = new_position
-				do_node.permanent_reparent(do_new_parent, keep_global_transform)
+				do_node.permanent_reparent(do_new_parent)
+				do_node.set_position(new_position)
+				do_node.set_rotation(new_rotation)
 			else:
 				do_node.set_real_parent(do_new_parent)
 	Undo_Redo.add_do_method(do_method)
+	if is_being_added_to_selected_glyphs:
+		Undo_Redo.add_do_method(update_mouse_position)
 	
 	var undo_method = func undo_method():
 		var undo_node = canvas_root.get_descendant_element_by_unique_name(node_name)
 		var undo_old_parent = canvas_root.get_descendant_element_by_unique_name(old_parent_name)
+		assert(undo_node != null)
+		assert(undo_old_parent != null)
 		if has_old_real_parent:
 			var undo_old_real_parent = canvas_root.get_descendant_element_by_unique_name(old_real_parent_name)
 			undo_node.set_real_parent(undo_old_real_parent)
 		undo_node.reparent(undo_old_parent)
-		if undo_old_parent == lambda_self:
-			lambda_self.update_mouse_position()
-		if old_position != null:
-			undo_node.set_position(old_position)
+		undo_node.set_position(old_position)
 	Undo_Redo.add_undo_method(undo_method)
 
 
