@@ -111,7 +111,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer"]
-z_index = 12
 layout_mode = 2
 
 [node name="Undo" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer"]
