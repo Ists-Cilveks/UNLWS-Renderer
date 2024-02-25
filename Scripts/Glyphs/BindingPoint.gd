@@ -112,16 +112,23 @@ func end_drag():
 	being_dragged = false
 	update_style()
 	
-	var lambda_dict = dict
+	var canvas_root = get_UNLWS_canvas_root()
+	var owner_bp_name = id
+	assert(id != null)
+	var get_current_bp = func get_current_bp():
+		var current_bp = canvas_root.get_descendant_element_by_unique_name(owner_bp_name)
+		assert(current_bp != null)
+		return current_bp
+	
 	if Drag_Handler.is_changing_rotation: # The BP's rotation is being dragged
 		Undo_Redo.create_action("Change binding point rotation by dragging")
 		var new_rotation = get_rotation()
 		Undo_Redo.add_do_method(func():
-			lambda_dict["owner"].set_bp_rotation(new_rotation)
+			get_current_bp.call().set_bp_rotation(new_rotation)
 		)
 		var start_rotation = Drag_Handler.local_node_start_rotation
 		Undo_Redo.add_undo_method(func():
-			lambda_dict["owner"].set_bp_rotation(start_rotation)
+			get_current_bp.call().set_bp_rotation(start_rotation)
 		)
 		Undo_Redo.commit_action()
 	else: # The BP's position is being dragged
@@ -129,12 +136,12 @@ func end_drag():
 		var new_x = get_position().x
 		var new_y = get_position().y
 		Undo_Redo.add_do_method(func():
-			lambda_dict["owner"].set_bp_position(new_x, new_y)
+			get_current_bp.call().set_bp_position(new_x, new_y)
 		)
 		var start_x = Drag_Handler.local_node_start_pos.x
 		var start_y = Drag_Handler.local_node_start_pos.y
 		Undo_Redo.add_undo_method(func():
-			lambda_dict["owner"].set_bp_position(start_x, start_y)
+			get_current_bp.call().set_bp_position(start_x, start_y)
 		)
 		Undo_Redo.commit_action()
 
