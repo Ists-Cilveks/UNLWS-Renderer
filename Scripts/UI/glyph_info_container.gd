@@ -10,6 +10,7 @@ func update_children(children = null):
 	if children != null and len(children) == 1:
 		var instance = children[0]
 		$GlyphAttributes.update(instance)
+		$BindingPointInfo.update(instance)
 		$FileData/PathLineEdit.update(instance)
 		show()
 	else:
