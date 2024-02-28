@@ -88,7 +88,9 @@ func get_restore_all_children_function():
 func get_restore_child_function(child, make_self_parent = false):
 	var lambda_self = self
 	var restore_func = child.get_restore_function()
-	var old_position = Vector2(position)
+	# TODO: Are there cases where this won't work? Shouldn't the position be tied to the real_parent, instead of just using the global position?
+	var old_position = Vector2(child.global_position)
+	#var old_position = child.get_real_parent().to_local(child.global_position) # Doesn't always have a real_parent
 	
 	var restore_child_function = func restore_child_function():
 		#var instance = lambda_glyph_instance_scene.instantiate()
@@ -98,9 +100,9 @@ func get_restore_child_function(child, make_self_parent = false):
 			lambda_self.add_child(instance)
 			#instance.set_real_parent(lambda_self)
 		else:
+			assert(instance.get_real_parent() != null)
+			instance.get_real_parent().add_child(instance)
 			instance.set_position(old_position)
-			assert(instance.real_parent != null)
-			instance.real_parent.add_child(instance)
 	
 	return restore_child_function
 
