@@ -76,6 +76,8 @@ func remove_all(delete_after_removing = true):
 	if is_selecting_glyphs:
 		Undo_Redo.add_do_property(self, "is_selecting_glyphs", false)
 		Undo_Redo.add_undo_property(self, "is_selecting_glyphs", true)
+		Undo_Redo.add_do_method(func(): Event_Bus.stopped_selecting_glyphs.emit())
+		Undo_Redo.add_undo_method(func(): Event_Bus.started_selecting_glyphs.emit(lambda_self.get_children()))
 		# Also restore this node's position so the selection appears in the right place on undo.
 		var lambda_position = Vector2(position)
 		Undo_Redo.add_undo_property(self, "position", lambda_position)
