@@ -31,9 +31,12 @@ func set_on_change(new_on_change):
 		line_edit.text_changed.disconnect(on_change)
 		on_change_connected = false
 	on_change = new_on_change
-	if on_change:
+	if on_change != null:
 		line_edit.text_changed.connect(on_change)
 		on_change_connected = true
+		line_edit.editable = true
+	else:
+		line_edit.editable = false
 	
 
 
