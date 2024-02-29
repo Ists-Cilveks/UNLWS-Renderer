@@ -12,6 +12,9 @@ func _init(init_parent, label_name, init_get_new_value = null, init_on_change = 
 	
 	label.name = label_name+"Label"
 	label.text = label_name
+	label.clip_text = true
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	
 	line_edit.name = label_name+"LineEdit"
 	line_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
