@@ -2,7 +2,7 @@ extends GridContainer
 
 var bp_info_grid_scene = preload("./bp_info_grid.tscn")
 
-var grids = []
+var bp_infos = []
 var glyph_instance
 
 
@@ -27,22 +27,27 @@ func create_attribute_list():
 		add_binding_point_info_grid(bp)
 
 func destroy_attribute_list():
-	for grid in grids:
-		grid.free_children()
-		grid.free()
-	grids = []
+	for bp_info in bp_infos:
+		#bp_info.free_children()
+		#bp_info.free()
+		bp_info.propagate_call("queue_free", [])
+	bp_infos = []
+
+
+func delete_bp_info(old_bp_info):
+	bp_infos.erase(old_bp_info)
 
 
 func add_binding_point_info_grid(bp):
 	var new_grid = bp_info_grid_scene.instantiate()
-	new_grid.init(bp)
+	new_grid.init(bp, glyph_instance)
 	
-	grids.append(new_grid)
+	bp_infos.append(new_grid)
 	add_child(new_grid)
 
 
 #func _on_container_glyph_instance_set(new_instance):
 	#glyph_instance = new_instance
 	#create_attribute_list()
-	#for grid in grids:
+	#for grid in bp_infos:
 		#grid.update_text()

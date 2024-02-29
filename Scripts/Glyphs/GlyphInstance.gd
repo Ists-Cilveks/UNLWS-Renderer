@@ -181,12 +181,17 @@ func get_UNLWS_canvas_root():
 #endregion
 
 
+#region Binding point actions
 func show_binding_points():
 	if bp_container_node != null:
 		bp_container_node.show_all()
 func hide_binding_points():
 	if bp_container_node != null:
 		bp_container_node.hide_all()
+
+func delete_bp(bp):
+	bp_container_node.delete_bp(bp)
+#endregion
 
 
 #region Save/restore with a dict
