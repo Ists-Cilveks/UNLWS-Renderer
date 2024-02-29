@@ -16,7 +16,7 @@
 [ext_resource type="Script" path="res://Scripts/Popups/show_controls_button.gd" id="12_v1us4"]
 [ext_resource type="Script" path="res://Scripts/glyph_type_save_button.gd" id="14_1yuho"]
 [ext_resource type="LabelSettings" uid="uid://pqgvl8pp1tfe" path="res://Styles/bold_label.tres" id="14_ijhnr"]
-[ext_resource type="Script" path="res://Scripts/UI/all_bp_info.gd" id="14_s77wt"]
+[ext_resource type="Script" path="res://Scripts/UI/all_bp_info_grid.gd" id="14_s77wt"]
 [ext_resource type="Script" path="res://Scripts/UI/glyph_attributes_info.gd" id="15_go35b"]
 [ext_resource type="Script" path="res://temp/PathLineEdit.gd" id="16_ofrlu"]
 [ext_resource type="Script" path="res://Scripts/Popups/popup_container.gd" id="17_37ibm"]
@@ -185,11 +185,11 @@ theme_override_constants/h_separation = 5
 columns = 2
 script = ExtResource("15_go35b")
 
-[node name="BindingPointInfoLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
+[node name="AllBindingPointInfoLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
 text = "Binding points"
 
-[node name="BindingPointInfo" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
+[node name="AllBindingPointInfo" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
 script = ExtResource("14_s77wt")
 
