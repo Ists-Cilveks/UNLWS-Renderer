@@ -45,7 +45,7 @@ func add_to_grid(grid):
 	grid.add_child(line_edit)
 
 func update_text():
-	line_edit.text = get_new_value.call()
+	line_edit.text = str(get_new_value.call())
 
 
 func free_children():
