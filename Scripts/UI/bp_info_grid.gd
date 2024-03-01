@@ -22,7 +22,8 @@ func create_attribute_list_from_bp(new_bp):
 	create_attribute_list()
 
 func create_attribute_list():
-	for attribute_name in bp.dict:
+	var attribute_dict = bp.get_displayable_attributes()
+	for attribute_name in attribute_dict:
 		add_simple_attribute_row(attribute_name)
 
 func destroy_attribute_list():

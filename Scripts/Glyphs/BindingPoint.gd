@@ -205,7 +205,7 @@ func get_attribute(key):
 	return dict[key]
 
 func get_displayable_attributes():
-	return {}
+	return dict
 
 func set_bp_position(x, y):
 	position = Vector2(x, y)

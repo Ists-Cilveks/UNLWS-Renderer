@@ -9,6 +9,9 @@ var glyph_instance
 func update(new_instance):
 	create_attribute_list_from_instance(new_instance)
 
+func erase_data():
+	destroy_attribute_list()
+
 
 func create_attribute_list_from_instance(new_instance):
 	destroy_attribute_list()
