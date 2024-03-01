@@ -13,9 +13,7 @@ func update(new_instance):
 func create_attribute_list_from_instance(new_instance):
 	destroy_attribute_list()
 	
-	# TODO: Find some way to check if the received child is a Glyph_Instance or some other not-yet-implemented class (like a rel line)
-	#if not new_instance.is_class("Glyph_Instance"): return
-	if not new_instance.has_method("get_binding_points"):
+	if new_instance.holdable_type != "glyph":
 		return
 	
 	glyph_instance = new_instance
