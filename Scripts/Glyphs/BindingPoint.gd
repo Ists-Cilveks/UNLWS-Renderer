@@ -5,6 +5,7 @@ class_name Binding_Point extends UNLWS_Canvas_Element
 var bp_name = "" # Unique within this glyph instance
 var id # Globally unique (includes the glyph's name)
 var self_scene
+var holdable_type = "bp"
 
 ## dict holds all permanent information about this BP.
 ## If a BP is being instanced from a glyph type, the dict should be copied element by element. (see create_copy in init)

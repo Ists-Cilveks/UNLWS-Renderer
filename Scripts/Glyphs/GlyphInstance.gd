@@ -12,6 +12,7 @@ var sprite_material = ShaderMaterial.new()
 
 var glyph_type
 var id
+var holdable_type = "glyph"
 
 var style_dict = {}
 
