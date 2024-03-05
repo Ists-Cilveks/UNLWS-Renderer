@@ -14,6 +14,7 @@ func _ready():
 	Event_Bus.glyph_type_saving_attemped.connect(attempt_to_save_glyph_type)
 	Event_Bus.request_to_be_held.connect(overwrite_hold)
 	#Event_Bus.request_to_be_held.connect(func(node): overwrite_hold(node, false))
+	Event_Bus.create_binding_point.connect(create_binding_point)
 
 # Track the mouse position
 func _unhandled_input(event):
@@ -287,3 +288,10 @@ func attempt_to_save_glyph_type():
 	var instance = get_children()[0]
 	instance.overwrite_own_glyph_type()
 #endregion
+
+
+func create_binding_point():
+	assert(len(get_children()) == 1)
+	var child = get_children()[0]
+	assert(child.holdable_type == "glyph")
+	child.create_binding_point()

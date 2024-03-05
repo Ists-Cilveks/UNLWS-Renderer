@@ -39,6 +39,31 @@ func restore_bps_from_glyph_type(glyph_type):
 		add_child(new_bp)
 
 
+func has_child_with_bp_name(test_name):
+	for child in get_children():
+		if child.bp_name == test_name:
+			return true
+	return false
+
+func create_default_bp():
+	var new_bp = binding_point_scene.instantiate()
+	var owner_glyph = get_owner_glyph()
+	var owner_glyph_name = owner_glyph.get_name()
+	var new_bp_name
+	for i in range(100): # Find a unique name (a number)
+		new_bp_name = str(i)
+		if not has_child_with_bp_name(new_bp_name):
+			break
+	assert(not has_child_with_bp_name(new_bp_name))
+	new_bp.init({
+		"real_parent": self,
+		"owner": owner_glyph,
+		"owner_glyph_name": owner_glyph_name,
+		"name": new_bp_name,
+		})
+	add_child(new_bp)
+
+
 func delete_bp(bp):
 	remove_child(bp)
 	bp.free()

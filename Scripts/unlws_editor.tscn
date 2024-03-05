@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://css6xu7374m8y"]
+[gd_scene load_steps=31 format=3 uid="uid://css6xu7374m8y"]
 
 [ext_resource type="Script" path="res://Scripts/UNLWS_editor.gd" id="1_5jbj8"]
 [ext_resource type="Script" path="res://Scripts/UI/UNLWSCanvas/glyph_canvas.gd" id="3_pniuy"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://Scripts/UI/glyph_info_container.gd" id="11_kpgnh"]
 [ext_resource type="Script" path="res://Scripts/Popups/show_controls_button.gd" id="12_v1us4"]
 [ext_resource type="Script" path="res://Scripts/glyph_type_save_button.gd" id="14_1yuho"]
+[ext_resource type="Script" path="res://Scripts/add_binding_point_button.gd" id="14_burrm"]
 [ext_resource type="LabelSettings" uid="uid://pqgvl8pp1tfe" path="res://Styles/bold_label.tres" id="14_ijhnr"]
 [ext_resource type="Script" path="res://Scripts/UI/all_bp_info_grid.gd" id="14_s77wt"]
 [ext_resource type="Script" path="res://Scripts/UI/glyph_attributes_info.gd" id="15_go35b"]
@@ -185,9 +186,19 @@ theme_override_constants/h_separation = 5
 columns = 2
 script = ExtResource("15_go35b")
 
-[node name="AllBindingPointInfoLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
+[node name="AllBindingPointInfoLabelBox" type="HBoxContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AllBindingPointInfoLabel" type="Label" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/AllBindingPointInfoLabelBox"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Binding points"
+
+[node name="AddBindingPointButton" type="Button" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/AllBindingPointInfoLabelBox"]
+layout_mode = 2
+text = "➕"
+script = ExtResource("14_burrm")
 
 [node name="AllBindingPointInfo" type="GridContainer" parent="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo"]
 layout_mode = 2
@@ -257,6 +268,7 @@ script = ExtResource("17_37ibm")
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Undo" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" to="MarginContainer/HSplitContainer/Control/VSplitContainer/GridContainer/Redo" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/EditingModeButton" to="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/EditingModeButton" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/AllBindingPointInfoLabelBox/AddBindingPointButton" to="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/AllBindingPointInfoLabelBox/AddBindingPointButton" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/SaveButton" to="MarginContainer/HSplitContainer/Control/VSplitContainer/MarginContainer1/InfoScrollContainer/Info/GlyphInfo/SaveButton" method="_on_pressed"]
 [connection signal="child_order_changed" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/SelectedGlyphs" method="_on_child_order_changed"]
 [connection signal="child_entered_tree" from="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" to="MarginContainer/HSplitContainer/SubViewportContainer/SubViewport/Canvas/Glyphs" method="_on_child_entered_tree"]

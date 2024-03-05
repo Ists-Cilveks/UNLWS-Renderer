@@ -30,3 +30,5 @@ signal became_able_to_start_glyph_editing()
 signal became_unable_to_start_glyph_editing()
 
 signal glyph_type_saving_attemped()
+
+signal create_binding_point()

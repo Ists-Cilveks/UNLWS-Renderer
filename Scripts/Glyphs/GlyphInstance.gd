@@ -192,6 +192,9 @@ func hide_binding_points():
 
 func delete_bp(bp):
 	bp_container_node.delete_bp(bp)
+
+func create_binding_point():
+	bp_container_node.create_default_bp()
 #endregion
 
 
