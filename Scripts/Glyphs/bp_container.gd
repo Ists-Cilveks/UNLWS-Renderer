@@ -21,7 +21,7 @@ func set_editing_mode(enabled):
 func get_bp_restore_dicts():
 	var res = []
 	for bp in get_children():
-		res.append(bp.get_copied_restore_dict())
+		res.append(bp.get_restore_dict())
 	return res
 
 func restore_bps_from_dicts(all_dicts):
