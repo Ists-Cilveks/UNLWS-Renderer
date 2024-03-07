@@ -201,7 +201,6 @@ func get_restore_dict(preserve_id = true):
 		focus_bp_name = focus_bp_name,
 		position = position, # TODO: is this passed by reference? it probably shouldn't be
 		rotation = base_rotation,
-		#is_selected = is_selected,
 		real_parent = real_parent,
 		binding_point_dicts = bp_container_node.get_bp_restore_dicts(),
 	}
