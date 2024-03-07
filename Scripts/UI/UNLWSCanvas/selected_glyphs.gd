@@ -172,12 +172,12 @@ func change_node_parent_by_name(node, new_parent, actually_reparent = true, keep
 		assert(do_new_parent != null)
 		if is_being_added_to_selected_glyphs:
 			do_node.reparent(do_new_parent, keep_global_transform)
-			do_node.set_position(new_position)
+			do_node.custom_set_position(new_position)
 		else:
 			if actually_reparent:
 				assert(do_new_parent != null)
 				do_node.permanent_reparent(do_new_parent)
-				do_node.set_position(new_position)
+				do_node.custom_set_position(new_position)
 				do_node.set_rotation(new_rotation)
 			else:
 				do_node.set_real_parent(do_new_parent)

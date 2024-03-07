@@ -21,13 +21,13 @@ func set_editing_mode(enabled):
 func get_bp_restore_dicts():
 	var res = []
 	for bp in get_children():
-		res.append(bp.get_restore_dict())
+		res.append(bp.get_copied_restore_dict())
 	return res
 
 func restore_bps_from_dicts(all_dicts):
 	for dict in all_dicts:
 		var bp = binding_point_scene.instantiate()
-		bp.init(dict, false, self)
+		bp.init(dict, true, self)
 		add_child(bp)
 
 func restore_bps_from_glyph_type(glyph_type):
@@ -57,7 +57,7 @@ func create_default_bp():
 	assert(not has_child_with_bp_name(new_bp_name))
 	new_bp.init({
 		"real_parent": self,
-		"owner": owner_glyph,
+		"owner": new_bp,
 		"owner_glyph_name": owner_glyph_name,
 		"name": new_bp_name,
 		})

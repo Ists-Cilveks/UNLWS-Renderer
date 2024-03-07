@@ -8,9 +8,7 @@ var self_scene
 var holdable_type = "bp"
 
 ## dict holds all permanent information about this BP.
-## If a BP is being instanced from a glyph type, the dict should be copied element by element. (see create_copy in init)
-## Otherwise, if the dict of a specific (potentially user-modified) BP was saved and restored, the dict should be passed by reference.
-## This allows the dict to stay up-to-date on what its owner is, so Undo_Redo functions can rely on it while setting/restoring the BP's properties.
+## The dict should generally be copied element by element. (see create_copy in init and get_copied_restore_dict())
 var dict = {}
 
 var editing_enabled = false
@@ -43,7 +41,6 @@ func init(init_dict, create_copy = false, new_real_parent = null):
 		elif create_copy: # If dict = init_dict, this would be a no-op
 			dict[key] = init_dict[key]
 	
-	dict["owner"] = self
 	if new_real_parent != null:
 		#print("init param")
 		set_real_parent(new_real_parent)
@@ -242,6 +239,10 @@ func get_UNLWS_canvas_root():
 
 func get_parent_after_placing():
 	return get_real_parent()
+
+
+func custom_set_position(new_position):
+	set_bp_position(new_position.x, new_position.y)
 #endregion
 
 
@@ -272,7 +273,6 @@ func get_copied_restore_dict():
 		"x": position.x,
 		"y": position.y,
 		"angle": dict["angle"],
-		"owner": dict["owner"],
 	}
 	if owner_glyph_name != null:
 		res["owner_glyph_name"] = owner_glyph_name
@@ -285,7 +285,7 @@ func get_restore_dict():
 
 func get_restore_function():
 	var lambda_self_scene = self_scene
-	var restore_dict = get_restore_dict()
+	var restore_dict = get_copied_restore_dict()
 	return func restore_binding_point():
 		var res = lambda_self_scene.instantiate()
 		res.restore_from_dict(restore_dict)

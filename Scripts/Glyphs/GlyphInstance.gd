@@ -175,6 +175,10 @@ func permanent_reparent(new_parent, keep_global_transform = false):
 
 func get_UNLWS_canvas_root():
 	return get_parent().get_UNLWS_canvas_root()
+
+
+func custom_set_position(new_position):
+	set_position(new_position)
 #endregion
 
 
