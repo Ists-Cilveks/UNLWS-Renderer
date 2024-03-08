@@ -285,13 +285,13 @@ func _unhandled_key_input(event):
 func attempt_to_save_glyph_type():
 	if get_child_count() != 1:
 		return
-	var instance = get_children()[0]
+	var instance = get_child(0)
 	instance.overwrite_own_glyph_type()
 #endregion
 
 
 func create_binding_point():
-	assert(len(get_children()) == 1)
-	var child = get_children()[0]
+	assert(get_child_count() == 1)
+	var child = get_child(0)
 	assert(child.holdable_type == "glyph")
 	child.create_binding_point()
