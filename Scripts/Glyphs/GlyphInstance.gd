@@ -199,31 +199,31 @@ func create_binding_point():
 
 
 #region Save/restore with a dict
-func get_restore_dict(preserve_id = true):
-	var res = {
-		glyph_type = glyph_type,
-		focus_bp_name = focus_bp_name,
-		position = position, # TODO: is this passed by reference? it probably shouldn't be
-		rotation = base_rotation,
-		real_parent = real_parent,
-		binding_point_dicts = bp_container_node.get_bp_restore_dicts(),
-	}
-	if preserve_id:
-		res["id"] = id
-	return res
-
-func get_restore_function():
-	var lambda_self_scene = self_scene
-	var restore_dict = get_restore_dict()
-	return func restore_glyph_instance():
-		var res = lambda_self_scene.instantiate()
-		res.restore_from_dict(restore_dict)
-		return res
-
-func restore_from_dict(dict):
-	init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"], dict["binding_point_dicts"])
-	#set_is_selected(dict["is_selected"])
-	set_real_parent(dict["real_parent"])
+#func get_restore_dict(preserve_id = true):
+	#var res = {
+		#glyph_type = glyph_type,
+		#focus_bp_name = focus_bp_name,
+		#position = position, # TODO: is this passed by reference? it probably shouldn't be
+		#rotation = base_rotation,
+		#real_parent = real_parent,
+		#binding_point_dicts = bp_container_node.get_bp_restore_dicts(),
+	#}
+	#if preserve_id:
+		#res["id"] = id
+	#return res
+#
+#func get_restore_function():
+	#var lambda_self_scene = self_scene
+	#var restore_dict = get_restore_dict()
+	#return func restore_glyph_instance():
+		#var res = lambda_self_scene.instantiate()
+		#res.restore_from_dict(restore_dict)
+		#return res
+#
+#func restore_from_dict(dict):
+	#init(dict["glyph_type"], dict["focus_bp_name"], dict["position"], dict["rotation"], dict["id"], dict["binding_point_dicts"])
+	##set_is_selected(dict["is_selected"])
+	#set_real_parent(dict["real_parent"])
 #endregion
 
 

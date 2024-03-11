@@ -111,7 +111,7 @@ func overwrite_hold(new_instance, make_self_parent = true):
 	Undo_Redo.add_do_method(deselect_all)
 	Undo_Redo.add_undo_method(deselect_all)
 	if is_holding_glyphs:
-		delete_all()
+		remove_all(false)
 	if new_instance.get_keep_global_transform():
 		change_node_parent_by_name(new_instance, self, true, true)
 	else:
@@ -205,7 +205,7 @@ func deselect_instance(child):
 		child.reparent(nodes_real_parent)
 		child.set_is_selected(false)
 	else:
-		delete_child_without_undo_redo(child)
+		remove_child_without_undo_redo(child, false)
 	if get_child_count() == 0:
 		Event_Bus.stopped_selecting_glyphs.emit(get_children())
 		is_selecting_glyphs = false

@@ -87,22 +87,19 @@ func get_restore_all_children_function():
 
 func get_restore_child_function(child, make_self_parent = false):
 	var lambda_self = self
-	var restore_func = child.get_restore_function()
+	#var restore_func = child.get_restore_function()
 	# TODO: Are there cases where this won't work? Shouldn't the position be tied to the real_parent, instead of just using the global position?
 	var old_position = Vector2(child.global_position)
 	#var old_position = child.get_real_parent().to_local(child.global_position) # Doesn't always have a real_parent
 	
 	var restore_child_function = func restore_child_function():
-		#var instance = lambda_glyph_instance_scene.instantiate()
-		#instance.restore_from_dict(restore_dict)
-		var instance = restore_func.call()
+		assert(child != null)
 		if make_self_parent:
-			lambda_self.add_child(instance)
-			#instance.set_real_parent(lambda_self)
+			lambda_self.add_child(child)
 		else:
-			assert(instance.get_real_parent() != null)
-			instance.get_real_parent().add_child(instance)
-			instance.set_position(old_position)
+			assert(child.get_real_parent() != null)
+			child.get_real_parent().add_child(child)
+			child.set_position(old_position)
 	
 	return restore_child_function
 
@@ -110,6 +107,6 @@ func get_restore_child_function(child, make_self_parent = false):
 func restore_child(child, make_self_parent = false):
 	Undo_Redo.add_do_method(get_restore_child_function(child, make_self_parent))
 	var lambda_self = self
-	Undo_Redo.add_undo_method(func(): lambda_self.remove_child_by_name_without_undo_redo(child.name))
+	Undo_Redo.add_undo_method(func(): lambda_self.remove_child_by_name_without_undo_redo(child.name, false))
 #endregion
 
