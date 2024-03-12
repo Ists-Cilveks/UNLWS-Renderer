@@ -278,18 +278,19 @@ func get_copied_restore_dict():
 		res["owner_glyph_name"] = owner_glyph_name
 	if real_parent != null:
 		res["real_parent"] = real_parent
+	# TODO: there may be other properties that I don't use but which need to be carried over (user defined attributes in the SVG or something like that)
 	return res
 
 func get_restore_dict():
 	return dict
 
-func get_restore_function():
-	var lambda_self_scene = self_scene
-	var restore_dict = get_copied_restore_dict()
-	return func restore_binding_point():
-		var res = lambda_self_scene.instantiate()
-		res.restore_from_dict(restore_dict)
-		return res
+#func get_restore_function():
+	#var lambda_self_scene = self_scene
+	#var restore_dict = get_copied_restore_dict()
+	#return func restore_binding_point():
+		#var res = lambda_self_scene.instantiate()
+		#res.restore_from_dict(restore_dict)
+		#return res
 
 func restore_from_dict(restore_dict):
 	init(restore_dict)

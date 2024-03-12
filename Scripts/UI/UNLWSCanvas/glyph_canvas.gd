@@ -38,7 +38,7 @@ func deselect_selected_glyphs():
 	$SelectedGlyphs.deselect_all()
 
 func delete_selected_or_held_glyphs():
-	$SelectedGlyphs.remove_all(false)
+	$SelectedGlyphs.remove_all()
 
 func hold_instance(new_instance):
 	$SelectedGlyphs.overwrite_hold(new_instance)

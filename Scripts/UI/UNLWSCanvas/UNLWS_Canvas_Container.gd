@@ -6,7 +6,7 @@ func _ready():
 
 
 #region Non-undo-able functions (removing children etc)
-func remove_child_without_undo_redo(child, delete_after_removing = true):
+func remove_child_without_undo_redo(child, delete_after_removing = false):
 	assert(child in get_children())
 	remove_child(child)
 	if delete_after_removing:
@@ -16,7 +16,7 @@ func delete_child_without_undo_redo(child):
 	remove_child_without_undo_redo(child, true)
 
 
-func remove_all_without_undo_redo(delete_after_removing = true):
+func remove_all_without_undo_redo(delete_after_removing = false):
 	for child in get_children():
 		remove_child_without_undo_redo(child, delete_after_removing)
 
@@ -24,16 +24,16 @@ func delete_all_without_undo_redo():
 	remove_all_without_undo_redo(true)
 
 
-func remove_node_from_parent_by_name_without_undo_redo(node_name, delete_after_removing = true):
-	get_parent().remove_descendant_by_name_without_undo_redo(node_name, delete_after_removing)
+#func remove_node_from_parent_by_name_without_undo_redo(node_name, delete_after_removing = false):
+	#get_parent().remove_descendant_by_name_without_undo_redo(node_name, delete_after_removing)
 
-func remove_child_by_name_without_undo_redo(node_name, delete_after_removing = true):
-	var node_path = NodePath(node_name)
-	#Undo_Redo.add_do_method(func(): lambda_self.get_node(node_path).reparent(new_parent)) # Doesn't preserve position on redo
-	var node = get_node(node_path)
-	assert(node != null)
-	
-	remove_child_without_undo_redo(node, delete_after_removing)
+#func remove_child_by_name_without_undo_redo(node_name, delete_after_removing = false):
+	#var node_path = NodePath(node_name)
+	##Undo_Redo.add_do_method(func(): lambda_self.get_node(node_path).reparent(new_parent)) # Doesn't preserve position on redo
+	#var node = get_node(node_path)
+	#assert(node != null)
+	#
+	#remove_child_without_undo_redo(node, delete_after_removing)
 #endregion
 
 
@@ -41,7 +41,7 @@ func remove_child_by_name_without_undo_redo(node_name, delete_after_removing = t
 func get_descendant_by_name(node_name):
 	return find_child(node_name, true, false)
 
-func remove_descendant_by_name_without_undo_redo(node_name, delete_after_removing = true):
+func remove_descendant_by_name_without_undo_redo(node_name, delete_after_removing = false):
 	var node = get_descendant_by_name(node_name)
 	if delete_after_removing:
 		node.free()
@@ -54,25 +54,25 @@ func get_UNLWS_canvas_root():
 #endregion
 
 
-#region Undo-able child removal functions
-func remove_all(delete_after_removing = true):
+# Undo-able child removal function
+func remove_all():
 	# TODO: if a glyph is deleted while its BP is being dragged, undoing will crash
 	if get_child_count() > 0:
-		var restore_all_children_function = get_restore_all_children_function()
+		#var restore_all_children_function = get_restore_all_children_function()
 		var lambda_self = self
 		for child in get_children():
-			var child_name = child.name
+			#var child_name = child.name
 			Undo_Redo.add_do_method(func():
 				# TODO: is this future-proof?
 				# Will there eventually be other places that the glyph could have
 				# been reparented to that aren't contained in the Canvas node?
-				lambda_self.remove_node_from_parent_by_name_without_undo_redo(child_name, delete_after_removing))
-		Undo_Redo.add_undo_method(restore_all_children_function)
-		
-
-func delete_all():
-	remove_all(true)
-#endregion
+				#lambda_self.remove_node_from_parent_by_name_without_undo_redo(child_name, delete_after_removing))
+				lambda_self.remove_child(child)
+				)
+			Undo_Redo.add_undo_method(func():
+				lambda_self.add_child(child)
+				)
+		#Undo_Redo.add_undo_method(restore_all_children_function)
 
 
 #region Glyph restoring functions
@@ -107,6 +107,7 @@ func get_restore_child_function(child, make_self_parent = false):
 func restore_child(child, make_self_parent = false):
 	Undo_Redo.add_do_method(get_restore_child_function(child, make_self_parent))
 	var lambda_self = self
-	Undo_Redo.add_undo_method(func(): lambda_self.remove_child_by_name_without_undo_redo(child.name, false))
+	#Undo_Redo.add_undo_method(func(): lambda_self.remove_child_by_name_without_undo_redo(child.name, false))
+	Undo_Redo.add_undo_method(func(): lambda_self.remove_child(child))
 #endregion
 

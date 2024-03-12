@@ -13,9 +13,9 @@ func set_visibility(enabled):
 	else:
 		hide()
 
-func set_editing_mode(enabled):
+func map_over_children(function):
 	for child in get_children():
-		child.set_editing_mode(enabled)
+		function.call(child)
 
 
 func get_bp_restore_dicts():
@@ -45,7 +45,7 @@ func has_child_with_bp_name(test_name):
 			return true
 	return false
 
-func create_default_bp():
+func create_default_bp(new_bp_property_adder = null):
 	var new_bp = binding_point_scene.instantiate()
 	var owner_glyph = get_owner_glyph()
 	var owner_glyph_name = owner_glyph.get_name()
@@ -61,6 +61,8 @@ func create_default_bp():
 		"owner_glyph_name": owner_glyph_name,
 		"name": new_bp_name,
 		})
+	if new_bp_property_adder != null:
+		new_bp_property_adder.call(new_bp)
 	add_child(new_bp)
 
 

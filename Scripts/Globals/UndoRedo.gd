@@ -29,6 +29,10 @@ func add_do_method(callable):
 func add_undo_method(callable):
 	undo_redo.add_undo_method(callable)
 
+func add_command(command: Command):
+	undo_redo.add_do_method(func(): command.do())
+	undo_redo.add_undo_method(func(): command.undo())
+
 func add_do_property(object, property, value):
 	undo_redo.add_do_property(object, property, value)
 func add_undo_property(object, property, value):

@@ -165,7 +165,7 @@ func set_binding_point_visibility(enabled):
 
 func set_editing_mode(enabled):
 	editing_enabled = enabled
-	bp_container_node.set_editing_mode(enabled)
+	bp_container_node.map_over_children(update_bp_state)
 
 
 func permanent_reparent(new_parent, keep_global_transform = false):
@@ -194,7 +194,11 @@ func delete_bp(bp):
 	bp_container_node.delete_bp(bp)
 
 func create_binding_point():
-	bp_container_node.create_default_bp()
+	bp_container_node.create_default_bp(update_bp_state)
+
+func update_bp_state(bp):
+	# Called on a BP that needs to update whether the glyph is being held, selected etc.
+	bp.set_editing_mode(editing_enabled)
 #endregion
 
 
